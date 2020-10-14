@@ -1,0 +1,2 @@
+License: MIT or Public Domain
+Copyright © 2016 Steve Tranby.
