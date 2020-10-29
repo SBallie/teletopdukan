@@ -22,4 +22,4 @@ Try it out TranbyOS (tested on macOS, should work on any host where QEMU runs)
 
 ## Used run commands during testing:
 ```
-qemu-system-i386 -m 64 -rtc base=loca
+qemu-system-i386 -m 64 -rtc base=localtime,clock=host,driftfix=slew -hda tranbyos-hd-32mb.img -hdb tranbyos-hd-32mb.img -vga std -serial stdio -fda grub_disk_backup.img
