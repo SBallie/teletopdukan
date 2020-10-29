@@ -18,4 +18,8 @@ Try it out TranbyOS (tested on macOS, should work on any host where QEMU runs)
 
 - http://www.qemu-project.org/download
 - https://github.com/stevetranby/tranbyos/blob/master/tools/grub_disk_backup.img
-- https://github.com/stevetranby/tranbyos/blob/mast
+- https://github.com/stevetranby/tranbyos/blob/master/tools/tranbyos-hd-32mb.img
+
+## Used run commands during testing:
+```
+qemu-system-i386 -m 64 -rtc base=loca
