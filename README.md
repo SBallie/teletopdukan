@@ -36,4 +36,6 @@ If it succeeds through all tests should see black square mouse cursor.
 
 
 Building Cross Compiler
------
+-------------------------
+
+Why? Because the default compilers include standard libraries and other optimizations that your bas
