@@ -30,4 +30,10 @@ qemu-system-i386  -m 64 -hdb tranbyos-hd-32mb.img -vga std -serial stdio -fda gr
 ```
 Press a key until asks for [SPACE]
 
-Should see debug logs in stdout (assume ru
+Should see debug logs in stdout (assume run from a terminal). 
+
+If it succeeds through all tests should see black square mouse cursor.
+
+
+Building Cross Compiler
+-----
