@@ -26,4 +26,8 @@ qemu-system-i386 -m 64 -rtc base=localtime,clock=host,driftfix=slew -hda tranbyo
 ```
 Simpler Method that should still work: (try -hda if -hdb doesn't work)
 ```
-qemu-system-i386  -m 64 -hdb tranbyos-hd-32mb.img -vga st
+qemu-system-i386  -m 64 -hdb tranbyos-hd-32mb.img -vga std -serial stdio -fda grub_disk_backup.img
+```
+Press a key until asks for [SPACE]
+
+Should see debug logs in stdout (assume ru
