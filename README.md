@@ -48,4 +48,4 @@ Why? Because the default compilers include standard libraries and other optimiza
 Using crosstool-ng
 -------------------
 
-I'm going to only use linux to develop for now, 
+I'm going to only use linux to develop for now, so use a virtual machine if on OSX or Windows. I previously created a cross-compiler on mac by hand, but with crosstool-ng things are
