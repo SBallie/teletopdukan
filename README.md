@@ -40,4 +40,12 @@ Building Cross Compiler
 
 Why? Because the default compilers include standard libraries and other optimizations that your base OS won't have until you add support for them. See: reference to OSDev about why X-Compile
 
-# Building with Ubuntu 14.04 Serv
+# Building with Ubuntu 14.04 Server
+
+* could look into using crosstool-ng
+
+
+Using crosstool-ng
+-------------------
+
+I'm going to only use linux to develop for now, 
