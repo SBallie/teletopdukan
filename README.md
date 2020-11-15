@@ -38,4 +38,6 @@ If it succeeds through all tests should see black square mouse cursor.
 Building Cross Compiler
 -------------------------
 
-Why? Because the default compilers include standard libraries and other optimizations that your bas
+Why? Because the default compilers include standard libraries and other optimizations that your base OS won't have until you add support for them. See: reference to OSDev about why X-Compile
+
+# Building with Ubuntu 14.04 Serv
