@@ -50,4 +50,12 @@ Using crosstool-ng
 
 I'm going to only use linux to develop for now, so use a virtual machine if on OSX or Windows. I previously created a cross-compiler on mac by hand, but with crosstool-ng things are now much simpler.
 
-I'm going to build for i{3,5,6}86 to start and then look at building for amd64 and arm (Raspberry Pi and Nvidia's 
+I'm going to build for i{3,5,6}86 to start and then look at building for amd64 and arm (Raspberry Pi and Nvidia's Tegra2 Jeston TK1).
+
+
+Tools
+-----
+
+Most linux distros will have binutils, make, gcc, and ld already installed.
+
+ - binutils 
