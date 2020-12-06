@@ -58,4 +58,12 @@ Tools
 
 Most linux distros will have binutils, make, gcc, and ld already installed.
 
- - binutils 
+ - binutils (standard )
+ - make (build tool)
+ - gcc (gnu compiler)
+ - ld (linker)
+ - nasm (assembler)
+ - qemu (emulator)
+
+
+Buil
