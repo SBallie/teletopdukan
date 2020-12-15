@@ -66,4 +66,10 @@ Most linux distros will have binutils, make, gcc, and ld already installed.
  - qemu (emulator)
 
 
-Buil
+Build and Run
+--------------------
+
+make build
+- Creates a binary kernel from assembling, compiling, and linking.
+
+make disk
