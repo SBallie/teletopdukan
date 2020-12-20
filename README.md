@@ -73,3 +73,8 @@ make build
 - Creates a binary kernel from assembling, compiling, and linking.
 
 make disk
+- Modifies standard GRUB disk image to include the kernel and configuration
+- Creates the QEMU hard disk images
+
+make run
+- Loads QEMU wit
