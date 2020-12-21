@@ -77,4 +77,11 @@ make disk
 - Creates the QEMU hard disk images
 
 make run
-- Loads QEMU wit
+- Loads QEMU with GRUB disk image and hard disk images
+
+
+OS Details
+---------------------
+
+*Multiboot Header*
+Using GRUB as the bootloader, since a 
