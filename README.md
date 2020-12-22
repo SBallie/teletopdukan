@@ -84,4 +84,4 @@ OS Details
 ---------------------
 
 *Multiboot Header*
-Using GRUB as the bootloader, since a 
+Using GRUB as the bootloader, since a bootloader is almost as much work as an OS kernel or more, I am using GRUB as suggested by many of the c/c++ kernel developmen
