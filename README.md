@@ -84,4 +84,13 @@ OS Details
 ---------------------
 
 *Multiboot Header*
-Using GRUB as the bootloader, since a bootloader is almost as much work as an OS kernel or more, I am using GRUB as suggested by many of the c/c++ kernel developmen
+Using GRUB as the bootloader, since a bootloader is almost as much work as an OS kernel or more, I am using GRUB as suggested by many of the c/c++ kernel development guides.
+
+*Simple Console Library*
+
+*Interrupts and IRQs*
+Currently these are mostly from Bran's Tutorial
+
+*Keyboard Support*
+
+*Timer Int
