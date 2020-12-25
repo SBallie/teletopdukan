@@ -93,4 +93,10 @@ Currently these are mostly from Bran's Tutorial
 
 *Keyboard Support*
 
-*Timer Int
+*Timer Interrupt*
+100Hz is the current interrupt frequency
+
+*Simple Hard Disk ATA Driver*
+Currently reads and writes data successfully.
+
+_I'll write more as I
