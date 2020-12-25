@@ -99,4 +99,10 @@ Currently these are mostly from Bran's Tutorial
 *Simple Hard Disk ATA Driver*
 Currently reads and writes data successfully.
 
-_I'll write more as I
+_I'll write more as I have time to work on this_
+
+
+Extensive How-To In Progress
+------------------------------------------
+
+[Google Doc on How To Build OS](
