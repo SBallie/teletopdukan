@@ -105,4 +105,7 @@ _I'll write more as I have time to work on this_
 Extensive How-To In Progress
 ------------------------------------------
 
-[Google Doc on How To Build OS](
+[Google Doc on How To Build OS](https://docs.google.com/document/d/17-3cOyXNgPmjh05qogS-h6hKn6WDllWs0xOVhEWvj9I/edit?usp=sharing)
+
+Resources
+---------------------------
