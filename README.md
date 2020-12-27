@@ -108,4 +108,6 @@ Extensive How-To In Progress
 [Google Doc on How To Build OS](https://docs.google.com/document/d/17-3cOyXNgPmjh05qogS-h6hKn6WDllWs0xOVhEWvj9I/edit?usp=sharing)
 
 Resources
----------------------------
+------------------------------------------
+
+- [http://www.osdever.net/tutorials/view/getting-started-in-os-development](http://www.osdever.net/tutorials
