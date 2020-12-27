@@ -112,4 +112,9 @@ Resources
 
 - [http://www.osdever.net/tutorials/view/getting-started-in-os-development](http://www.osdever.net/tutorials/view/getting-started-in-os-development)
 - [http://mikeos.berlios.de/](http://mikeos.berlios.de/)
-- http://www.jamesmolloy.co.uk
+- http://www.jamesmolloy.co.uk/tutorial_html/index.html
+- http://wiki.osdev.org/Main_Page
+- http://wiki.osdev.org/Bare_bones
+
+SETUP OSX Lion
+----------
