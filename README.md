@@ -110,4 +110,6 @@ Extensive How-To In Progress
 Resources
 ------------------------------------------
 
-- [http://www.osdever.net/tutorials/view/getting-started-in-os-development](http://www.osdever.net/tutorials
+- [http://www.osdever.net/tutorials/view/getting-started-in-os-development](http://www.osdever.net/tutorials/view/getting-started-in-os-development)
+- [http://mikeos.berlios.de/](http://mikeos.berlios.de/)
+- http://www.jamesmolloy.co.uk
