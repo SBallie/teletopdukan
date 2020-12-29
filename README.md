@@ -117,4 +117,7 @@ Resources
 - http://wiki.osdev.org/Bare_bones
 
 SETUP OSX Lion
-----------
+------------------------------------------
+= Cross-Compiler =
+brew install binutils
+brew install gcc (pulls 
