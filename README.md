@@ -120,4 +120,9 @@ SETUP OSX Lion
 ------------------------------------------
 = Cross-Compiler =
 brew install binutils
-brew install gcc (pulls 
+brew install gcc (pulls in deps: mpfr, libmpc, isl, cloog)
+brew install gmp mpc libmpc
+
+### Follow instructions
+
+http://wiki.osdev
