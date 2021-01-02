@@ -133,4 +133,10 @@ OLD README
 GDT [Global Descriptor Table]
 
 Multitasking:
-http://
+http://www.osdever.net/tutorials/multitasking.php
+
+Tips/Problems
+------------------------------------------
+
+Prob:
+  undefin
