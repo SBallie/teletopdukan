@@ -125,4 +125,12 @@ brew install gmp mpc libmpc
 
 ### Follow instructions
 
-http://wiki.osdev
+http://wiki.osdev.org/GCC_Cross-Compiler
+
+OLD README
+------------------------------------------
+
+GDT [Global Descriptor Table]
+
+Multitasking:
+http://
