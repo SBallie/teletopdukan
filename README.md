@@ -139,4 +139,8 @@ Tips/Problems
 ------------------------------------------
 
 Prob:
-  undefin
+  undefined reference to '__stack_chk_fail'
+
+Desc:
+  This problem occurs when the gcc compiler thinks you have a possible buffer
+  overflow, or the code can
