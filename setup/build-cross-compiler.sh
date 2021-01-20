@@ -9,4 +9,13 @@ export PATH="$PREFIX/bin:$PATH"
 cd $HOME/src
 mkdir build-binutils
 cd build-binutils
-../binutils-x.y.z/configure --target=$TARGET --
+../binutils-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --disable-werror
+make
+make install
+
+
+# Build GCC
+
+cd $HOME/src
+
+# If you wish to build these packages as 
