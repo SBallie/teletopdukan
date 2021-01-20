@@ -63,3 +63,104 @@ link: compile assemble
 							$(OBJ_DIR)/isrs.o  \
 							$(OBJ_DIR)/timer.o \
 							$(OBJ_DIR)/task.o \
+							$(OBJ_DIR)/kb.o    \
+							$(OBJ_DIR)/mm.o    \
+							$(OBJ_DIR)/hd.o    \
+							$(OBJ_DIR)/io.o    \
+							$(OBJ_DIR)/vga.o   \
+							$(OBJ_DIR)/test.o
+
+	@#$(ld) -T link.ld -o $(BIN_DIR)/$(OSNAME).bin $(OBJ_DIR)/*.o
+
+compile: dirs
+	@echo "Compiling..."
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main.o  $(SRC)/main.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/scrn.o  $(SRC)/scrn.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/gdt.o   $(SRC)/gdt.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/isrs.o  $(SRC)/isrs.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/timer.o $(SRC)/timer.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/task.o   $(SRC)/task.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/kb.o    $(SRC)/kb.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/mm.o    $(SRC)/mm.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hd.o    $(SRC)/hd.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/io.o    $(SRC)/io.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/vga.o   $(SRC)/vga.c
+	$(CXX) $(CXXFLAGS) -c -o $(OBJ_DIR)/test.o $(SRC)/_test.cpp
+
+	@#$(CXX) $(CXXFLAGS) -c -o $(OBJ_DIR)/test.o $(SRC)/test.cpp
+
+# currently working on
+assemble: dirs
+	@echo "\nAssembling...\n"
+	# stdout the preproccessed version
+	#nasm -e elf -o $(OBJ_DIR)/start.o $(ASM_DIR)/start.s
+	# aout
+	#nasm -f aout -o $(OBJ_DIR)/start.o $(SRC)/start.s
+	# elf obj format
+	nasm -f elf -o $(OBJ_DIR)/start.o $(ASM_DIR)/start.s
+	nasm -f elf -o $(OBJ_DIR)/kernel.o $(ASM_DIR)/kernel.s
+
+
+dirs:
+	mkdir -p $(BIN_DIR)
+	mkdir -p $(OBJ_DIR)
+	@echo "\nDirectories Created.\n"
+
+iso:
+	mkisofs -o $(BIN_DIR)/$(OSNAME).iso -b $(BIN_DIR)/$(OSNAME).flp
+	#grub-mkrescue --output=$(BUILD_DIR)tranbyos.iso $(BUILD_DIR)/boot/grub
+
+copykernel: build
+	@echo "\nInjecting Kernel Into Grub Image"
+	$(BUILD_DIR)/build-copykernel-grub.sh
+
+disks:
+	@echo "\nCreating Blank QEMU Hard Drive Images For Testing"
+	$(QIMG) create -f qcow2 $(BUILD_DIR)/$(OSNAME)-hd-32mb.img 32M
+	$(QIMG) create -f qcow2 $(BUILD_DIR)/$(OSNAME)-hd-64mb.img 64M
+
+
+#TODO: Add Scripts or Programs to Disk Image
+test: build
+	@echo "\nTesting...\n"
+
+
+# others
+# - https://github.com/zhiayang/mx/blob/develop/tools/createdisk.sh
+# -
+
+# -vga [std|cirrus|vmware|qxl|xenfb|tcx|cg3|virtio|none]
+# => VESA VBE virtual graphic card (std 1024x768, cirrus 4096x4096??, vmware fastest if can setup)
+# -vga std (Bochs VBE 2.0 support)
+# -vga vmware VMWare SVGA-II
+# -rtc [base=utc|localtime|date][,clock=host|vm][,driftfix=none|slew]
+# -usb, -usbdevice mouse
+run: copykernel disks
+	@echo "\nRun in QEMU"
+	# Use GRUB for multiboot
+	#$(QEMU) -m 32 -rtc base=localtime,clock=host,driftfix=slew -hda $(BUILD_DIR)/$(OSNAME)-hd-32mb.img -hdb $(BUILD_DIR)/$(OSNAME)-hd-64mb.img -fda $(BUILD_DIR)/grub_disk.img -vga vmware -serial stdio
+	# Use QEMU directly as multiboot loader
+	$(QEMU) -m 32 -rtc base=localtime,clock=host,driftfix=slew -hda $(BUILD_DIR)/$(OSNAME)-hd-32mb.img -hdb $(BUILD_DIR)/$(OSNAME)-hd-64mb.img -vga std -serial stdio -fda $(BUILD_DIR)/grub_disk.img
+	$(QEMU) -m 32 -rtc base=localtime,clock=host,driftfix=slew -hda $(BUILD_DIR)/$(OSNAME)-hd-32mb.img -hdb $(BUILD_DIR)/$(OSNAME)-hd-64mb.img -vga std -serial -usbdevice mouse stdio -fda $(BUILD_DIR)/grub_disk.img
+
+
+riso: build
+	mkdir -p $(BUILD_DIR)/tmp/boot/grub
+	cp $(BIN_DIR)/$(OSNAME).bin $(BUILD_DIR)/tmp/boot/grub
+	mkisofs -J -o $(BUILD_DIR)/tranbyos.iso $(BUILD_DIR)/tmp
+	grub-mkrescue --modules="iso9660 biosdisk multiboot" --output=$(BUILD_DIR)/tranbyos.iso $(BUILD_DIR)/tmp
+	$(QEMU) -m 32 -rtc base=localtime,clock=host,driftfix=slew -hda $(BUILD_DIR)/$(OSNAME)-hd-32mb.img -hdb $(BUILD_DIR)/$(OSNAME)-hd-64mb.img -vga std -serial stdio -cdrom $(BUILD_DIR)/tranbyos.iso
+
+#TODO: Should the directories bin/ and obj/ be removed, or just all the files inside?
+#TODO: Should all the bin/* and obj/* files be removed, or should they just be overwritten each time?
+clean:
+	@echo Files Cleaned.
+	@echo $(PATH)
+	rm -f $(BUILD_DIR)/$(OSNAME)-hd-32mb.img
+	rm -f $(BUILD_DIR)/$(OSNAME)-hd-64mb.img
+	rm -f $(BIN_DIR)/*
+	rm -f $(OBJ_DIR)/*.o
+
+
+deps:
+	$(CC) -MMD -MF $out.d $(CFLAGS)
