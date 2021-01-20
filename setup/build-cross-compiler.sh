@@ -18,4 +18,8 @@ make install
 
 cd $HOME/src
 
-# If you wish to build these packages as 
+# If you wish to build these packages as part of gcc:
+mv libiconv-x.y.z gcc-x.y.z/libiconv # Mac OS X users
+mv gmp-x.y.z gcc-x.y.z/gmp
+mv mpfr-x.y.z gcc-x.y.z/mpfr
+mv mpc
