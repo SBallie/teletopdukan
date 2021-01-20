@@ -147,4 +147,11 @@ Desc:
 
 Soln:
   add -fno-stack-protector to the CFLAGS as an argument to gcc
-  [http://hackinglinux.blogspot.com/2006/11/resolving-stackchkfail-error.html](http://hackinglinux.blogspot.com/2006/11/res
+  [http://hackinglinux.blogspot.com/2006/11/resolving-stackchkfail-error.html](http://hackinglinux.blogspot.com/2006/11/resolving-stackchkfail-error.html)
+
+-------------
+
+Prob:
+
+Desc:
+Soln:
