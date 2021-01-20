@@ -143,4 +143,8 @@ Prob:
 
 Desc:
   This problem occurs when the gcc compiler thinks you have a possible buffer
-  overflow, or the code can
+  overflow, or the code cannot be statically proven to be safe to such a bug.
+
+Soln:
+  add -fno-stack-protector to the CFLAGS as an argument to gcc
+  [http://ha
