@@ -22,4 +22,8 @@ cd $HOME/src
 mv libiconv-x.y.z gcc-x.y.z/libiconv # Mac OS X users
 mv gmp-x.y.z gcc-x.y.z/gmp
 mv mpfr-x.y.z gcc-x.y.z/mpfr
-mv mpc
+mv mpc-x.y.z gcc-x.y.z/mpc
+
+mkdir build-gcc
+cd build-gcc
+../gcc-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enabl
