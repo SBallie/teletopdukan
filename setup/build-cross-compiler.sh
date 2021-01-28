@@ -33,4 +33,9 @@ make install-gcc
 make install-target-libgcc
 
 
-# Test Versi
+# Test Version
+
+$HOME/opt/cross/bin/$TARGET-gcc --version
+
+# Add cross compiler to path
+export PATH="$HOME/opt/cross/bin:$PATH"
