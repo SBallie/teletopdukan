@@ -11,4 +11,8 @@ banner();
 
 osx()
 {
-	echo "D
+	echo "Detected OSX!"
+	if [ ! -z "$(which brew)" ]; then
+		echo "Homebrew detected! Now updating..."
+		brew update
+		if [ -z 
