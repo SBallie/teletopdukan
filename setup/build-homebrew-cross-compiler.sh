@@ -15,4 +15,9 @@ osx()
 	if [ ! -z "$(which brew)" ]; then
 		echo "Homebrew detected! Now updating..."
 		brew update
-		if [ -z 
+		if [ -z "$(which git)" ]; then
+			echo "Now installing git..."
+			brew install git
+		fi
+		if [ "$2" == "qemu" ]; then
+			if [ -z "$(which 
