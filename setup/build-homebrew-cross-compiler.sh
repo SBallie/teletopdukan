@@ -20,4 +20,8 @@ osx()
 			brew install git
 		fi
 		if [ "$2" == "qemu" ]; then
-			if [ -z "$(which 
+			if [ -z "$(which qemu-system-i386)" ]; then
+				echo "Installing qemu..."
+				brew install qemu
+			else
+				echo "QEMU already installed
