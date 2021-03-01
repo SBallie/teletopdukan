@@ -24,4 +24,9 @@ osx()
 				echo "Installing qemu..."
 				brew install qemu
 			else
-				echo "QEMU already installed
+				echo "QEMU already installed!"
+			fi
+		else
+			if [ -z "$(which virtualbox)" ]; then
+				echo "Now installing virtualbox..."
+				brew cask install
