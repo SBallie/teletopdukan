@@ -29,4 +29,10 @@ osx()
 		else
 			if [ -z "$(which virtualbox)" ]; then
 				echo "Now installing virtualbox..."
-				brew cask install
+				brew cask install virtualbox
+			else
+				echo "Virtualbox already installed!"
+			fi
+		fi
+	else
+		echo "Homebrew does not appear to
