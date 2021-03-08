@@ -35,4 +35,8 @@ osx()
 			fi
 		fi
 	else
-		echo "Homebrew does not appear to
+		echo "Homebrew does not appear to be installed! Would you like me to install it?"
+		printf "(Y/n): "
+		read -r installit
+		if [ "$installit" == "Y" ]; then
+			rub
