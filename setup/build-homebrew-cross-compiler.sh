@@ -61,4 +61,9 @@ brew update
 brew install git
 
 # clone project
-echo "cloning TranbyO
+echo "cloning TranbyOS"
+git clone https://github.com/stevetranby/tranbyos.git
+
+echo "installing cross-compilers"
+# cross-compilers
+brew tap homebrew/version
