@@ -50,4 +50,15 @@ osx()
 	echo "Running Redox setup script..."
 	sh redox/setup/osx-homebrew.sh
 	echo "Running rust install script"
-	sh redox/setup/bina
+	sh redox/setup/binary.sh
+	endMessage
+}
+
+brew update
+brew update
+
+# dependencies
+brew install git
+
+# clone project
+echo "cloning TranbyO
