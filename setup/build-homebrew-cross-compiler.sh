@@ -41,4 +41,10 @@ osx()
 		if [ "$installit" == "Y" ]; then
 			ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		else
-			echo "Will n
+			echo "Will not install, now exiting..."
+			exit
+		fi
+	fi
+	echo "Cloning Redox repo"
+	git clone -b "$1" --recursive https://github.com/redox-os/redox.git
+	echo "Run
