@@ -47,4 +47,7 @@ osx()
 	fi
 	echo "Cloning Redox repo"
 	git clone -b "$1" --recursive https://github.com/redox-os/redox.git
-	echo "Run
+	echo "Running Redox setup script..."
+	sh redox/setup/osx-homebrew.sh
+	echo "Running rust install script"
+	sh redox/setup/bina
