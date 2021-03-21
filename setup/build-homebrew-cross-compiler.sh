@@ -66,4 +66,8 @@ git clone https://github.com/stevetranby/tranbyos.git
 
 echo "installing cross-compilers"
 # cross-compilers
-brew tap homebrew/version
+brew tap homebrew/versions
+brew install gcc49
+brew tap stevetranby/homebrew-gcc_cross_compilers
+brew install nasm
+brew install i386-elf-binutils i386-elf-gcc
