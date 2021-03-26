@@ -71,3 +71,8 @@ brew install gcc49
 brew tap stevetranby/homebrew-gcc_cross_compilers
 brew install nasm
 brew install i386-elf-binutils i386-elf-gcc
+brew install x86_64-elf-binutils x86_64-elf-gcc
+brew install arm-elf-binutils arm-elf-gcc
+
+brew install qemu
+brew cask install vi
