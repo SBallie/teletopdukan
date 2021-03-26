@@ -75,4 +75,4 @@ brew install x86_64-elf-binutils x86_64-elf-gcc
 brew install arm-elf-binutils arm-elf-gcc
 
 brew install qemu
-brew cask install vi
+brew cask install virtualbox
