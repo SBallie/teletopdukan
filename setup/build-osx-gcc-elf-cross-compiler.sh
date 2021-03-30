@@ -7,4 +7,7 @@ brew install bison flex gmp mpfr mpc isl cloog
 brew install libiconv
 brew install texinfo
 
-# This
+# This is only necessary for MacOS users.
+export CC=/usr/local/bin/gcc-4.8
+export CXX=/usr/local/bin/g++-4.8
+export CPP=/usr/l
