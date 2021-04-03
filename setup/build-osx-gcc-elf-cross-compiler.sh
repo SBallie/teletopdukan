@@ -10,4 +10,9 @@ brew install texinfo
 # This is only necessary for MacOS users.
 export CC=/usr/local/bin/gcc-4.8
 export CXX=/usr/local/bin/g++-4.8
-export CPP=/usr/l
+export CPP=/usr/local/bin/cpp-4.8
+export LD=/usr/local/bin/gcc-4.8
+
+# Add to bash_profile (or similar)
+TOOLCHAIN=""
+export PREFIX="$TOOLCHAIN/opt/cros
