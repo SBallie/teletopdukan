@@ -15,4 +15,11 @@ export LD=/usr/local/bin/gcc-4.8
 
 # Add to bash_profile (or similar)
 TOOLCHAIN=""
-export PREFIX="$TOOLCHAIN/opt/cros
+export PREFIX="$TOOLCHAIN/opt/cross"
+export PREFIX="$TOOLCHAIN/local/cross-elf"
+export TARGET=i686-elf
+export PATH="$PREFIX/bin:$PATH"
+
+
+# Build cross-Binutils
+cd $HOME/s
