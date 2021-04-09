@@ -22,4 +22,7 @@ export PATH="$PREFIX/bin:$PATH"
 
 
 # Build cross-Binutils
-cd $HOME/s
+cd $HOME/src
+mkdir build-binutils
+cd build-binutils
+../binutils-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-n
