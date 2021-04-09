@@ -25,4 +25,13 @@ export PATH="$PREFIX/bin:$PATH"
 cd $HOME/src
 mkdir build-binutils
 cd build-binutils
-../binutils-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-n
+../binutils-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --disable-werror
+make
+make install
+
+
+# Build cross-GCC
+
+cd $HOME/src
+
+# If you wish to build these packages
