@@ -11,4 +11,8 @@ class ArmElfGcc < Formula
   depends_on 'mpfr'
   depends_on 'arm-elf-binutils'
 
-  
+  def install
+    binutils = Formula.factory 'arm-elf-binutils'
+
+    ENV['CC'] = '/usr/local/bin/gcc-4.2'
+    ENV['CXX'] = '/usr/local/bi
