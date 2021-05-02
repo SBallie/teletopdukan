@@ -18,4 +18,7 @@ class ArmElfGcc < Formula
     ENV['CXX'] = '/usr/local/bin/g++-4.2'
     ENV['CPP'] = '/usr/local/bin/cpp-4.2'
     ENV['LD'] = '/usr/local/bin/gcc-4.2'
-    ENV['PATH'] 
+    ENV['PATH'] += ":#{binutils.prefix/"bin"}"
+
+    mkdir 'build' do
+      system '../configure', '--disable-nls', '--target=arm-elf-eabi', '--disabl
