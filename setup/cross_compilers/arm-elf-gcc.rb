@@ -24,4 +24,7 @@ class ArmElfGcc < Formula
       system '../configure', '--disable-nls', '--target=arm-elf-eabi', '--disable-werror',
                              "--prefix=#{prefix}",
                              "--enable-languages=c",
-        
+                             "--without-headers"
+      system 'make all-gcc'
+      system 'make install-gcc'
+      FileUtils.ln_sf binutils.prefix/"arm-elf-eabi", pr
