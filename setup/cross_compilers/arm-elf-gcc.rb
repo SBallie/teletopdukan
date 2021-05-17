@@ -30,4 +30,7 @@ class ArmElfGcc < Formula
       FileUtils.ln_sf binutils.prefix/"arm-elf-eabi", prefix/"arm-elf-eabi"
       system 'make all-target-libgcc'
       system 'make install-target-libgcc'
-      FileUtils.rm_rf share/"man
+      FileUtils.rm_rf share/"man"/"man7"
+    end
+  end
+end
