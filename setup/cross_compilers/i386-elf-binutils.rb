@@ -14,4 +14,7 @@ class I386ElfBinutils < Formula
     ENV['LD'] = '/usr/local/bin/gcc-4.9'
 
     mkdir 'build' do
-      system '../configure', '--disable-nls', '--target
+      system '../configure', '--disable-nls', '--target=i386-elf',
+                             '--disable-werror',
+                             '--enable-gold=yes',
+       
