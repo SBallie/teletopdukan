@@ -21,4 +21,7 @@ class I386ElfBinutils < Formula
       system 'make all'
       system 'make install'
       FileUtils.mv lib, libexec
-    e
+    end
+  end
+
+end
