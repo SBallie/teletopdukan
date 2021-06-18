@@ -23,4 +23,7 @@ class I386ElfGcc < Formula
 
     mkdir 'build' do
       system '../configure', '--disable-nls', '--target=i386-elf', '--disable-werror',
-                             "--prefix=#{prefix}
+                             "--prefix=#{prefix}",
+                             "--enable-languages=c,c++",
+                             "--without-headers"
+      system 'make all-gcc'
