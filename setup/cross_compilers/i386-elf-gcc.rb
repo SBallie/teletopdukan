@@ -27,3 +27,6 @@ class I386ElfGcc < Formula
                              "--enable-languages=c,c++",
                              "--without-headers"
       system 'make all-gcc'
+      system 'make install-gcc'
+      FileUtils.ln_sf binutils.prefix/"i386-elf", prefix/"i386-elf"
+      system 'make all-target-lib
