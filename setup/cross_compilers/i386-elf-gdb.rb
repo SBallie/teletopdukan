@@ -12,4 +12,8 @@ class I386ElfGdb < Formula
     # ENV['CC'] = '/usr/local/bin/gcc-4.9'
     # ENV['CXX'] = '/usr/local/bin/g++-4.9'
     # ENV['CPP'] = '/usr/local/bin/cpp-4.9'
-    # 
+    # ENV['LD'] = '/usr/local/bin/gcc-4.9'
+
+    mkdir 'build' do
+      system '../configure', '--target=i386-elf', "--prefix=#{prefix}", '--disable-werror'
+  
