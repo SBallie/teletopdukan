@@ -8,4 +8,7 @@ class I386JosElfBinutils < Formula
   depends_on 'apple-gcc42' => :build
 
   def install
-    ENV
+    ENV['CC'] = '/usr/local/bin/gcc-4.2'
+    ENV['CXX'] = '/usr/local/bin/g++-4.2'
+    ENV['CPP'] = '/usr/local/bin/cpp-4.2'
+    ENV['
