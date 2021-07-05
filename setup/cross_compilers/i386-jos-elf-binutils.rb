@@ -11,4 +11,7 @@ class I386JosElfBinutils < Formula
     ENV['CC'] = '/usr/local/bin/gcc-4.2'
     ENV['CXX'] = '/usr/local/bin/g++-4.2'
     ENV['CPP'] = '/usr/local/bin/cpp-4.2'
-    ENV['
+    ENV['LD'] = '/usr/local/bin/gcc-4.2'
+
+    mkdir 'build' do
+      system '../configure', '--disable-nls', '--target=i386-jos-elf',
