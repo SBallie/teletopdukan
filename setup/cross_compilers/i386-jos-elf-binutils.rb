@@ -15,3 +15,6 @@ class I386JosElfBinutils < Formula
 
     mkdir 'build' do
       system '../configure', '--disable-nls', '--target=i386-jos-elf',
+                             '--disable-werror',
+                             '--enable-gold=yes',
+                            
