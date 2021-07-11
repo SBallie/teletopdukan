@@ -17,4 +17,11 @@ class I386JosElfBinutils < Formula
       system '../configure', '--disable-nls', '--target=i386-jos-elf',
                              '--disable-werror',
                              '--enable-gold=yes',
-                            
+                             "--prefix=#{prefix}"
+      system 'make all'
+      system 'make install'
+      FileUtils.mv lib, libexec
+    end
+  end
+
+end
