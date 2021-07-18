@@ -21,4 +21,6 @@ class I586ElfGcc < Formula
     ENV['PATH'] += ":#{binutils.prefix/"bin"}"
 
     mkdir 'build' do
-      system '../configure', '--d
+      system '../configure', '--disable-nls', '--target=i586-elf',
+                             '--disable-werror',
+                             "--
