@@ -12,4 +12,8 @@ class I586ElfGcc < Formula
   depends_on 'i586-elf-binutils'
 
   def install
-    binutils = Formula.factory 'i586-elf-bi
+    binutils = Formula.factory 'i586-elf-binutils'
+
+    ENV['CC'] = '/usr/local/bin/gcc-4.2'
+    ENV['CXX'] = '/usr/local/bin/g++-4.2'
+    ENV['CPP'] = '/usr/local/bin/cpp-4.2'
