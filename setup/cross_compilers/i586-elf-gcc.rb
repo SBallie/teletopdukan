@@ -17,3 +17,8 @@ class I586ElfGcc < Formula
     ENV['CC'] = '/usr/local/bin/gcc-4.2'
     ENV['CXX'] = '/usr/local/bin/g++-4.2'
     ENV['CPP'] = '/usr/local/bin/cpp-4.2'
+    ENV['LD'] = '/usr/local/bin/gcc-4.2'
+    ENV['PATH'] += ":#{binutils.prefix/"bin"}"
+
+    mkdir 'build' do
+      system '../configure', '--d
