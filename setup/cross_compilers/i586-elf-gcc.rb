@@ -26,4 +26,7 @@ class I586ElfGcc < Formula
                              "--prefix=#{prefix}",
                              "--enable-languages=c",
                              "--without-headers"
-      system 'make all-g
+      system 'make all-gcc'
+      system 'make install-gcc'
+      FileUtils.ln_sf binutils.prefix/"i586-elf", prefix/"i586-elf"
+      system 'make all-target
