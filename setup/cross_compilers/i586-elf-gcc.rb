@@ -29,4 +29,8 @@ class I586ElfGcc < Formula
       system 'make all-gcc'
       system 'make install-gcc'
       FileUtils.ln_sf binutils.prefix/"i586-elf", prefix/"i586-elf"
-      system 'make all-target
+      system 'make all-target-libgcc'
+      system 'make install-target-libgcc'
+      FileUtils.rm_rf share/"man"/"man7"
+    end
+  end
