@@ -34,3 +34,4 @@ class I586ElfGcc < Formula
       FileUtils.rm_rf share/"man"/"man7"
     end
   end
+end
