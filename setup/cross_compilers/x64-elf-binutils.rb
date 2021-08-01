@@ -14,4 +14,6 @@ class X64ElfBinutils < Formula
     ENV['LD'] = '/usr/local/bin/gcc-4.2'
 
     mkdir 'build' do
-      system '../configure
+      system '../configure', '--disable-nls', '--target=x86_64-elf','--disable-werror',
+                             '--enable-gold=yes',
+  
