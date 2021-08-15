@@ -19,4 +19,8 @@ class X64ElfBinutils < Formula
                              "--prefix=#{prefix}"
       system 'make all'
       system 'make install'
-      FileUtils.mv li
+      FileUtils.mv lib, libexec
+    end
+  end
+
+end
