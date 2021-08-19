@@ -9,4 +9,10 @@ class X64ElfGcc < Formula
   depends_on 'gmp'
   depends_on 'libmpc'
   depends_on 'mpfr'
-  depends_
+  depends_on 'x64-elf-binutils'
+
+  def install
+    binutils = Formula.factory 'x64-elf-binutils'
+
+    ENV['CC'] = '/usr/local/bin/gcc-4.2'
+    ENV['CXX'] = '/usr/l
