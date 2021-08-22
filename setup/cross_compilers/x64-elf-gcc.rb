@@ -15,4 +15,7 @@ class X64ElfGcc < Formula
     binutils = Formula.factory 'x64-elf-binutils'
 
     ENV['CC'] = '/usr/local/bin/gcc-4.2'
-    ENV['CXX'] = '/usr/l
+    ENV['CXX'] = '/usr/local/bin/g++-4.2'
+    ENV['CPP'] = '/usr/local/bin/cpp-4.2'
+    ENV['LD'] = '/usr/local/bin/gcc-4.2'
+    EN
