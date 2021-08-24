@@ -26,4 +26,7 @@ class X64ElfGcc < Formula
                              "--enable-languages=c,c++",
                              "--without-headers"
       system 'make all-gcc'
-      system 'make install
+      system 'make install-gcc'
+      FileUtils.ln_sf binutils.prefix/"x86_64-elf", prefix/"x86_64-elf"
+      system 'make all-target-libgcc'
+      system 'make install-ta
