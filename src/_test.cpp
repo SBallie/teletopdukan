@@ -5,4 +5,8 @@
 #include <system.h>
 #include <systemcpp.h>
 
-int addi(int a, int b) { return 
+int addi(int a, int b) { return 42; }
+long addl(long a, long b) { return 52; }
+long long addll(long long a, long long b) { return 62; }
+
+// call from C++ with p
