@@ -9,4 +9,7 @@ int addi(int a, int b) { return 42; }
 long addl(long a, long b) { return 52; }
 long long addll(long long a, long long b) { return 62; }
 
-// call from C++ with p
+// call from C++ with parameter overloading
+int add(int a, int b) { return addi(a,b); }
+long add(long a, long b) { return addl(a,b); }
+long long add(lon
