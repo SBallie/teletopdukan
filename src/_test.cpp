@@ -20,4 +20,10 @@ void test() {
 	add(c,*d);
 }
 
-// Test compilin
+// Test compiling classes
+struct entity_component {};
+struct entity {
+    entity_component components[];
+};
+struct entity_system {
+    entity_compo
