@@ -26,4 +26,6 @@ struct entity {
     entity_component components[];
 };
 struct entity_system {
-    entity_compo
+    entity_component components_this_handles[];
+    void update(real64 dt);
+};
