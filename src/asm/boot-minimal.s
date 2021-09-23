@@ -10,4 +10,9 @@ Start:
     hlt      ; halt the system
 
     times 510 - ($-$$) db 0  ;We have to be 512 bytes.Clear rest of bytes with 0
-    ddw 0xAA55   
+    ddw 0xAA55               ;Boot signature
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ _start:
+    ; Write kernel here. It might be good to load a 
