@@ -24,4 +24,7 @@ Start:
     stosw
     or al, al
     jnz .displaying
-    jmp short
+    jmp short $
+
+string:
+    db "Hello world!", 0
