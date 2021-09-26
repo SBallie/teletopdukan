@@ -4,4 +4,8 @@
 ; TODO: can we move this into C code?
 
 
-; 
+; From: http:// ??????
+
+section .bss ; $Revision: 1.6 $
+vendor_id       resd	12	;reserve 12 bytes of memory
+version
