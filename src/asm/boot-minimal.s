@@ -15,4 +15,13 @@ Start:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  _start:
-    ; Write kernel here. It might be good to load a 
+    ; Write kernel here. It might be good to load a new GDT.
+    mov edi, 0xB8000
+    mov esi, string
+    mov ah, 0x0F
+    .displaying:
+    lodsb
+    stosw
+    or al, al
+    jnz .displaying
+    jmp short
