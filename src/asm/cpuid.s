@@ -15,4 +15,5 @@ curfeat		resd	4
 
 
 section .text
-    global _start                       ;must be
+    global _start                       ;must be declared for linker (ld)
+names	db	'FPU  VME  DE   PSE  TSC  MSR  PAE  MCE  CX8  APIC RESV SEP  MTRR PGE  MCA  CMOV PAT PSE3 PSN  
