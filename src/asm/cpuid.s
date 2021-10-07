@@ -22,4 +22,9 @@ _start:					;tell linker entry point
 
 mov eax,0
 cpuid
-mo
+mov [vendor_id],ebx
+mov [vendor_id+4],edx
+mov [vendor_id+8],ecx
+
+        ;;syscall(SYS_write, 0, str, sizeof(str)-1)
+        mov   
