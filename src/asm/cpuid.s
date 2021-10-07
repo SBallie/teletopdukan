@@ -16,4 +16,10 @@ curfeat		resd	4
 
 section .text
     global _start                       ;must be declared for linker (ld)
-names	db	'FPU  VME  DE   PSE  TSC  MSR  PAE  MCE  CX8  APIC RESV SEP  MTRR PGE  MCA  CMOV PAT PSE3 PSN  
+names	db	'FPU  VME  DE   PSE  TSC  MSR  PAE  MCE  CX8  APIC RESV SEP  MTRR PGE  MCA  CMOV PAT PSE3 PSN  CLFS RESV DS   ACPI MMX FXSR SSE  SSE2 SS   HTT  TM   RESV PBE '
+
+_start:					;tell linker entry point
+
+mov eax,0
+cpuid
+mo
