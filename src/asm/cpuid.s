@@ -27,4 +27,7 @@ mov [vendor_id+4],edx
 mov [vendor_id+8],ecx
 
         ;;syscall(SYS_write, 0, str, sizeof(str)-1)
-        mov   
+        mov     edx,12  ;message length
+        mov     ecx,vendor_id   ;message to write (msg is a pointer to the start of the string
+
+        mov 
