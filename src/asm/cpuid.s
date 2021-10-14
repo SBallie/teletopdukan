@@ -30,4 +30,6 @@ mov [vendor_id+8],ecx
         mov     edx,12  ;message length
         mov     ecx,vendor_id   ;message to write (msg is a pointer to the start of the string
 
-        mov 
+        mov     ebx,1   ;file descriptor (stdout)
+        mov     eax,4   ;system call number (sys_write)
+        int     0x80    ;cal
