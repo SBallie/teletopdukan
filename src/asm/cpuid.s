@@ -32,4 +32,13 @@ mov [vendor_id+8],ecx
 
         mov     ebx,1   ;file descriptor (stdout)
         mov     eax,4   ;system call number (sys_write)
-        int     0x80    ;cal
+        int     0x80    ;call kernel
+
+
+mov eax,1
+cpuid
+mov [version],eax
+mov [features],edx
+;mov [100000f0h],ebx ;break program for debugging
+
+;; lo
