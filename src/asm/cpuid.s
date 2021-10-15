@@ -41,4 +41,13 @@ mov [version],eax
 mov [features],edx
 ;mov [100000f0h],ebx ;break program for debugging
 
-;; lo
+;; loop
+mov	eax,00000001h
+mov	[curfeat],eax
+mov     eax,-1
+mov     [i],eax
+.loop:
+;;--i
+	mov     eax,[i] 
+	inc eax         ;(i++)
+	cmp     eax,31
