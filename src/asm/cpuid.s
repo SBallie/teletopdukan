@@ -55,4 +55,7 @@ mov     [i],eax
 	mov     [i],eax    ;put updated value on stack
 
 ;get current feature
-    
+        mov ebx,[curfeat]
+;test for feature - if feature exists ebx is non zero
+	and ebx,[features]
+;left shift to test fo
