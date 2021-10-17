@@ -51,3 +51,8 @@ mov     [i],eax
 	mov     eax,[i] 
 	inc eax         ;(i++)
 	cmp     eax,31
+	jz     .quitloop   ;quit loop if reached limit
+	mov     [i],eax    ;put updated value on stack
+
+;get current feature
+    
