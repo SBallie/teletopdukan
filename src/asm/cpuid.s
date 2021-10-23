@@ -61,4 +61,8 @@ mov     [i],eax
 ;left shift to test for next feature (will be used in next iteration of loop)
 	mov eax,[curfeat]
         shl eax,1
-        mov [curf
+        mov [curfeat],eax
+
+;jump if feaure not exist
+cmp ebx,0 
+jz .loop ;check if zero flag is set - if it is it means that the feature didn't exist so
