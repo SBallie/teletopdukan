@@ -58,4 +58,7 @@ mov     [i],eax
         mov ebx,[curfeat]
 ;test for feature - if feature exists ebx is non zero
 	and ebx,[features]
-;left shift to test fo
+;left shift to test for next feature (will be used in next iteration of loop)
+	mov eax,[curfeat]
+        shl eax,1
+        mov [curf
