@@ -67,4 +67,6 @@ mov     [i],eax
 cmp ebx,0 
 jz .loop ;check if zero flag is set - if it is it means that the feature didn't exist so we don't want to print anything out
 ;;otherwise this feature must exist lets print it out...
-        mov     eax,[i] ;get value from
+        mov     eax,[i] ;get value from stack           0x080480bf
+        mov     edx,5   ;message length
+        mov     ecx,names     ;message to write 
