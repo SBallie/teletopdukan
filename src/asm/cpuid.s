@@ -69,4 +69,7 @@ jz .loop ;check if zero flag is set - if it is it means that the feature didn't 
 ;;otherwise this feature must exist lets print it out...
         mov     eax,[i] ;get value from stack           0x080480bf
         mov     edx,5   ;message length
-        mov     ecx,names     ;message to write 
+        mov     ecx,names     ;message to write (msg is a pointer to the start of the string
+times 5	add	ecx,eax
+	
+        mov     ebx,1   ;file descriptor (
