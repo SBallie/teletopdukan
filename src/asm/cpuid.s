@@ -74,4 +74,10 @@ times 5	add	ecx,eax
 	
         mov     ebx,1   ;file descriptor (stdout)
         mov     eax,4   ;system call number (sys_write) 0x080480b7
-        int     0x80    ;call kernel             
+        int     0x80    ;call kernel                    0x080480be
+
+	jmp .loop ; unconditional jump
+;}
+.quitloop:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
