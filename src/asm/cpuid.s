@@ -80,4 +80,6 @@ times 5	add	ecx,eax
 ;}
 .quitloop:
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+mov	eax,1	;system call number (sys_exit)
+	mov	ebx,0	;exit status 0 (if not used is 1 as set before) "echo $?" to check
