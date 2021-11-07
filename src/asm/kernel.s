@@ -11,4 +11,15 @@ extern test_user_function
 ; 0x28, as it is the 5th selector and each is 8 bytes
 ; long, but we set the bottom two bits (making 0x2B)
 ; so that it has an RPL of 3, not zero.
-; Load 0x
+; Load 0x2B into the task state register.
+
+section text
+
+global tss_flush
+tss_flush:
+    mov ax, 0x2B
+    ltr ax
+    ret
+
+global jump_usermode
+ju
