@@ -22,4 +22,9 @@ tss_flush:
     ret
 
 global jump_usermode
-ju
+jump_usermode:
+     mov ax, 0x23
+     mov ds, ax
+     mov es, ax
+     mov fs, ax
+     mov gs, ax      ;we don't need to worry about S
