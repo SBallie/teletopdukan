@@ -32,4 +32,9 @@ jump_usermode:
      push 0x23      ;user data segment with bottom 2 bits set for ring 3
      push eax       ;push our current stack just for the heck of it
      pushf          ;push the Eflags register
-     push 0x1B      ;u
+     push 0x1B      ;user data segment with bottom 2 bits set for ring 3
+     push test_user_function
+     iret           
+
+
+global switchT
