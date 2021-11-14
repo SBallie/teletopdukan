@@ -37,4 +37,7 @@ jump_usermode:
      iret           
 
 
-global switchT
+global switchTask
+switchTask:
+                            ; arg1, arg2 (esp -= 8)
+                            ; eip (esp -= 4)
