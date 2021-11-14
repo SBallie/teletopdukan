@@ -30,4 +30,6 @@ jump_usermode:
      mov gs, ax      ;we don't need to worry about SS. it's handled by iret
      mov eax, esp
      push 0x23      ;user data segment with bottom 2 bits set for ring 3
-     push 
+     push eax       ;push our current stack just for the heck of it
+     pushf          ;push the Eflags register
+     push 0x1B      ;u
