@@ -41,3 +41,5 @@ global switchTask
 switchTask:
                             ; arg1, arg2 (esp -= 8)
                             ; eip (esp -= 4)
+    pusha                   ; ax,bx,cx,dx(16),sp,bp,si,di(16) (esp -= 32)
+    pushf                   ; eflags (esp 
