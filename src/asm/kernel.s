@@ -42,4 +42,9 @@ switchTask:
                             ; arg1, arg2 (esp -= 8)
                             ; eip (esp -= 4)
     pusha                   ; ax,bx,cx,dx(16),sp,bp,si,di(16) (esp -= 32)
-    pushf                   ; eflags (esp 
+    pushf                   ; eflags (esp -= 4)
+    
+    mov eax, cr3                                         
+    push eax                ; cr3 (esp -= 4)
+
+    ; ESP  +  0 ,   4   ,
