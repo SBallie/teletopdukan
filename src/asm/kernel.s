@@ -47,4 +47,5 @@ switchTask:
     mov eax, cr3                                         
     push eax                ; cr3 (esp -= 4)
 
-    ; ESP  +  0 ,   4   ,
+    ; ESP  +  0 ,   4   ,  8 , 12 , 16 , 20 , 24 , 28 , 32 , 36 , 40 , 44 , 48
+    ; Stack: cr3, eflags, edi, esi, ebp, esp, edx, ecx, ebx, eax, eip, a
