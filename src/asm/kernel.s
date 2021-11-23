@@ -52,4 +52,7 @@ switchTask:
                                                
     mov eax, [esp+44]       ; The first argument, where to save
      
-    m
+    mov [eax+4], ebx        ;   
+    mov [eax+8], ecx        ;   
+    mov [eax+12], edx       ;   
+    mov [eax+1
