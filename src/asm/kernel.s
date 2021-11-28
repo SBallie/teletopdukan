@@ -60,4 +60,7 @@ switchTask:
 
     mov ebx, [esp+36]       ; eax
     mov ecx, [esp+40]       ; eip
-   
+    mov esi, [esp+16]       ; ebp
+    mov edi, [esp+4]        ; eflags
+    mov edx, [esp+20]       ; esp
+    add edx, 4        
