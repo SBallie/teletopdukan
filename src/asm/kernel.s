@@ -55,4 +55,9 @@ switchTask:
     mov [eax+4], ebx        ;   
     mov [eax+8], ecx        ;   
     mov [eax+12], edx       ;   
-    mov [eax+1
+    mov [eax+16], esi       ;   
+    mov [eax+20], edi       ;
+
+    mov ebx, [esp+36]       ; eax
+    mov ecx, [esp+40]       ; eip
+   
