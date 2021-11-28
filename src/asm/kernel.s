@@ -63,4 +63,8 @@ switchTask:
     mov esi, [esp+16]       ; ebp
     mov edi, [esp+4]        ; eflags
     mov edx, [esp+20]       ; esp
-    add edx, 4        
+    add edx, 4              ; Remove the return value
+
+    mov [eax], ebx          ; eax
+    mov [eax+24], edx       ; esp
+    mov [eax+28], esi       ; ebp
