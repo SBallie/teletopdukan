@@ -68,3 +68,7 @@ switchTask:
     mov [eax], ebx          ; eax
     mov [eax+24], edx       ; esp
     mov [eax+28], esi       ; ebp
+    mov [eax+32], ecx       ; eip
+    mov [eax+36], edi       ; eflags
+
+    pop ebx                 ; was pushed last
