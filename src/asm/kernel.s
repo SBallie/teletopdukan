@@ -72,3 +72,7 @@ switchTask:
     mov [eax+36], edi       ; eflags
 
     pop ebx                 ; was pushed last
+    mov [eax+40], ebx       ; cr3
+    push ebx                ;
+ 
+    mov eax, [esp+48]       ; eax points to "nex
