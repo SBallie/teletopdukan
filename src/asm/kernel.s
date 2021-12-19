@@ -75,4 +75,7 @@ switchTask:
     mov [eax+40], ebx       ; cr3
     push ebx                ;
  
-    mov eax, [esp+48]       ; eax points to "nex
+    mov eax, [esp+48]       ; eax points to "next" task obj
+
+    mov ebx, [eax+4]        ;
+    mov ecx, [eax+8]        ;                                    
