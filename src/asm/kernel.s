@@ -78,4 +78,6 @@ switchTask:
     mov eax, [esp+48]       ; eax points to "next" task obj
 
     mov ebx, [eax+4]        ;
-    mov ecx, [eax+8]        ;                                    
+    mov ecx, [eax+8]        ;                                     
+    mov edx, [eax+12]       ;                                     
+    mov esi, [eax+16]       ;                              
