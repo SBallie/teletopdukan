@@ -87,4 +87,7 @@ switchTask:
     push eax                ; save obj pointer
     mov eax, [eax+36]       ; eflags
     push eax                ; push onto stack
- 
+    popf                    ; pop into eflags registers
+    pop eax                 ; restore obj pointer
+
+    mov esp, 
