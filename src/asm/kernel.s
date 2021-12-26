@@ -84,4 +84,7 @@ switchTask:
     mov edi, [eax+20]       ;                                     
     mov ebp, [eax+28]       ;  
 
-    push eax              
+    push eax                ; save obj pointer
+    mov eax, [eax+36]       ; eflags
+    push eax                ; push onto stack
+ 
