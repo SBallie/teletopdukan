@@ -80,4 +80,8 @@ switchTask:
     mov ebx, [eax+4]        ;
     mov ecx, [eax+8]        ;                                     
     mov edx, [eax+12]       ;                                     
-    mov esi, [eax+16]       ;                              
+    mov esi, [eax+16]       ;                                     
+    mov edi, [eax+20]       ;                                     
+    mov ebp, [eax+28]       ;  
+
+    push eax              
