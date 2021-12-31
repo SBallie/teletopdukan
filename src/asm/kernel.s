@@ -90,4 +90,8 @@ switchTask:
     popf                    ; pop into eflags registers
     pop eax                 ; restore obj pointer
 
-    mov esp, 
+    mov esp, [eax+24]       ; esp - restore "next" stack
+
+    ; new stack
+    push eax                ; save obj pointer
+    mov eax, [e
