@@ -94,4 +94,8 @@ switchTask:
 
     ; new stack
     push eax                ; save obj pointer
-    mov eax, [e
+    mov eax, [eax+40]       ; cr3
+    mov cr3, eax            ; restore cr3
+    pop eax                 ; restore obj pointer
+
+    push e
