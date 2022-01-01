@@ -100,4 +100,7 @@ switchTask:
 
     push eax                ; save obj pointer
     mov eax, [eax+32]       ; eip - return address
-    xchg [esp], eax         ; We do no
+    xchg [esp], eax         ; We do not have any more registers to use as tmp storage 
+    mov eax, [eax]          ; eax
+
+    ret                     ; This ends al
