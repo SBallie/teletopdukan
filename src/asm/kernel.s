@@ -103,4 +103,13 @@ switchTask:
     xchg [esp], eax         ; We do not have any more registers to use as tmp storage 
     mov eax, [eax]          ; eax
 
-    ret                     ; This ends al
+    ret                     ; This ends all!
+
+
+
+
+;--------------------------------------------------------------------
+; Paging
+
+section text
+global invalidate_page_tab
