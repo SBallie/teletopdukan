@@ -98,4 +98,6 @@ switchTask:
     mov cr3, eax            ; restore cr3
     pop eax                 ; restore obj pointer
 
-    push e
+    push eax                ; save obj pointer
+    mov eax, [eax+32]       ; eip - return address
+    xchg [esp], eax         ; We do no
