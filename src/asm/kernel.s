@@ -112,4 +112,12 @@ switchTask:
 ; Paging
 
 section text
-global invalidate_page_tab
+global invalidate_page_tables
+invalidate_page_tables:
+    invlpg [eax]
+
+
+switch_page_directory:
+    push ebp
+    mov ebp, esp
+    mov eax, [esp
