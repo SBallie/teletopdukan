@@ -130,4 +130,12 @@ switch_page_directory:
 enable_pse:
     mov eax, cr4
     or eax, 0x00000010
-    mov cr4
+    mov cr4, eax
+
+global loadPageDirectory ; &page_directory -> void
+loadPageDirectory:
+    push ebp
+    mov ebp, esp
+    mov eax, [esp+8] 
+    mov cr3, eax 
+    mov
