@@ -138,4 +138,11 @@ loadPageDirectory:
     mov ebp, esp
     mov eax, [esp+8] 
     mov cr3, eax 
-    mov
+    mov esp, ebp
+    pop ebp
+    ret
+
+global enablePaging ; void -> void
+enablePaging:
+    push ebp
+    mov ebp, esp
