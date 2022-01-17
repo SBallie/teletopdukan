@@ -153,4 +153,7 @@ enablePaging:
     pop ebp
     ret
 
-; TODO:  Physic
+; TODO:  Physical Address Extension (PAE)
+
+
+
