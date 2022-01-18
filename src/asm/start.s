@@ -92,3 +92,121 @@ stublet:
 halt:
     hlt
     jmp $
+
+sse_enabled:
+    mov eax, 0x1
+    cpuid
+    test edx, 1<<25
+    jz .noSSE
+    ;SSE is available
+    ret;
+.noSSE:
+    ret;
+
+;now enable SSE and the like
+enable_sse:
+    mov eax, cr0
+    and ax, 0xFFFB      ;clear coprocessor emulation CR0.EM
+    or ax, 0x2          ;set coprocessor monitoring  CR0.MP
+    mov cr0, eax
+    mov eax, cr4
+    or ax, 3 << 9       ;set CR4.OSFXSR and CR4.OSXMMEXCPT at the same time
+    mov cr4, eax
+    ret
+
+%macro prologue 1
+    push ebp
+	mov ebp, esp
+	sub	esp, %1
+%endmacro
+%macro epilogue 0
+    mov	esp, ebp
+	pop	ebp
+	ret
+%endmacro
+%macro epilogue 1
+    mov esp, ebp
+    pop ebp
+    ret
+%endmacro
+
+_outpb:
+    prologue 2
+    out dx, al
+    epilogue
+_outpw:
+    prologue 2
+    out dx, ax
+    epilogue
+_outpl:
+    prologue 2
+    out dx, eax
+    epilogue
+_inpb:
+    prologue 1
+    in al, dx
+    epilogue 1
+_inpw:
+    prologue 1
+    in ax, dx
+    epilogue 1
+_inpl:
+    prologue 1
+    in eax, dx
+    epilogue 1
+
+;--------------------------------------------------------------------
+
+; Shortly we will add code for loading the GDT right here!
+; This will set up our new segment registers. We need to do
+; something special in order to set CS. We do what is called a
+; far jump. A jump that includes a segment as well as an offset.
+; This is declared in C as 'extern void gdt_flush();'
+gdt_flush:
+    lgdt [gp]         ; Load the GDT with our '_gp' which is a special pointer
+    mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    jmp 0x08:flush2   ; 0x08 is the offset to our code segment: Far jump!
+flush2:
+    ret               ; Returns back to the C code!
+
+;--------------------------------------------------------------------
+
+; Loads the IDT defined in '_idtp' into the processor.
+; This is declared in C as 'extern void idt_load();'
+idt_load:
+    lidt [idtp]
+    ret
+
+;--------------------------------------------------------------------
+; Interrupt Service Routines (ISR)
+;
+; http://wiki.osdev.org/Exceptions
+;
+; make handler available to 'C' with `global`
+; only push 0 for NO ERROR gates
+
+%assign i 0
+%rep    32
+
+global isr %+ i
+; IRQ handler
+isr %+ i:
+    cli
+%if (i != 8 && (i < 10 || i > 14))
+    push    byte 0
+%endif
+    push    byte i
+    jmp     isr_common_stub
+%assign i i+1
+%endrep
+
+; This is our common ISR stub. It saves the processor state, sets
+; up for kernel mode segments, calls the C-level fault handler,
+; and finally restores the stack frame.
+isr_common_stub:
+    pusha            ; push all regular registers (ax,bx,cx,dx,etc)
