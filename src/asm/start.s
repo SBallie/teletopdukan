@@ -210,3 +210,106 @@ isr %+ i:
 ; and finally restores the stack frame.
 isr_common_stub:
     pusha            ; push all regular registers (ax,bx,cx,dx,etc)
+
+    push ds
+    push es
+    push fs
+    push gs
+
+    mov ax, 0x10   ; Load the Kernel Data Segment descriptor!
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+
+    mov eax, esp   ; Push us the stack
+    push eax
+
+    mov eax, fault_handler
+    call eax       ; A special call, preserves the 'eip' register
+
+    pop eax
+    pop gs
+    pop fs
+    pop es
+    pop ds
+
+    popa           ; pop all regular registers (ax,bx,cx,dx,etc)
+
+    add esp, 8     ; Cleans up the pushed error code and pushed ISR number
+
+    ; iret pops 5 things at once: EIP, CS, EFLAGS, ESP, SS
+    iret           
+    ; WRONG pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+
+;--------------------------------------------------------------------
+; Interrupt Request (IRQ) handlers
+%assign i 0
+%assign j 32
+%rep    16
+
+; make handler available to 'C'
+global irq %+ i
+
+; IRQ handler
+irq %+ i:
+    cli                     ; make sure we clear interrupts so we have full control
+    push byte 0
+    push byte j
+    jmp irq_common_stub
+%assign i i+1
+%assign j j+1
+%endrep
+
+irq_common_stub:
+    pusha
+
+    push ds
+    push es
+    push fs
+    push gs
+
+    mov ax, 0x10   ; Load the Kernel Data Segment descriptor!
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+
+    mov eax, esp   ; Push us the stack
+    push eax
+
+    mov eax, irq_handler
+    call eax
+    pop eax
+
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    popa
+
+    add esp, 8
+
+    sti                     ; make sure we enable interrupts again
+
+    iret
+
+;--------------------------------------------------------------------
+
+; Block Started by Symbol (BSS)
+; - mostly used for uninitialized data (static int i;)
+; - https://en.wikipedia.org/wiki/.bss
+; - often the heap grows upward and thus sys_heap label/extern may be used for
+;
+; NOTE: using for boot stack/heap
+; TODO: adjust once full kernel loaded
+;
+
+section .bss
+
+sys_stack_bottom:
+    resb 16384               ; This reserves 8KBytes of memory here for the stack
+sys_stack_top:
+sys_heap_bottom:
+	resb 2048              ; This is the test kernel heap
+sys_heap_top:
