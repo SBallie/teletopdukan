@@ -92,3 +92,71 @@ void gdt_install()
 {
     // Setup the GDT pointer and limit
     gp.limit = sizeof(gdt_entry) * 6 - 1;
+    //gp.limit = sizeof(gdt) - 1;
+    gp.base = gdt;
+
+    // NULL descriptor
+    gdt_set_gate(0, 0, 0, 0, 0);
+
+    // Kernel Code(1) & Data(2)
+    // Base: 0, Limit: 4GB, 4KB blocks, 32-bit opcodes
+    // Code: 0x0A, Data: 0x02, Kernel: 0x90, User: 0xF0
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+
+    // User Code(3) & Data(4)
+    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
+    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
+
+    // Do it
+    gdt_flush();
+
+    write_tss(5, 0x10, 0x0);
+    tss_flush();
+}
+
+static void write_tss(int32_t num, uint16_t ss0, uint32_t esp0)
+{
+    uintptr_t base = (uintptr_t)&tss;
+    uintptr_t limit = base + sizeof(tss);
+
+    /* Add the TSS descriptor to the GDT */
+    gdt_set_gate(num, base, limit, 0xE9, 0x00);
+
+    kmemsetb((u8*)&tss, 0x0, sizeof(tss));
+
+    tss.ss0 = ss0;
+    tss.esp0 = esp0;
+    tss.cs = 0x0b;
+    tss.ss = 0x13;
+    tss.ds = 0x13;
+    tss.es = 0x13;
+    tss.fs = 0x13;
+    tss.gs = 0x13;
+
+    tss.iomap_base = sizeof(tss);
+}
+
+// Use When Interrupt Occurs
+void set_kernel_stack(uintptr_t stack) 
+{
+    tss.esp0 = stack;
+}
+
+//////////////////////////////////
+
+void test_user_function()
+{
+    trace("We were called from asm, we should be in ring 3, and cause GPF now!\n");
+    trace("1/\n");
+    trace("2/\n");
+    trace("3/\n");
+
+    asm volatile ("mov $0x123456, %%eax" : : );
+
+    trace("4/\n");
+    trace("5/\n");
+
+    //cli();
+}
+
