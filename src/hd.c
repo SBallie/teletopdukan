@@ -167,3 +167,26 @@ int ata_pio_read_w(int controller, int slave, int sn, int sc, u16 *data)
     ata_wait_drq();
 
     trace("Reading data\n");
+    for(i=0; i < sc*256; ++i)
+    {
+        data[i] = inw(HD_DATA);
+        if((inb(HD_ST_ALT)&HD_ST_ERR)) {
+            u8 err = inb(HD_ERR);
+            trace("Error Occured: %x (%d)\n", err, err);
+        }
+    }
+    trace("Finished Reading\n");
+
+    return 1;
+}
+
+// Calculate CHS to u8S
+u32 chs2bytes(u16 c, u16 h, u16 s)
+{
+  u32 bytes = SECTOR_BYTES;
+  u32 u8s = bytes * c * h * s;
+  //u32 kilou8s = u8s/1024;
+  //u32 megau8s = u8s/1048576;
+  //u32 gigau8s = u8s/1073741824;
+  return u8s;
+}
