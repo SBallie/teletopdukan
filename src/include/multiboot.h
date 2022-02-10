@@ -118,3 +118,72 @@ typedef struct
 
     uint32_t physbase;  // your LFB (Linear Framebuffer) address ;)
     uint32_t reserved1;
+    uint16_t reserved2;
+
+    // VBE 3.0, use these if LFB is present
+    uint16_t LinBytesPerScanLine;
+    uint8_t  BnkNumberofImagePages;
+    uint8_t  LinNumberofImagePages;
+    uint8_t  LinRedMaskSize;
+    uint8_t  LinRedFieldPosition;
+    uint8_t  LinGreenMaskSize;
+    uint8_t  LinGreenFieldPosition;
+    uint8_t  LinBlueMaskSize;
+    uint8_t  LinBlueMaskPosition;
+    uint8_t  LinRsvdMaskSize;
+    uint8_t  LinRsvdFieldPosition;
+    uint32_t MaxPixelClock;
+    uint8_t  Reserved;
+} vbe_mode_info;
+
+
+
+// order important 0x[seg][off]
+typedef struct PACKED
+{
+    union {
+        struct {
+            u16 off;
+            u16 seg;
+        };
+        u32 segoff;
+    };
+} segoff;
+
+// 512 Bytes struct
+typedef struct PACKED
+{
+    u8          signature[4];          /* VESA for <= 2.0, VBE2 for >= 3.0 */
+    u16         version;            /* BCD, ie 0x0104 is version 1.4 */
+    segoff      oem;                /* OEM String */
+    u8          caps[4];            /* Capabilities */
+    segoff      mode_list;          /* List of modes, terminated by 0xFFFF */
+    u16         total_memory;		/* Memory in 64kb blocks */
+    u16         oem_software_revision;		/* BCD, Revision of BIOS */
+    segoff      oem_vendor_name;	/* Name of vendor */
+    segoff      oem_product_name;	/* Name of product */
+    segoff      oem_product_revision;	/* Product revision */
+    u16         reserved[111];
+    u8          buff[256];        /*  OEM String Area */
+} vbe_controller_info;
+
+/* The module structure. */
+typedef struct
+{
+    u32 mod_start;
+    u32 mod_end;
+    u32 string;
+    u32 reserved;
+} module_t;
+
+/* The memory map. Be careful that the offset 0 is base_addr_low
+ but no size. */
+typedef struct
+{
+    u32 size;
+    u32 base_addr_low;
+    u32 base_addr_high;
+    u32 length_low;
+    u32 length_high;
+    u32 type;
+} memory_map_t;
