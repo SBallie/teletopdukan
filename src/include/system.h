@@ -408,3 +408,136 @@ extern void writeChar(output_writer writer, u8 ch);
 extern void printInt(i32 num);
 extern void printHex(u32 num);
 extern void printHex_w(u16 num);
+extern void printHex_b(u8 num);
+extern void printAddr(void* ptr);
+extern void printBinary_b(u8 num);
+
+/// serial communication for output through QEMU/BOCHS serial terminal interface view
+extern void init_serial();
+extern int serial_received();
+extern char read_serial();
+extern u32 is_transmit_empty();
+extern void serial_write_b(u8 a);
+extern void serial_write(c_str str);
+extern void serial_writeInt(u32 num);
+extern void serial_writeHex(u32 num);
+extern void serial_writeHex_w(u16 num);
+extern void serial_writeHex_b(u8 num);
+extern void serial_writeBinary_b(u8 num);
+
+/// formatted strings
+extern void kwrites(output_writer writer, c_str text);
+extern void kwritef(output_writer writer, c_str format, ...);
+#define kprintf(fmt, ...) kwritef(kputch, fmt, ##__VA_ARGS__)
+#define kserialf(fmt, ...) kwritef(serial_write_b, fmt, ##__VA_ARGS__)
+
+////////////////////////////////////////////////////////////////////////////
+// User Input Devices
+
+typedef struct {
+    u32 magic;
+    i16 x_difference;
+    i16 y_difference;
+    u16 buttons;
+} mouse_device_packet;
+
+#define MOUSE_MAGIC 0x57343
+#define LEFT_CLICK 0x01
+#define RIGHT_CLICK 0x02
+#define MIDDLE_CLICK 0x04
+#define MOUSE_SCROLL_DOWN 0x08
+#define MOUSE_SCROLL_UP 0x10
+
+extern i32 mouse_get_x();
+extern i32 mouse_get_y();
+extern u16 mouse_get_buttons();
+extern i8 mouse_get_scrolling();
+
+extern void ps2_install();
+
+////////////////////////////////////////////////////////////////////////////
+// Disks (Hard Drive, Floppy, CDRom)
+
+#define SECTOR_BYTES       512
+#define SECTOR_WORDS       256
+#define SECTOR_DWORDS      128     
+
+// could use if wanting more than one controller
+#define IDE_PRIMARY        1
+#define IDE_SECONDARY      0
+
+// could use if want a programmed way to access ATA registers
+#define IDE0_BASE          0x1F0
+#define IDE1_BASE          0X170
+
+#define HD0_IRQ            IRQ14
+#define HD1_IRQ            IRQ15
+
+#define HD_DATA            0x1f0  // Data port
+#define HD_FEAT            0x1f1  // Features (write)
+#define HD_ERR             0x1f1  // Error Info (read)
+#define HD_SC              0x1f2  // Sector Count
+#define HD_SN              0x1f3  // Sector Number (Low Byte of LBA - Partial Disk Sector Address)
+#define HD_CL              0x1f4  // Cylinder low-byte (Mid Byte of LBA - Partial Disk Sector Address)
+#define HD_CH              0x1f5  // Cylinder high-byte (High Byte of LBA - Partial Disk Sector Address)
+#define HD_DH              0x1f6  // Drive select bit, 101DHHHH
+#define HD_ST              0x1f7  // Status port (read)
+#define HD_CMD             0x1f7  // Command port (write)
+#define HD_ST_ALT          0x3f6  // Alternative Status
+#define HD_DCR             0x3f6  // Device Control Register (Alternative Status)
+
+#define HD1_DATA           0x170  // Data port
+#define HD1_FEAT           0x171  // Features (write)
+#define HD1_ERR            0x171  // Error Info (read)
+#define HD1_SC             0x172  // Sector Count
+#define HD1_SN             0x173  // Sector Number (Low Byte of LBA - Partial Disk Sector Address)
+#define HD1_CL             0x174  // Cylinder low-byte (Mid Byte of LBA - Partial Disk Sector Address)
+#define HD1_CH             0x175  // Cylinder high-byte (High Byte of LBA - Partial Disk Sector Address)
+#define HD1_DH             0x176  // Drive select bit, 101DHHHH
+#define HD1_ST             0x177  // Status port (read)
+#define HD1_CMD            0x177  // Command port (write)
+#define HD1_ST_ALT         0x3f7  // Alternative Status
+#define HD1_DCR            0x3f7  // Device Control Register (Alternative Status)
+
+#define HD_DCR_HOB          0x80  // SEt this to read back high-order byte of last LBA48 value sent to IO port.
+#define HD_DCR_SRST         0x04  // Software Reset -- set this to reset all ATA drives on a bus, if one is misbehaving.
+#define HD_DCR_NIEN         0x02  // Set this to stop the current device from sending interrupts.
+
+// Bits for HD_STATUS
+#define HD_ST_ERR           0x01  // Error flag (when set). Send new command to clear it (or nuke with Soft-Reset)
+#define HD_ST_IDX           0x02  // ?
+#define HD_ST_ECC           0x04  // corrected errors
+#define HD_ST_DRQ           0x08  // Set when drive has PIO data to transfer, or is ready to accept PIO data.
+#define HD_ST_SK            0x10  // Overlapped Mode Service Request (seek)
+#define HD_ST_DFE           0x20  // Drive fault errors (does not set ERR!)
+#define HD_ST_RDY           0x40  // Bit is clear when drive is spun down, or after an error. Set otherwise.
+#define HD_ST_BSY           0x80  // drive is preparing to accept/send data -- wait until this bit clears. If it never clears, then do a soft-reset. When set other status bits are meaningless.
+
+// Values for HD_CMD
+#define HD_CMD_RESTORE      0x10  //
+#define HD_CMD_READ         0x20  //
+#define HD_CMD_WRITE        0x30  //
+#define HD_CMD_VERIFY       0x40  //
+#define HD_CMD_FORMAT       0x50  //
+#define HD_CMD_INIT         0x60  //
+#define HD_CMD_SEEK         0x70  //
+#define HD_CMD_DIAGNOSE     0x90  //
+#define HD_CMD_SPECIFY      0x91  //
+#define HD_CMD_IDENTIFY     0xEC  //
+
+// Bits for HD_ERROR
+#define HD_ERR_MARK         0x01  //
+#define HD_ERR_TRACK0       0x02  //
+#define HD_ERR_ABORT        0x04  //
+#define HD_ERR_ID           0x10  //
+#define HD_ERR_ECC          0x40  //
+#define HD_ERR_BBD          0x80  //
+
+extern void ata_delay400ns(void);
+extern void ata_wait_busy();
+extern void ata_wait_drq();
+extern void ata_wait_ready();
+extern int ata_soft_reset(void);
+extern int ata_pio_read_w(int controller, int slave, int sn, int sc, u16 *data);
+extern int ata_pio_write_w(int controller, int slave, int sn, int sc, u16 *data);
+extern int ata_controller_present(int controller);
