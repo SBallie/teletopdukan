@@ -290,3 +290,121 @@ typedef struct PACKED
     u32 cacheDisabled:1;
     u32 accessed:1;
     u32 dirty:1;
+    u32 isGlobal:1;
+    u32 _unused:3;
+    u32 frameAddress:20;
+} page_table_entry;
+
+typedef struct PACKED
+{
+    page_table_entry pages[1024];
+} page_table;
+
+typedef struct PACKED
+{
+    page_table* tables[1024];
+    u32 tablesPhysical[1024];
+    u32 physicalAddress;
+} page_directory;
+
+#define PAGE_DIR_PRESENT         	0x00000001 // 1 - in physical memory
+#define PAGE_DIR_READWRITE          0x00000002 // 1 - readwrite, 0 - readonly
+#define PAGE_DIR_ACCESS_RING3       0x00000004 // 1 - access by ALL, 0 - only supervisor
+#define PAGE_DIR_WRITE_THROUGH      0x00000008 // 1 - write-through, 0 - write-back
+#define PAGE_DIR_CACHE_DISABLED     0x00000010 // 1 - page will NOT be cached
+#define PAGE_DIR_ACCESSED_RECENTLY  0x00000020 // 1 - read/written recently, OS must clear
+#define PAGE_DIR_ZERO_unused        0x00000040 // for OS use
+#define PAGE_TABLE_DIRTY            0x00000040 // written to, OS must clear
+#define PAGE_DIR_PAGE_SIZE_4M       0x00000080 // 1 - 4MB pages, 0 - 4KB pages
+#define PAGE_TABLE_zero_unused      0x00000080 // for OS use
+#define PAGE_DIR_ignored            0x00000100 // ignored ...
+#define PAGE_TABLE_GLOBAL           0x00000100 // The Global, or 'G' above, flag, if set, prevents the TLB from updating the address in it's cache if CR3 is reset. Note, that the page global enable bit in CR4 must be set to enable this feature.
+#define PAGE_DIR_unused             0x00000200 // for OS use
+#define PAGE_DIR_unused1            0x00000400 // for OS use
+#define PAGE_DIR_unused2            0x00000800 // for OS use
+#define PAGE_DIR_ADDR_BASE          0x00001000 // Base bit of start of address bits
+#define PAGE_DIR_ADDR_MASK          0xfffff000 // mask of all bits in address
+
+
+#define KERNEL_STACK_SIZE 2048       // Use a 2kb kernel stack.
+
+typedef uintptr_t vaddr;
+typedef uintptr_t paddr;
+
+// TODO: check out isr_stack_state for task switching from IRQ
+typedef struct {
+    // general (0,4,8,12)
+    u32 eax, ebx, ecx, edx;
+    // special (eax + 16,20,24,28,32)
+    u32 esi, edi, esp, ebp, eip;
+    // code segment
+    //TODO: u32 cs;
+    // flags (eax + 36)
+    u32 eflags;
+    // page directory (eax + 40)
+    u32 cr3;
+} TaskRegisters;
+
+// NOTE: require struct w/ tag because typedef not defined yet
+typedef struct Task {
+    TaskRegisters regs;
+    i32 pid;
+    //u32 esp, ebp, eip;
+    page_directory* pageDirectory;
+    u32 kernel_stack;
+    b32 isActive;
+    struct Task* next;
+} Task;
+
+void switch_page_directory(page_directory* newDirectory);
+page_table_entry* get_page(u32 address, int make, page_directory* dir);
+void page_fault(TaskRegisters* regs);
+page_directory* clone_directory(page_directory* src);
+
+typedef void(*TaskHandler)();
+
+/// Initialize the multitasking system and structures
+extern void initTasking();
+/// Kernel interface to switching task
+extern void preemptCurrentTask();
+extern void createTask(Task*, TaskHandler, u32, u32*);
+/// Kernel impl for switching task
+extern void switchTask(TaskRegisters* prev, TaskRegisters* next);
+extern void switchTaskInterrupt(TaskRegisters* prev, TaskRegisters* next);
+
+extern void initialise_tasking();
+extern i32 fork();
+extern void move_stack(void* newStackStart, u32 stackSize);
+extern i32 getpid();
+extern void switch_task();
+extern void set_kernel_stack(uintptr_t stack);
+
+// testing
+extern void jump_usermode();
+extern void k_preempt();
+extern void k_preempt_kernel();
+extern void k_doIt();
+
+//////////////////////////////////////////////////////////////////
+// STDOUT and friends
+
+typedef void(*output_writer)(u8 a);
+
+extern void writeInt(output_writer writer, i32 num);
+extern void writeUInt(output_writer writer, u32 num);
+extern void writeInt64(output_writer writer, i64 num);
+extern void writeUInt64(output_writer writer, u64 num);
+extern void writeAddr(output_writer writer, void* ptr);
+extern void writeHex_b(output_writer writer, u8 num);
+extern void writeHex_w(output_writer writer, u16 num);
+extern void writeHex(output_writer writer, u32 num);
+extern void writeHex_q(output_writer writer, u64 num);
+extern void writeHexDigit(output_writer writer, u8 digit);
+extern void writeBinary_b(output_writer writer, u8 num);
+extern void writeBinary_w(output_writer writer, u16 num);
+extern void writeBinary(output_writer writer, u32 num);
+extern void writeChar(output_writer writer, u8 ch);
+
+extern void printInt(i32 num);
+extern void printHex(u32 num);
+extern void printHex_w(u16 num);
