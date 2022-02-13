@@ -159,3 +159,134 @@ extern u32 timer_ticks();
 extern u32 timer_seconds();
 extern void delay_ticks(i32 ticks);
 extern void delay_ms(u32 ms);
+extern void delay_s(u32 s);
+extern rtc_time read_rtc();
+
+//////////////////////////////////////////////////////////////////
+// Filesystem (FS)
+
+/// FS Block -
+typedef struct {
+    u32 a;
+    u8 b;
+    i16 add;
+} fs_block;
+
+
+/// FS Master Table
+/// - the top level table storing pointers to block paging tables, etc
+typedef struct {
+
+} fs_master_table;
+
+//////////////////////////////////////////////////////////////////
+// Screen (Terminal, VGA, VESA)
+
+// TODO: const u8
+#define COLOR_BLACK         0x00
+#define COLOR_BLUE          0x01
+#define COLOR_GREEN         0x02
+#define COLOR_CYAN          0x03
+#define COLOR_RED           0x04
+#define COLOR_MAGENTA       0x05
+#define COLOR_BROWN         0x06
+#define COLOR_LIGHT_GREY    0x07
+#define COLOR_DARK_GREY     0x08
+#define COLOR_LIGHT_BLUE    0x09
+#define COLOR_LIGHT_GREEN   0x0a
+#define COLOR_LIGHT_CYAN    0x0b
+#define COLOR_LIGHT_RED     0x0c
+#define COLOR_LIGHT_MAGENTA 0x0d
+#define COLOR_YELLOW        0x0e
+#define COLOR_WHITE         0x0f
+
+// TODO: use Apple-style (maybe others) consts ????
+enum {
+    kColor_Black,
+};
+
+extern void cls();
+extern u8 kgetch();
+extern void kputch(u8 c);
+extern void kputs(c_str str);
+extern void set_text_color(u8 forecolor, u8 backcolor);
+extern void init_video();
+
+// vga
+extern u32 init_graph_vga(u32 width, u32 height, b32 chain4);
+extern void plot_pixel(u32 x, u32 y, u8 color);
+extern void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color);
+extern void polygon(u32 num_vertices,  u32 *vertices, u8 color);
+extern void fillrect(u32 xoff, u32 yoff, u8 color);
+extern void vga_tests();
+
+
+//////////////////////////////////////////////////////////////////
+// Device Input/Output
+
+extern u8 inb(u16 _port);
+extern void outb(u16 _port, u8 _data);
+extern u16 inw(u16 _port);
+extern void outw(u16 _port, u16 _data);
+extern void print_port(u16 port);
+
+// TODO: move elsewhere??? Inline Asm Funcs
+//extern inline void cpuid(int code, u32* a, u32* d);
+//extern inline u64 rdtsc();
+//extern inline void lidt(void* base, u16 size);
+//extern inline void invlpg(void* m);
+//extern inline void wrmsr(u32 msr_id, u64 msr_value);
+//extern inline u64 rdmsr(u32 msr_id);
+
+//////////////////////////////////////////////////////////////////
+// Memory, Page Faults, Page Tables
+
+/// Global Descriptor Table (GDT)
+/// - Defines the memory paging table map
+extern void gdt_set_gate(u32 num, u32 base, u32 limit, u8 access, u8 gran);
+extern void gdt_install();
+
+// Memory Allocation
+extern void init_mm();
+extern void print_heap_magic();
+extern void print_heap_bytes(u32 n);
+extern void print_blocks_avail();
+
+extern u8* kmalloc_b(u32 size);
+extern void free_b(u8* addr);
+
+extern void loadPageDirectory(u32* page_directory);
+extern void enablePaging();
+extern void init_page_directory();
+
+
+//////////////////////////////////////////////////////////////////
+// Multitasking (Tasks, TSS, etc)
+// Paging
+
+// TODO: can we use packed bitfield structs without issue?
+// - do we want to? if not create helper funcs for bit twiddle with DEFINES
+typedef struct PACKED
+{
+    u32 present:1;
+    u32 readwrite:1;
+    u32 accessRing3:1;
+    u32 writeThrough:1;
+    u32 cacheDisabled:1;
+    u32 accessed:1;
+    u32 _zero:1;
+    u32 pageSize:1;
+    u32 _ignored:1;
+    u32 _unused:3;
+    u32 address:20;
+} page_directory_entry;
+
+typedef struct PACKED
+{
+    u32 present:1;
+    u32 readwrite:1;
+    u32 accessRing3:1;
+    u32 writeThrough:1;
+    u32 cacheDisabled:1;
+    u32 accessed:1;
+    u32 dirty:1;
