@@ -541,3 +541,123 @@ extern int ata_soft_reset(void);
 extern int ata_pio_read_w(int controller, int slave, int sn, int sc, u16 *data);
 extern int ata_pio_write_w(int controller, int slave, int sn, int sc, u16 *data);
 extern int ata_controller_present(int controller);
+extern int ata_drive_present(int controller, int drive);
+u32 chs2bytes(u16 c, u16 h, u16 s);
+
+
+//////////////////////////////////////////////////////////////////
+// Interrupts
+
+#define ISR_COUNT 32
+
+/// IRQ function table (0-7, 8-15)
+#define IRQ_COUNT 16
+
+#define IRQ_SYSTEM_TIMER        0
+#define IRQ_KEYBOARD_PS2        1
+//IRQ 2 – cascaded signals from IRQs 8–15 (any devices configured to use IRQ 2 will actually be using IRQ 9)
+#define IRQ_SERIAL_PORT_2_4     3
+#define IRQ_SERIAL_PORT_1_3     4
+#define IRQ_PARALLEL_PORT_2_3   5
+#define IRQ_SOUND_CARD          5
+#define IRQ_FLOPPY_DISK         6
+#define IRQ_PARALLEL_PORT_1     7
+#define IRQ_REAL_TIME_CLOCK     8
+#define IRQ_ACPI_CTRL_INTEL     9
+//IRQ 10 – The Interrupt is left open for the use of peripherals (open interrupt/available, SCSI or NIC)
+//IRQ 11 – The Interrupt is left open for the use of peripherals (open interrupt/available, SCSI or NIC)
+#define IRQ_MOUSE_PS2           12
+#define IRQ_COPROC_FPU_IPI      13
+#define IRQ_ATA_MASTER          14
+#define IRQ_ATA_SLAVE           15
+
+/* Defines an IDT entry */
+typedef struct PACKED
+{
+    u16 base_lo;
+    u16 sel;        /* Our kernel segment goes here! */
+    u8 always0;     /* This will ALWAYS be set to 0! */
+    u8 flags;       /* Set using the above table! */
+    u16 base_hi;
+} idt_entry;
+
+typedef struct PACKED
+{
+    unsigned short limit;
+    unsigned int base;
+} idt_ptr;
+
+
+// TODO: we could change the ordering, need to make clear this is ISR specific from ASM code
+/// This defines what the stack looks like after an ISR was running
+typedef struct
+{
+    // pushed the segs last
+    u32 gs, fs, es, ds;
+    // pushed by 'pusha'
+    u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    // our 'push byte #' and ecodes do this
+    u32 int_no, err_code;
+    // pushed by the processor automatically
+    u32 eip, cs, eflags, useresp, ss;
+} isr_stack_state;
+
+typedef void(*isr_handler)(isr_stack_state* regs);
+
+/// (in start.s)
+extern void idt_load();
+
+extern void k_panic();
+
+/// Interrupt Descriptor Table (IDT)
+extern void idt_set_gate(u8 num, u32 base, u16 sel, u8 flags);
+extern void idt_install();
+
+// Interrupt Service Routines (ISR)
+extern void isrs_install();
+
+extern void isr_install_handler(u32 isr, isr_handler handler, c_str name);
+extern void isr_uninstall_handler(u32 isr);
+extern void irq_install_handler(u32 irq, isr_handler handler, c_str name);
+extern void irq_uninstall_handler(u32 irq);
+
+extern void irq_remap();
+extern void print_irq_counts();
+
+
+/// Handlers (defined in asm)
+// TODO: can we reduce this to single wrapper?
+//extern isr_handler isr_stubs[ISR_COUNT];
+//extern isr_handler isr_syscall;
+
+#define ISR(a) void isr##a();
+#define IRQ(a) void irq##a();
+REPEAT_x0_x9(ISR,);
+REPEAT_x0_x9(ISR,1);
+REPEAT_x0_x9(ISR,2);
+REPEAT_x0_x9(ISR,3);
+REPEAT_x0_x9(IRQ,);
+REPEAT_x0_x9(IRQ,1);
+//
+//extern void isr0();
+//extern void isr1();
+// ...
+//extern void irq0();
+//extern void irq1();
+// ...
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+// Keyboard
+
+// TODO: define mapping in config file (include a couple test to confirm scan codes valid)
+// maybe move to it's own include file
+// http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html#ss1.1
+/*
+ #define SCAN_NULL
+ #define SCAN_
+ #define SCAN_1 3
+ #define SCAN_2
+ #define SCAN_3
+ #define SCAN_4
+ #define SCAN_5
