@@ -661,3 +661,93 @@ REPEAT_x0_x9(IRQ,1);
  #define SCAN_3
  #define SCAN_4
  #define SCAN_5
+ #define SCAN_6
+ #define SCAN_7
+ #define SCAN_8
+ #define SCAN_9
+ #define SCAN_0
+ #define SCAN_MINUS
+ #define SCAN_EQUAL
+ #define SCAN_BACKSPACE
+ #define SCAN_TAB
+ #define SCAN_Q
+ #define SCAN_W
+ #define SCAN_E
+ */
+
+#define KBDUS_DOWNARROW		137
+#define KBDUS_PAGEDOWN		138
+#define KBDUS_INSERT		139
+#define KBDUS_CONTROL		140
+#define KBDUS_LEFTSHIFT		141
+#define KBDUS_RIGHTSHIFT	142
+#define KBDUS_ALT			143
+#define KBDUS_CAPSLOCK		144
+#define KBDUS_F1			145
+#define KBDUS_F2			146
+#define KBDUS_F3			147
+#define KBDUS_F4			148
+#define KBDUS_F5			149
+#define KBDUS_F6			150
+#define KBDUS_F7			151
+#define KBDUS_F8			152
+#define KBDUS_F9			153
+#define KBDUS_F10			154
+#define KBDUS_F11			155
+#define KBDUS_F12			156
+#define KBDUS_NUMLOCK		157
+#define KBDUS_SCROLLLOCK	158
+#define KBDUS_HOME			159
+#define KBDUS_DELETE		160
+#define KBDUS_PAGEUP		161
+#define KBDUS_UPARROW		162
+#define KBDUS_RIGHTARROW	163
+#define KBDUS_LEFTARROW		164
+#define KBDUS_END			165
+
+#define SCAN_US_SPACE   0x39
+#define SCAN_US_F2      0x3c
+#define SCAN_US_F3      0x3d
+#define SCAN_US_F4      0x3e
+#define SCAN_US_ENTER   0x1c // 28
+
+/* KBDUS means US Keyboard Layout. This is a scancode table
+ *  used to layout a standard US keyboard. I have left some
+ *  comments in to give you an idea of what key is what, even
+ *  though I set it's array index to 0. You can change that to
+ *  whatever you want using a macro, if you wish! */
+
+typedef u8 kbscan_t;
+
+extern kbscan_t kbdus[128];
+extern kbscan_t keyboard_read_next();
+
+extern i32 mouse_get_x();
+extern i32 mouse_get_y();
+
+////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+
+//------------------
+// Debugging
+
+// TODO: improve this imensly with real logging
+// TODO: move this into `make debug`
+#define _DEBUG_
+#ifdef _DEBUG_
+// NOTE: The token ` %| ` inside the trace format string is for hacky way of padding output to line up
+extern output_writer TRACE_WRITER;
+#define trace(fmt, ...) kwritef(TRACE_WRITER, "%s::%d: %|" fmt, __FILE__, __LINE__, 30, ##__VA_ARGS__)
+//#define trace(fmt, ...) kwritef(serial_write_b, "%s::%d::%s: " fmt, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+//#define trace(fmt, ...) kwritef(kputch, fmt, ##__VA_ARGS__)
+#else
+#define trace(fmt, ...) do {} while(0);
+#endif
+
+//#define _DEBUG_INFO_
+#ifdef _DEBUG_INFO_
+#define trace_info(fmt, ...) trace("[INFO]" fmt, ##__VA_ARGS__)
+#else
+#define trace_info(fmt, ...) do {} while(0);
+#endif
