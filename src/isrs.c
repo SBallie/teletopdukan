@@ -537,3 +537,105 @@ void fault_handler(isr_stack_state* r)
 /* Helper func */
 static uint16_t __pic_get_irq_reg(int ocw3)
 {
+    /* OCW3 to PIC CMD to get the register values.  PIC2 is chained, and
+     * represents IRQs 8-15.  PIC1 is IRQs 0-7, with 2 being the chain */
+    outb(PIC1_CMD, ocw3);
+    outb(PIC2_CMD, ocw3);
+    return (inb(PIC2_CMD) << 8) | inb(PIC1_CMD);
+}
+
+/* Returns the combined value of the cascaded PICs irq request register */
+uint16_t pic_get_irr(void)
+{
+    return __pic_get_irq_reg(PIC_READ_IRR);
+}
+
+/* Returns the combined value of the cascaded PICs in-service register */
+uint16_t pic_get_isr(void)
+{
+    return __pic_get_irq_reg(PIC_READ_ISR);
+}
+
+
+/// Two 8259 chips: First bank: 0x20, Second: 0xA0.
+/// IRQ handler - called from assembly
+// NOTE: irq_no is 0-15
+void irq_ack(u32 irq_no)
+{
+    // Need to send IRQ 8-15 to SLAVE as well
+    if (irq_no >= 8) {
+        outb(PIC2_CMD, PIC_CMD_EOI);
+    }
+    outb(PIC1_CMD, PIC_CMD_EOI);
+}
+
+void irq_handler(isr_stack_state* r)
+{
+    u8 irq = r->int_no - 32;
+
+    // check if spurious?
+    u16 isrFlags = pic_get_isr();
+    if(! BIT(isrFlags, irq)) {
+        trace("isrflags = %b", isrFlags);
+        trace("spurious IRQ #%d detected", irq);
+        irq_spurious[irq]++;
+    }
+
+    // if we've installed a handler, call it
+    if (irq_routines[irq]) {
+        isr_handler handler = irq_routines[irq];
+        handler(r);
+    }
+
+    irq_ack(irq);
+
+    irq_counts[irq]++;
+}
+
+void print_irq_counts()
+{
+    trace("IRQ#\tCount\tName\t\tSpurious");
+    for(int i=0; i < IRQ_COUNT; ++i) {
+        trace("%d:\t%d\t'%s'\t%d\n", i, irq_counts[i], irq_names[i], irq_spurious[i]);
+    }
+}
+
+void print_regs(isr_stack_state *regs)
+{
+    kprintf("\n\rPushed by CPU:\n\r");
+    kprintf("ss: %x uesp: %x eflags: %x cs: %x eip: %x\n\r",
+            regs->ss,
+            regs->esp,
+            regs->eflags,
+            regs->cs,
+            regs->eip
+            );
+    kprintf("int_no: %x err_code: %x\n\r", regs->int_no, regs->err_code);
+    kprintf("Pushed by pusha:\n\r");
+    kprintf("eax: %x ecx: %x edx: %x ebx: %x kesp: %x\n\r",
+            regs->eax,
+            regs->ecx,
+            regs->edx,
+            regs->ebx//,
+            // regs->kesp
+            );
+
+    kprintf("ebp: %x esi: %x edi: %x\n\r",
+            regs->ebp,
+            regs->esi,
+            regs->edi
+            );
+    kprintf("Others:\n\r");
+    kprintf("es: %x ds: %x fs: %x gs: %x\n\r",
+            regs->es,
+            regs->ds,
+            regs->fs,
+            regs->gs
+            );
+
+    // TODO:
+//    kprintf("cr2: %x cr3: %x\n\r",
+//            regs->cr2,
+//            regs->cr3
+//            );
+}
