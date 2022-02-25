@@ -271,3 +271,141 @@ c_str exception_messages[] =
     "Into Detected Overflow",
     "Out of Bounds",
     "Invalid Opcode",
+    "No Coprocessor",
+    "Double Fault",
+
+    // CSO is on 386 and earlier only
+    "Coprocessor Segment Overrun",
+
+    // 0x0A - 0x13
+    "Bad TSS", // Invalid Task State Segment
+    "Segment Not Present",
+    "Stack Fault",
+    "General Protection Fault",
+    "Page Fault",
+    "Unknown Interrupt [RESERVED]",
+    "Coprocessor Fault",
+    "Alignment Check",
+    "Machine Check",
+    "SIMD Floating-Point Exception",
+
+    // 19-??
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved"
+};
+
+// TODO: check alignment
+
+static isr_handler isr_routines[ISR_COUNT] = { 0, };
+static isr_handler irq_routines[IRQ_COUNT] = { 0, };
+
+static u32 isr_counts[ISR_COUNT] = { 0, };
+static u32 irq_counts[IRQ_COUNT] = { 0, };
+static u32 irq_spurious[IRQ_COUNT] = { 0, };
+
+// these are global data so we don't need to bother w/alloc
+static u8 isr_names[ISR_COUNT][20] = { {0, }, };
+static u8 irq_names[IRQ_COUNT][20] = { {0, }, };
+
+/// (Un)Install IRQ handler
+
+void isr_install_handler(u32 isr, isr_handler handler, c_str name)
+{
+    ASSERT(kstrlen(name) < 20, "name length must be < 20!\n");
+    isr_routines[isr] = handler;
+    kmemcpyb((u8*)irq_names[isr], (u8*)name, 20);
+    trace("installing isr: %d, %x, '%s'\n", isr, (u32)handler, name);
+}
+
+void isr_uninstall_handler(u32 isr)
+{
+    isr_routines[isr] = 0;
+    kmemsetb((u8*)&isr_names[isr], 0, 20);
+}
+
+void irq_install_handler(u32 irq, isr_handler handler, c_str name)
+{
+    ASSERT(kstrlen(name) < 20, "name length must be < 20!\n");
+    irq_routines[irq] = handler;
+    kmemcpyb((u8*)irq_names[irq], (u8*)name, 20);
+    trace("installing irq: %d, %x, '%s'\n", irq, (u32)handler, name);
+}
+void irq_uninstall_handler(u32 irq)
+{
+    irq_routines[irq] = 0;
+    kmemsetb((u8*)&irq_names[irq], 0, 20);
+}
+
+// May be fragile? basically does an opcode for jmp twice
+#define PIC_WAIT() do { asm volatile("jmp 1f\n\t1:\n\tjmp 2f\n\t2:"); } while (0)
+
+#define PIC1_CMD            0x20
+#define PIC1_DATA           0x21
+#define PIC2_CMD            0xA0
+#define PIC2_DATA           0xA1
+
+#define PIC_CMD_EOI         0x20   // end of interrupt
+
+#define ICW1_ICW4           0x01   // ICW4 (not) needed
+#define ICW1_SINGLE         0x02   // Single (cascade) mode
+#define ICW1_INTERVAL4      0x04   // Call address interval 4 (8)
+#define ICW1_LEVEL		  	0x08   // Level triggered (edge) mode
+#define ICW1_INIT           0x10   // Initialization - required!
+#define ICW4_8086           0x01   // 8086/88 (MCS-80/85) mode
+#define ICW4_AUTO           0x02   // Auto (normal) EOI
+#define ICW4_BUF_SLAVE      0x08   // Buffered mode/slave
+#define ICW4_BUF_MASTER     0x0C   // Buffered mode/master
+#define ICW4_SFNM           0x10   // Special fully nested (not)
+
+/// Remap IRQs 0-7 since they are mapped to IDT entries 8-15 by default
+/// IRQ 0 is mapped to IDT entry 8 is Double Fault (only an issue in protected mode: )
+void irq_remap(int irqPrimary, int irqSecondary)
+{
+    // NOTE: other implementations don't bother saving/restoring the masks
+    // save masks
+    u8 a1 = inb(PIC1_DATA);
+    u8 a2 = inb(PIC2_DATA);
+
+    // TODO: name consts
+    outb(PIC1_CMD, ICW1_INIT|ICW1_ICW4); PIC_WAIT();
+    outb(PIC2_CMD, ICW1_INIT|ICW1_ICW4); PIC_WAIT();
+
+    // remap
+    outb(PIC1_DATA, irqPrimary); PIC_WAIT();
+    outb(PIC2_DATA, irqSecondary); PIC_WAIT();
+
+    // cascade identity with slave
+    outb(PIC1_DATA, ICW1_INTERVAL4); PIC_WAIT();
+    outb(PIC2_DATA, ICW1_SINGLE); PIC_WAIT();
+
+    // Request 8086 mode on each PIC
+    outb(PIC1_DATA, ICW4_8086); PIC_WAIT();
+    outb(PIC2_DATA, ICW4_8086); PIC_WAIT();
+
+    // reset PIC's
+    outb(PIC1_DATA, PIC_CMD_EOI);
+    outb(PIC2_DATA, PIC_CMD_EOI);
+
+    // restore saved masks.
+    outb(PIC1_DATA, a1);
+    outb(PIC2_DATA, a2);
+}
+
+
+void k_panic()
+{
+    trace("\n\n ****  PANIC. System Halted! ******* \n\n");
+
+    // TODO: pass in correct stack pointer
+    //die("die not implemented", 0, 0);
