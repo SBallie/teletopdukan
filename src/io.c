@@ -193,3 +193,11 @@ inline void wrmsr(u32 msr_id, u64 msr_value)
 {
     asm volatile ( "wrmsr" : : "c" (msr_id), "A" (msr_value) );
 }
+
+// Read a 64-bit value from a MSR. The A constraint stands for concatenation of registers EAX and EDX.
+inline u64 rdmsr(u32 msr_id)
+{
+    u64 msr_value;
+    asm volatile ( "rdmsr" : "=A" (msr_value) : "c" (msr_id) );
+    return msr_value;
+}
