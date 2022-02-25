@@ -409,3 +409,131 @@ void k_panic()
 
     // TODO: pass in correct stack pointer
     //die("die not implemented", 0, 0);
+    //asm("hlt");
+}
+
+void do_int3(u32* esp, u32 error_code, u32 fs, u32 es, u32 ds,
+             u32 ebp, u32 esi, u32 edi, u32 edx, u32 ecx, u32 ebx,u32 eax)
+{
+    int tr;
+    asm ("str %%ax" : "=a" (tr) : "0" (0) );
+    trace("\n\neax\t\tebx\t\tecx\t\tedx\n\r%x\t%x\t%x\t%x\n\r", eax,ebx,ecx,edx);
+    trace("esi\t\tedi\t\tebp\t\tesp\n\r%x\t%x\t%x\t%x\n\r", esi,edi,ebp,(long) esp);
+    trace("\n\rds\tes\tfs\ttr\n\r%x\t%x\t%x\t%x\n\r", ds,es,fs,tr);
+    trace("\nEIP: %x   CS: %x  EFLAGS: %x\n\r",esp[0],esp[1],esp[2]);
+}
+
+
+// TODO:
+// - combine ISR w/IRQ (IRQs are mapped into IDT table, see above)
+// - IDT supports 128 ISRs, technically can have 256 ...
+// - fault_handler should handle some of the interrupts
+// - at least show a panic screen
+// - should change name or use this only for the real faults
+// - other ISRs are technically software ones where you can call w/INT ##
+
+/// The hardware ISRs use this handler
+/// cli() and sli() are called from asm
+void fault_handler(isr_stack_state* r)
+{
+    int i = r->int_no;
+
+    /// Should we handle this?
+    isr_handler handler = isr_routines[i];
+    if(handler) {
+        // handle
+        handler(r);
+    } else {
+        if (i < 32)
+        {
+            trace("Unhandled Exception in Kernel [ISR #%d]: %s\n[err: %d]\n", i, exception_messages[i], r->err_code);
+            trace("Can recover by killing this process and calling scheduler");
+            do_int3((u32*)r->esp, r->err_code, r->fs, r->es, r->ds, r->ebp, r->esi, r->edi, r->edx, r->ecx, r->ebx, r->eax);
+            k_panic();
+        } else {
+            trace("Unhandled Exception [ISR #%d]: %s\n[err: %d]\n", i, exception_messages[i], r->err_code);
+            trace("No Handler Setup\n");
+        }
+    }
+
+    ++isr_counts[i];
+}
+
+//void irq_set_mask(unsigned char irqLine)
+//{
+//    uint16_t port;
+//    uint8_t value;
+//
+//    if(IRQline < 8) {
+//        port = PIC1_DATA;
+//    } else {
+//        port = PIC2_DATA;
+//        IRQline -= 8;
+//    }
+//    value = inb(port) | (1 << IRQline);
+//    outb(port, value);
+//}
+//
+//void irq_clear_mask(unsigned char IRQline)
+//{
+//    uint16_t port;
+//    uint8_t value;
+//
+//    if(IRQline < 8) {
+//        port = PIC1_DATA;
+//    } else {
+//        port = PIC2_DATA;
+//        IRQline -= 8;
+//    }
+//    value = inb(port) & ~(1 << IRQline);
+//    outb(port, value);
+//}
+//
+///////
+// Spurious IRQs
+
+// http://wiki.osdev.org/PIC
+
+/*
+ When an IRQ occurs, the PIC chip tells the CPU (via. the PIC's INTR line) that there's an interrupt,
+ and the CPU acknowledges this and waits for the PIC to send the interrupt vector. This creates a race
+ condition: if the IRQ disappears after the PIC has told the CPU there's an interrupt but before the PIC
+ has sent the interrupt vector to the CPU, then the CPU will be waiting for the PIC to tell it which
+ interrupt vector but the PIC won't have a valid interrupt vector to tell the CPU.
+ To get around this, the PIC tells the CPU a fake interrupt number. This is a spurious IRQ. The fake
+ interrupt number is the lowest priority interrupt number for the corresponding PIC chip (IRQ 7 for the
+ master PIC, and IRQ 15 for the slave PIC).
+ There are several reasons for the interrupt to disappear. In my experience the most common reason is
+ software sending an EOI at the wrong time. Other reasons include noise on IRQ lines (or the INTR line).
+
+ Handling Spurious IRQs
+
+ For a spurious IRQ, there is no real IRQ and the PIC chip's ISR (In Service Register) flag for the
+ corresponding IRQ will not be set. This means that the interrupt handler must not send an EOI back to
+ the PIC to reset the ISR flag.
+
+ The correct way to handle an IRQ 7 is to first check the master PIC chip's ISR to see if the IRQ is a
+ spurious IRQ or a real IRQ. If it is a real IRQ then it is treated the same as any other real IRQ.
+ If it is a spurious IRQ then you ignore it (and do not send the EOI).
+
+ The correct way to handle an IRQ 15 is similar, but a little trickier due to the interaction between
+ the slave PIC and the master PIC. First check the slave PIC chip's ISR to see if the IRQ is a spurious
+ IRQ or a real IRQ. If it is a real IRQ then it is treated the same as any other real IRQ. If it's a
+ spurious IRQ then don't send the EOI to the slave PIC; however you will still need to send the EOI to
+ the master PIC because the master PIC itself won't know that it was a spurious IRQ from the slave.
+ Also note that some operating systems (e.g. Linux) keep track of the number of spurious IRQs that have
+ occurred (e.g. by incrementing a counter when a spurious IRQ occurs). This can be useful for detecting
+ problems in software (e.g. sending EOIs at the wrong time) and detecting problems in hardware
+ (e.g. line noise).
+
+ */
+//#define PIC1_CMD                    0x20
+//#define PIC1_DATA                   0x21
+//#define PIC2_CMD                    0xA0
+//#define PIC2_DATA                   0xA1
+#define PIC_READ_IRR                0x0a    /* OCW3 irq ready next CMD read */
+#define PIC_READ_ISR                0x0b    /* OCW3 irq service next CMD read */
+
+/* Helper func */
+static uint16_t __pic_get_irq_reg(int ocw3)
+{
