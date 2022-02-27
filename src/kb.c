@@ -20,4 +20,8 @@
 #define PS2_1_DISABLE 0xAD
 #define PS2_2_DISABLE 0xA7
 #define PS2_1_ENABLE  0xAE
-#define
+#define PS2_2_ENABLE  0xA8
+#define PS2_1_TEST    0xAB
+#define PS2_2_TEST    0xA9
+
+#define PS2_DEVICE_IDENTIFY             0xF2 /
