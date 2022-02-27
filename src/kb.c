@@ -8,4 +8,7 @@
 //0x64    Read    Status Register
 //0x64    Write   Command Register
 
-#define PS2_DATA    
+#define PS2_DATA                 	0x60
+#define PS2_STATUS               	0x64
+#define PS2_CMD                     0x64
+#define SCANCODE_MASK_RELEASED   	
