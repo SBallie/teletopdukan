@@ -24,4 +24,5 @@
 #define PS2_1_TEST    0xAB
 #define PS2_2_TEST    0xA9
 
-#define PS2_DEVICE_IDENTIFY             0xF2 /
+#define PS2_DEVICE_IDENTIFY             0xF2 // The mouse stops sending automatic packets.
+#define PS2_DEVICE_ENABLE_STREAMING     0xF4 // The mouse starts sending aut
