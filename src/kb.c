@@ -15,4 +15,9 @@
 #define PS2_CONFIG_READ             0x20
 #define PS2_CONFIG_WRITE        	0x60
 #define PS2_ACK_BYTE                0xFA
-#defi
+#define MOUSE_WRITE              	0xD4
+
+#define PS2_1_DISABLE 0xAD
+#define PS2_2_DISABLE 0xA7
+#define PS2_1_ENABLE  0xAE
+#define
