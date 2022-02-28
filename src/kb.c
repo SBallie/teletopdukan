@@ -27,4 +27,9 @@
 #define PS2_DEVICE_IDENTIFY             0xF2 // The mouse stops sending automatic packets.
 #define PS2_DEVICE_ENABLE_STREAMING     0xF4 // The mouse starts sending automatic packets when the mouse moves or is clicked.
 #define PS2_DEVICE_DISABLE_STREAMING    0xF5 // The mouse stops sending automatic packets.
-#define PS2_DEVICE_RESET                0xFF // The mouse probably sends ACK (0xFA) plus several more bytes, then resets itself, and alw
+#define PS2_DEVICE_RESET                0xFF // The mouse probably sends ACK (0xFA) plus several more bytes, then resets itself, and always sends 0xAA.
+
+// Mouse 3-byte Set
+
+#define MOUSE_DEFAULT            	0x00 //
+#define MOUSE_SCROLLWHEEL        	0x01 /
