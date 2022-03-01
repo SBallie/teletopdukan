@@ -32,4 +32,8 @@
 // Mouse 3-byte Set
 
 #define MOUSE_DEFAULT            	0x00 //
-#define MOUSE_SCROLLWHEEL        	0x01 /
+#define MOUSE_SCROLLWHEEL        	0x01 //
+#define MOUSE_BUTTONS            	0x02 //
+#define MOUSE_F_BIT              	0x20 //
+#define MOUSE_V_BIT              	0x08 //
+#define MOUSE_
