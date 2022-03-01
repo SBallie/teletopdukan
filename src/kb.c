@@ -36,4 +36,5 @@
 #define MOUSE_BUTTONS            	0x02 //
 #define MOUSE_F_BIT              	0x20 //
 #define MOUSE_V_BIT              	0x08 //
-#define MOUSE_
+#define MOUSE_CMD_RESEND            0xFE // This command makes the mouse send its most recent packet to the host again.
+#define MOUSE_CMD_S
