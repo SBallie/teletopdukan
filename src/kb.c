@@ -45,4 +45,8 @@
 #define MOUSE_CMD_STATUS_REQ        0xE9 // The mouse sends ACK, then 3 status bytes. See below for the status byte format.
 #define MOUSE_CMD_RESOLUTION        0xE8 // Requires an additional data byte: pixels per millimeter resolution (value 0 to 3)
 
-/
+// UNUSED !!
+#define SET_REMOTE_MODE				0xF0
+#define SET_WRAP_MODE 				0xEE
+#define RESET_WRAP_MODE				0xEC
+#define
