@@ -49,4 +49,7 @@
 #define SET_REMOTE_MODE				0xF0
 #define SET_WRAP_MODE 				0xEE
 #define RESET_WRAP_MODE				0xEC
-#define
+#define SET_STREAM_MODE				0xEA
+
+////////////////////////////////////////////////////////////////
+// currently allow up to 255 characters to b
