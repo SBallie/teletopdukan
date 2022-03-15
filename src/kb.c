@@ -52,4 +52,7 @@
 #define SET_STREAM_MODE				0xEA
 
 ////////////////////////////////////////////////////////////////
-// currently allow up to 255 characters to b
+// currently allow up to 255 characters to be buffered for use
+
+// TODO: should scan codes buffer as u16 ?? might want to store flags?
+// maybe u8 IRQ scan buf and u32 kernel scan buf
