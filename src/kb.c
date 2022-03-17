@@ -60,4 +60,7 @@
 // fixed-size ring buff using overflow to wrap around
 u8 kb_buf[MAX_BUFFERED_INPUT_KEYS] = { 0, };
 u8 kb_buf_first = 0; // points to first scan (not read yet)
-u8 kb_buf_last = 0; // poi
+u8 kb_buf_last = 0; // points to last scan received (LIFO)
+b32 kb_buf_empty() { return kb_buf_last == kb_buf_first; }
+
+////////////////
