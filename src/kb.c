@@ -58,4 +58,6 @@
 // maybe u8 IRQ scan buf and u32 kernel scan buf
 #define MAX_BUFFERED_INPUT_KEYS 255
 // fixed-size ring buff using overflow to wrap around
-u8 kb_buf[MAX_BUFFER
+u8 kb_buf[MAX_BUFFERED_INPUT_KEYS] = { 0, };
+u8 kb_buf_first = 0; // points to first scan (not read yet)
+u8 kb_buf_last = 0; // poi
