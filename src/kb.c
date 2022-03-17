@@ -56,3 +56,6 @@
 
 // TODO: should scan codes buffer as u16 ?? might want to store flags?
 // maybe u8 IRQ scan buf and u32 kernel scan buf
+#define MAX_BUFFERED_INPUT_KEYS 255
+// fixed-size ring buff using overflow to wrap around
+u8 kb_buf[MAX_BUFFER
