@@ -86,4 +86,7 @@ u8 scan_to_ascii_us[128] =
     ' ', /* Space bar */
     KBDUS_CAPSLOCK, /* Caps lock */
     KBDUS_F1, KBDUS_F2, KBDUS_F3, KBDUS_F4, KBDUS_F5,
-    KBDUS_F6, KBDUS_F7, KBDUS_F8, KBDUS_F9, KBD
+    KBDUS_F6, KBDUS_F7, KBDUS_F8, KBDUS_F9, KBDUS_F10, /* < ... F10 */
+    KBDUS_NUMLOCK, /* 69 - Num lock*/
+    KBDUS_SCROLLLOCK, /* Scroll Lock */
+    KBDUS_HOME, /* Home key */
