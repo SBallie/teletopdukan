@@ -81,4 +81,7 @@ u8 scan_to_ascii_us[128] =
     'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', /* 39 */
     '\'', '`', KBDUS_LEFTSHIFT, /* Left shift */
     '\\', 'z', 'x', 'c', 'v', 'b', 'n', /* 49 */
-    'm', ',', '.
+    'm', ',', '.', '/',   KBDUS_RIGHTSHIFT, /* Right shift */
+    '*', KBDUS_ALT, /* Alt */
+    ' ', /* Space bar */
+    KBDUS
