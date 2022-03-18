@@ -63,4 +63,8 @@ u8 kb_buf_first = 0; // points to first scan (not read yet)
 u8 kb_buf_last = 0; // points to last scan received (LIFO)
 b32 kb_buf_empty() { return kb_buf_last == kb_buf_first; }
 
-////////////////
+//////////////////////////////////////////////////////////////////
+// Scan->Print
+
+// http://www.quadibloc.com/comp/scan.htm
+// https://www.vm
