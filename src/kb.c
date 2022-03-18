@@ -67,4 +67,9 @@ b32 kb_buf_empty() { return kb_buf_last == kb_buf_first; }
 // Scan->Print
 
 // http://www.quadibloc.com/comp/scan.htm
-// https://www.vm
+// https://www.vmware.com/support/ws55/doc/ws_devices_keymap_vscan.html
+
+//
+u8 scan_to_ascii_us[128] =
+{
+    0,  27, '1', '2', '3', '4', '5', '6', '7', '
