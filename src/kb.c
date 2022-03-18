@@ -76,4 +76,6 @@ u8 scan_to_ascii_us[128] =
     '9', '0', '-', '=', '\b', /* Backspace */
     '\t', /* Tab */
     'q', 'w', 'e', 'r', /* 19 */
-    't', 'y',
+    't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', /* Enter key (28) */
+    KBDUS_CONTROL, /* 29 - Control */
+    'a', 's', 'd', 'f', 'g', 'h', 'j',
