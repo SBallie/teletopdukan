@@ -84,4 +84,6 @@ u8 scan_to_ascii_us[128] =
     'm', ',', '.', '/',   KBDUS_RIGHTSHIFT, /* Right shift */
     '*', KBDUS_ALT, /* Alt */
     ' ', /* Space bar */
-    KBDUS
+    KBDUS_CAPSLOCK, /* Caps lock */
+    KBDUS_F1, KBDUS_F2, KBDUS_F3, KBDUS_F4, KBDUS_F5,
+    KBDUS_F6, KBDUS_F7, KBDUS_F8, KBDUS_F9, KBD
