@@ -78,4 +78,7 @@ u8 scan_to_ascii_us[128] =
     'q', 'w', 'e', 'r', /* 19 */
     't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', /* Enter key (28) */
     KBDUS_CONTROL, /* 29 - Control */
-    'a', 's', 'd', 'f', 'g', 'h', 'j',
+    'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', /* 39 */
+    '\'', '`', KBDUS_LEFTSHIFT, /* Left shift */
+    '\\', 'z', 'x', 'c', 'v', 'b', 'n', /* 49 */
+    'm', ',', '.
