@@ -95,4 +95,8 @@ u8 scan_to_ascii_us[128] =
     '-',
     KBDUS_LEFTARROW, /* Left Arrow */
     0,
-    KBDUS_RIG
+    KBDUS_RIGHTARROW, /* Right Arrow */
+    '+',
+    KBDUS_END, /* 79 - End key*/
+    KBDUS_DOWNARROW, /* Down Arrow */
+    KBDUS_PAGEDOWN, /* Page Dow
