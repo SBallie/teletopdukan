@@ -104,4 +104,10 @@ u8 scan_to_ascii_us[128] =
     KBDUS_DELETE, /* Delete Key */
     0,   0,   0,
     KBDUS_F11, KBDUS_F12,
-    0, /* All other key
+    0, /* All other keys are undefined */
+};
+
+//////////////////////////////////////////////////////////////////
+
+// TODO: convert into ring buffer impl
+/// 
