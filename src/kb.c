@@ -134,3 +134,11 @@ static inline RETURN_CODE ps2_wait_write()
     u32 timeout = 100000;
     while(--timeout) {                 //
         if(! (inb(PS2_STATUS) & 0x02)) {
+            return SUCCESS;
+        }
+    }
+    trace("PS2 Timed Out!\n");
+    return ERROR_TIMEOUT;
+}
+
+/// bytes cannot be read until STATUS bit
