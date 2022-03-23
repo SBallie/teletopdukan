@@ -112,4 +112,9 @@ u8 scan_to_ascii_us[128] =
 // TODO: convert into ring buffer impl
 /// Reads next character of the input stream
 /// returns 0 if no key in buffer;
-kbscan_t keyboard_read
+kbscan_t keyboard_read_next()
+{
+    // TODO: support string formatting in serial_write
+    while(kb_buf_first == kb_buf_last) {
+        return 0;
+    }
