@@ -141,4 +141,9 @@ static inline RETURN_CODE ps2_wait_write()
     return ERROR_TIMEOUT;
 }
 
-/// bytes cannot be read until STATUS bit
+/// bytes cannot be read until STATUS bit 0 is set
+static inline RETURN_CODE ps2_wait_read()
+{
+    u32 timeout = 100000;
+    while(--timeout) {
+        if((inb(PS2_STATUS) &
