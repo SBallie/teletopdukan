@@ -124,4 +124,9 @@ kbscan_t keyboard_read_next()
 typedef enum {
     SUCCESS,
     ERROR_TIMEOUT = -1,
-    ER
+    ERROR_UNKNOWN = -2,
+    ERROR_GENERIC = -3
+} RETURN_CODE;
+
+/// All output must wait for STATUS bit 1 to become clear.
+static inline RETUR
