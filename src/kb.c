@@ -99,4 +99,9 @@ u8 scan_to_ascii_us[128] =
     '+',
     KBDUS_END, /* 79 - End key*/
     KBDUS_DOWNARROW, /* Down Arrow */
-    KBDUS_PAGEDOWN, /* Page Dow
+    KBDUS_PAGEDOWN, /* Page Down */
+    KBDUS_INSERT, /* Insert Key */
+    KBDUS_DELETE, /* Delete Key */
+    0,   0,   0,
+    KBDUS_F11, KBDUS_F12,
+    0, /* All other key
