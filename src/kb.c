@@ -118,3 +118,10 @@ kbscan_t keyboard_read_next()
     while(kb_buf_first == kb_buf_last) {
         return 0;
     }
+    return kb_buf[kb_buf_first++];
+}
+
+typedef enum {
+    SUCCESS,
+    ERROR_TIMEOUT = -1,
+    ER
