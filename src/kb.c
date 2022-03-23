@@ -129,4 +129,8 @@ typedef enum {
 } RETURN_CODE;
 
 /// All output must wait for STATUS bit 1 to become clear.
-static inline RETUR
+static inline RETURN_CODE ps2_wait_write()
+{
+    u32 timeout = 100000;
+    while(--timeout) {                 //
+        if(! (inb(PS2_STATUS) & 0x02)) {
