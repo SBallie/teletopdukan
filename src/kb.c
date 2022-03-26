@@ -146,4 +146,13 @@ static inline RETURN_CODE ps2_wait_read()
 {
     u32 timeout = 100000;
     while(--timeout) {
-        if((inb(PS2_STATUS) &
+        if((inb(PS2_STATUS) & 0x01)) {
+            return SUCCESS;
+        }
+
+    }
+    trace("PS2 Timed Out!\n");
+    return ERROR_TIMEOUT;
+}
+
+// Keyboard Hardware I
