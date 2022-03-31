@@ -155,4 +155,6 @@ static inline RETURN_CODE ps2_wait_read()
     return ERROR_TIMEOUT;
 }
 
-// Keyboard Hardware I
+// Keyboard Hardware Interrupt
+// Note: we don't need to check status/avail bit with interrupts
+void keyboard_handler(isr_stack_stat
