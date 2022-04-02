@@ -157,4 +157,9 @@ static inline RETURN_CODE ps2_wait_read()
 
 // Keyboard Hardware Interrupt
 // Note: we don't need to check status/avail bit with interrupts
-void keyboard_handler(isr_stack_stat
+void keyboard_handler(isr_stack_state *r)
+{
+    UNUSED_PARAM(r);
+    //kserialf("+\n");
+
+    //    // TODO: why does this fail? maybe reading the port itself makes it 
