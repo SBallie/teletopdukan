@@ -162,4 +162,10 @@ void keyboard_handler(isr_stack_state *r)
     UNUSED_PARAM(r);
     //kserialf("+\n");
 
-    //    // TODO: why does this fail? maybe reading the port itself makes it 
+    //    // TODO: why does this fail? maybe reading the port itself makes it work fine?
+    //    ps2_wait_read();
+
+    u8 scancode = inb(PS2_DATA);
+
+    // TODO: real input event system
+    // - eve
