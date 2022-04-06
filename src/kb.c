@@ -180,3 +180,8 @@ void keyboard_handler(isr_stack_state *r)
 
         enum {
             PRINT_MODE_ASCII,
+            PRINT_MODE_SCAN
+        };
+        //u8 _curPrintMode = PRINT_MODE_ASCII;
+        u8 _curPrintMode = PRINT_MODE_SCAN;
+ 
