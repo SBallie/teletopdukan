@@ -171,4 +171,12 @@ void keyboard_handler(isr_stack_state *r)
     // - events for down, up, pressed, repeated
     // - look at how GLFW, SMFL, SDL handles this
 
-    if (scancode & SCANCODE_MASK_
+    if (scancode & SCANCODE_MASK_RELEASED)
+    {
+    }
+    else
+    {
+        kb_buf[kb_buf_last++] = scancode;
+
+        enum {
+            PRINT_MODE_ASCII,
