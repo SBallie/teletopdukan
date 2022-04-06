@@ -168,4 +168,7 @@ void keyboard_handler(isr_stack_state *r)
     u8 scancode = inb(PS2_DATA);
 
     // TODO: real input event system
-    // - eve
+    // - events for down, up, pressed, repeated
+    // - look at how GLFW, SMFL, SDL handles this
+
+    if (scancode & SCANCODE_MASK_
