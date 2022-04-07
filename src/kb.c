@@ -184,4 +184,6 @@ void keyboard_handler(isr_stack_state *r)
         };
         //u8 _curPrintMode = PRINT_MODE_ASCII;
         u8 _curPrintMode = PRINT_MODE_SCAN;
- 
+        if(scancode == SCAN_US_ENTER) {
+            kputs("Elasped Time (in seconds): ");
+            printInt( timer_
