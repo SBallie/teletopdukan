@@ -186,4 +186,8 @@ void keyboard_handler(isr_stack_state *r)
         u8 _curPrintMode = PRINT_MODE_SCAN;
         if(scancode == SCAN_US_ENTER) {
             kputs("Elasped Time (in seconds): ");
-            printInt( timer_
+            printInt( timer_seconds() );
+            kputch('\n');
+        } else if(scancode == SCAN_US_F2) {
+            trace("\nPressed F2!\n");
+            jump_use
