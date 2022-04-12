@@ -190,4 +190,7 @@ void keyboard_handler(isr_stack_state *r)
             kputch('\n');
         } else if(scancode == SCAN_US_F2) {
             trace("\nPressed F2!\n");
-            jump_use
+            jump_usermode();
+        } else if(scancode == SCAN_US_F3) {
+            trace("\nPressed F3!\n");
+            print_irq
