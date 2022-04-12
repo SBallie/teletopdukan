@@ -193,4 +193,7 @@ void keyboard_handler(isr_stack_state *r)
             jump_usermode();
         } else if(scancode == SCAN_US_F3) {
             trace("\nPressed F3!\n");
-            print_irq
+            print_irq_counts();
+        } else if(scancode == SCAN_US_F4) {
+            trace("\nPressed F4!\n");
+            print_blocks_avail();
