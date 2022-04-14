@@ -200,4 +200,9 @@ void keyboard_handler(isr_stack_state *r)
         } else if(_curPrintMode == PRINT_MODE_SCAN) {
             printHex(scancode);
             kputch('[');
-            kputch(sc
+            kputch(scan_to_ascii_us[scancode]);
+            kputch(']');
+        } else {
+            kputch(scan_to_ascii_us[scancode]);
+        }
+ 
