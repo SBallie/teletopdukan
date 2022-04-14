@@ -197,3 +197,7 @@ void keyboard_handler(isr_stack_state *r)
         } else if(scancode == SCAN_US_F4) {
             trace("\nPressed F4!\n");
             print_blocks_avail();
+        } else if(_curPrintMode == PRINT_MODE_SCAN) {
+            printHex(scancode);
+            kputch('[');
+            kputch(sc
