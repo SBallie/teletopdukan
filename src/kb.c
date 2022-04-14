@@ -205,4 +205,10 @@ void keyboard_handler(isr_stack_state *r)
         } else {
             kputch(scan_to_ascii_us[scancode]);
         }
- 
+    }
+}
+
+/////////////////////////////////////////////////////////////////////
+// Mouse
+//
+// http://wiki.os
