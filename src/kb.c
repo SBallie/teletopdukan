@@ -211,4 +211,8 @@ void keyboard_handler(isr_stack_state *r)
 /////////////////////////////////////////////////////////////////////
 // Mouse
 //
-// http://wiki.os
+// http://wiki.osdev.org/Mouse_Input
+
+internal mouse_device_packet mouse_packets[256];
+internal u8 mouse_packets_first = 0;
+internal u8 mous
