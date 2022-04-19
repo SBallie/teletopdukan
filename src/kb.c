@@ -215,4 +215,9 @@ void keyboard_handler(isr_stack_state *r)
 
 internal mouse_device_packet mouse_packets[256];
 internal u8 mouse_packets_first = 0;
-internal u8 mous
+internal u8 mouse_packets_last = 0;
+
+internal u8 mouse_mode = 0;
+internal u8 mouse_cycle = 0;
+internal i32 mouse_x = 0;
+internal i32
