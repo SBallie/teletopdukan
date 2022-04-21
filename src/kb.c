@@ -220,4 +220,10 @@ internal u8 mouse_packets_last = 0;
 internal u8 mouse_mode = 0;
 internal u8 mouse_cycle = 0;
 internal i32 mouse_x = 0;
-internal i32
+internal i32 mouse_y = 0;
+internal u16 mouse_buttons = 0;
+
+//TODO: i think 4 would be enough??
+internal u8 mouse_byte[5] = { 0, };
+
+// TODO:
