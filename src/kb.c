@@ -226,4 +226,7 @@ internal u16 mouse_buttons = 0;
 //TODO: i think 4 would be enough??
 internal u8 mouse_byte[5] = { 0, };
 
-// TODO:
+// TODO: Need to think about coordinate system
+i32 mouse_get_x() { return mouse_x; }
+i32 mouse_get_y() { return mouse_y; }
+u16 mouse_get_buttons() {
