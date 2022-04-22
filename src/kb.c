@@ -229,4 +229,8 @@ internal u8 mouse_byte[5] = { 0, };
 // TODO: Need to think about coordinate system
 i32 mouse_get_x() { return mouse_x; }
 i32 mouse_get_y() { return mouse_y; }
-u16 mouse_get_buttons() {
+u16 mouse_get_buttons() { return mouse_buttons; }
+i8 mouse_get_scrolling() { return 0; }
+
+void add_packet(mouse_device_packet packet) {
+    mouse_
