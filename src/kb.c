@@ -233,4 +233,8 @@ u16 mouse_get_buttons() { return mouse_buttons; }
 i8 mouse_get_scrolling() { return 0; }
 
 void add_packet(mouse_device_packet packet) {
-    mouse_
+    mouse_packets[mouse_packets_last++] = packet;
+}
+
+// TODO: need real event system (pipes, socket, slot/signal, messages)
+mouse_devi
