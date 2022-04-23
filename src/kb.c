@@ -237,4 +237,7 @@ void add_packet(mouse_device_packet packet) {
 }
 
 // TODO: need real event system (pipes, socket, slot/signal, messages)
-mouse_devi
+mouse_device_packet read_next_packet() {
+    mouse_device_packet p;
+    if(mouse_packets_first < mouse_packets_last)
+        p = mo
