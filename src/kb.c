@@ -246,4 +246,11 @@ mouse_device_packet read_next_packet() {
 
 void mouse_handler(isr_stack_state *r)
 {
-    UNUSED_PA
+    UNUSED_PARAM(r);
+
+    u8 mouse_in = inb(PS2_DATA);
+
+    switch (mouse_cycle) {
+        case 0:
+            mouse_byte[0] = mouse_in;
+            if (!
