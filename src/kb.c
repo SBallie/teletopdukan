@@ -285,4 +285,7 @@ finish_packet:
         goto read_next;
     }
 
-    mouse_device_packet packet
+    mouse_device_packet packet;
+    packet.magic = MOUSE_MAGIC;
+    packet.x_difference = mouse_byte[1] - ((state << 4) & 0x100);
+    packet.y_difference = -(mouse_by
