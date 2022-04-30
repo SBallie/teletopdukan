@@ -263,4 +263,7 @@ void mouse_handler(isr_stack_state *r)
             ++mouse_cycle;
             break;
         case 2:
-            mous
+            mouse_byte[2] = mouse_in;
+            if (mouse_mode == MOUSE_SCROLLWHEEL || mouse_mode == MOUSE_BUTTONS) {
+                ++mouse_cycle;
+          
