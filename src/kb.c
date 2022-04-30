@@ -253,4 +253,9 @@ void mouse_handler(isr_stack_state *r)
     switch (mouse_cycle) {
         case 0:
             mouse_byte[0] = mouse_in;
-            if (!
+            if (!(mouse_in & 0x08)) {
+                goto read_next;
+            }
+            ++mouse_cycle;
+            break;
+  
