@@ -258,4 +258,9 @@ void mouse_handler(isr_stack_state *r)
             }
             ++mouse_cycle;
             break;
-  
+        case 1:
+            mouse_byte[1] = mouse_in;
+            ++mouse_cycle;
+            break;
+        case 2:
+            mous
