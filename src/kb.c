@@ -271,4 +271,13 @@ void mouse_handler(isr_stack_state *r)
             goto finish_packet;
         case 3:
             mouse_byte[3] = mouse_in;
-       
+            goto finish_packet;
+    }
+
+    goto read_next;
+
+finish_packet:
+
+    mouse_cycle = 0;
+    u8 state = mouse_byte[0];
+    if
