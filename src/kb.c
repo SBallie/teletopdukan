@@ -288,4 +288,8 @@ finish_packet:
     mouse_device_packet packet;
     packet.magic = MOUSE_MAGIC;
     packet.x_difference = mouse_byte[1] - ((state << 4) & 0x100);
-    packet.y_difference = -(mouse_by
+    packet.y_difference = -(mouse_byte[2] - ((state << 3) & 0x100));
+    packet.buttons = 0;
+
+    if (mouse_byte[0] & 0x01) {
+        packet.buttons |= LEFT_CL
