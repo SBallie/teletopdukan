@@ -292,4 +292,12 @@ finish_packet:
     packet.buttons = 0;
 
     if (mouse_byte[0] & 0x01) {
-        packet.buttons |= LEFT_CL
+        packet.buttons |= LEFT_CLICK;
+    }
+
+    if (mouse_byte[0] & 0x02) {
+        packet.buttons |= RIGHT_CLICK;
+    }
+
+    if (mouse_byte[0] & 0x04) {
+        packet.butt
