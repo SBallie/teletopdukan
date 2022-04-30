@@ -280,4 +280,9 @@ finish_packet:
 
     mouse_cycle = 0;
     u8 state = mouse_byte[0];
-    if
+    if (state & 0x80 || state & 0x40) {
+        /* x/y overflow? bad packet! */
+        goto read_next;
+    }
+
+    mouse_device_packet packet
