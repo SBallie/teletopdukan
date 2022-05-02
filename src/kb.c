@@ -300,4 +300,9 @@ finish_packet:
     }
 
     if (mouse_byte[0] & 0x04) {
-        packet.butt
+        packet.buttons |= MIDDLE_CLICK;
+    }
+
+    if (mouse_mode == MOUSE_SCROLLWHEEL && mouse_byte[3]) {
+        if (mouse_byte[3] > 0) {
+            pa
