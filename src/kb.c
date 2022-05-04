@@ -305,4 +305,6 @@ finish_packet:
 
     if (mouse_mode == MOUSE_SCROLLWHEEL && mouse_byte[3]) {
         if (mouse_byte[3] > 0) {
-            pa
+            packet.buttons |= MOUSE_SCROLL_DOWN;
+        } else if (mouse_byte[3] < 0) {
+            packet.buttons |= MOUSE_SCROLL_U
