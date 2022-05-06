@@ -323,3 +323,10 @@ finish_packet:
 read_next:
     inb(PS2_STATUS);
 
+    return;
+}
+
+static inline void mouse_write(u8 data)
+{
+    outb(PS2_CMD, MOUSE_WRITE);
+    if(ps2_wait_write() == ERROR_TIMEOUT)
