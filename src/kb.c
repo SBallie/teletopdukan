@@ -313,3 +313,13 @@ finish_packet:
 
     mouse_x = CLAMP(mouse_x + packet.x_difference, 0, 600);
     mouse_y = CLAMP(mouse_y + packet.y_difference, 0, 400);
+
+    //mouse_y += packet.y_difference;
+
+    mouse_buttons = packet.buttons;
+
+    add_packet(packet);
+
+read_next:
+    inb(PS2_STATUS);
+
