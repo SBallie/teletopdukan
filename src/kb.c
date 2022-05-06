@@ -307,4 +307,9 @@ finish_packet:
         if (mouse_byte[3] > 0) {
             packet.buttons |= MOUSE_SCROLL_DOWN;
         } else if (mouse_byte[3] < 0) {
-            packet.buttons |= MOUSE_SCROLL_U
+            packet.buttons |= MOUSE_SCROLL_UP;
+        }
+    }
+
+    mouse_x = CLAMP(mouse_x + packet.x_difference, 0, 600);
+    mouse_y = CLAMP(mouse_y + packet.y_difference, 0, 400);
