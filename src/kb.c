@@ -337,4 +337,9 @@ static inline void mouse_write(u8 data)
 /// Get's response from mouse
 internal inline u8 mouse_read()
 {
-   
+    if(ps2_wait_read() == ERROR_TIMEOUT)
+        return 0; // no data
+    return inb(PS2_DATA);
+}
+
+// TODO: combine with keyboard_ins
