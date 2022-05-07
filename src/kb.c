@@ -330,3 +330,11 @@ static inline void mouse_write(u8 data)
 {
     outb(PS2_CMD, MOUSE_WRITE);
     if(ps2_wait_write() == ERROR_TIMEOUT)
+        return;
+    outb(PS2_DATA, data);
+}
+
+/// Get's response from mouse
+internal inline u8 mouse_read()
+{
+   
