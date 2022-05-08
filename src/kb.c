@@ -348,4 +348,10 @@ void ps2_install()
 {
     //    trace("[INFO] Not Installing Mouse!\n");
     //    return;
-    trace
+    trace("Installing Mouse PS/2\n");
+
+    u8 status, result;
+
+    // disable PS2 ports
+    outb(PS2_CMD, PS2_1_DISABLE);
+    ou
