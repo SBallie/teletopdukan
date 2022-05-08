@@ -342,4 +342,10 @@ internal inline u8 mouse_read()
     return inb(PS2_DATA);
 }
 
-// TODO: combine with keyboard_ins
+// TODO: combine with keyboard_install
+/// Install Mouse IRQ Handler
+void ps2_install()
+{
+    //    trace("[INFO] Not Installing Mouse!\n");
+    //    return;
+    trace
