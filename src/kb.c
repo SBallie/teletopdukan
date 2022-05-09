@@ -360,3 +360,6 @@ void ps2_install()
     inb(PS2_DATA);
     inb(PS2_DATA);
     inb(PS2_DATA);
+
+    // http://wiki.osdev.org/%228042%22_PS/2_Controller#First_PS.2F2_Port
+    // 1: Initialise USB Controllers
