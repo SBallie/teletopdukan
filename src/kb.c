@@ -354,4 +354,9 @@ void ps2_install()
 
     // disable PS2 ports
     outb(PS2_CMD, PS2_1_DISABLE);
-    ou
+    outb(PS2_CMD, PS2_2_DISABLE);
+
+    // Do a couple dummy reads from the data port.
+    inb(PS2_DATA);
+    inb(PS2_DATA);
+    inb(PS2_DATA);
