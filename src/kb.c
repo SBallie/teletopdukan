@@ -363,3 +363,9 @@ void ps2_install()
 
     // http://wiki.osdev.org/%228042%22_PS/2_Controller#First_PS.2F2_Port
     // 1: Initialise USB Controllers
+    // 2: Determine if the PS/2 Controller Exists
+
+    ps2_wait_write();
+
+    // read config and set bit 2
+    outb(PS2_CMD, PS2_CONFIG
