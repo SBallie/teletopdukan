@@ -368,4 +368,8 @@ void ps2_install()
     ps2_wait_write();
 
     // read config and set bit 2
-    outb(PS2_CMD, PS2_CONFIG
+    outb(PS2_CMD, PS2_CONFIG_READ);
+    ps2_wait_read();
+    status = inb(PS2_DATA);
+
+    trace("initial config =  %b, %b\n", status, (status & 0b110111100)
