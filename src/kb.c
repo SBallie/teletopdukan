@@ -372,4 +372,11 @@ void ps2_install()
     ps2_wait_read();
     status = inb(PS2_DATA);
 
-    trace("initial config =  %b, %b\n", status, (status & 0b110111100)
+    trace("initial config =  %b, %b\n", status, (status & 0b110111100));
+
+    // write
+    outb(PS2_CMD, PS2_CONFIG_WRITE);
+    ps2_wait_write();
+    outb(PS2_DATA, status & 0b110111100);
+
+    // read
