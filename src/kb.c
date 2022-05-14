@@ -379,4 +379,7 @@ void ps2_install()
     ps2_wait_write();
     outb(PS2_DATA, status & 0b110111100);
 
-    // read
+    // read config again for testing
+    outb(PS2_CMD, PS2_CONFIG_READ);
+    ps2_wait_read();
+    status = inb(
