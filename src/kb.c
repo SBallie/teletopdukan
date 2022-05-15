@@ -382,4 +382,9 @@ void ps2_install()
     // read config again for testing
     outb(PS2_CMD, PS2_CONFIG_READ);
     ps2_wait_read();
-    status = inb(
+    status = inb(PS2_DATA);
+
+    trace("official config = %b\n", status);
+
+    // if clock bit for 2nd port (bit 5) is still enabled
+  
