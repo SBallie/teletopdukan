@@ -387,4 +387,6 @@ void ps2_install()
     trace("official config = %b\n", status);
 
     // if clock bit for 2nd port (bit 5) is still enabled
-  
+    // assume older "single device" controller mark it unusable
+    // disabled = 1, enabled = 0
+    static bool is_dual_device = fa
