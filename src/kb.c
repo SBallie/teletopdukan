@@ -394,4 +394,6 @@ void ps2_install()
         is_dual_device = true;
         trace("We believe this is a dual Device PS/2\n");
     } else {
-   
+        // don't use 2nd port
+        trace("Probably a Single Device PS/2\n");
+        trace("[ERR]: SHOULD NOT U
