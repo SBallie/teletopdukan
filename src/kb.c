@@ -406,4 +406,10 @@ void ps2_install()
     if(status == 0x55) {
         trace("PS2 Controller Test Passed\n");
     } else if(status == 0xFC) {
-        trace("[err] PS2 Controller Test FAI
+        trace("[err] PS2 Controller Test FAILED\n");
+    } else {
+        trace("[err] Unknown PS2 Controller Test Response\n");
+    }
+
+    if(is_dual_device)
+   
