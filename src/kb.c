@@ -403,4 +403,7 @@ void ps2_install()
     ps2_wait_read();
     status = inb(PS2_DATA);
 
-    if(status 
+    if(status == 0x55) {
+        trace("PS2 Controller Test Passed\n");
+    } else if(status == 0xFC) {
+        trace("[err] PS2 Controller Test FAI
