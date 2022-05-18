@@ -412,4 +412,7 @@ void ps2_install()
     }
 
     if(is_dual_device)
-   
+    {
+        // now confirm
+        outb(PS2_CMD, PS2_2_ENABLE);
+        // read config again for testing
