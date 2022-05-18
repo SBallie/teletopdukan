@@ -396,4 +396,11 @@ void ps2_install()
     } else {
         // don't use 2nd port
         trace("Probably a Single Device PS/2\n");
-        trace("[ERR]: SHOULD NOT U
+        trace("[ERR]: SHOULD NOT USE 2nd Port of PS/2\n");
+    }
+
+    outb(PS2_CMD, 0xAA);
+    ps2_wait_read();
+    status = inb(PS2_DATA);
+
+    if(status 
