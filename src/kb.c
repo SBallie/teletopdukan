@@ -416,3 +416,7 @@ void ps2_install()
         // now confirm
         outb(PS2_CMD, PS2_2_ENABLE);
         // read config again for testing
+        outb(PS2_CMD, PS2_CONFIG_READ);
+        ps2_wait_read();
+        status = inb(PS2_DATA);
+        if(BIT
