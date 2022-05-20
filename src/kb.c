@@ -425,3 +425,11 @@ void ps2_install()
         } else {
             trace("We have a second controller!\n");
             outb(PS2_CMD, PS2_2_DISABLE);
+        }
+    }
+
+    int n = is_dual_device ? 2 : 1;
+
+    ////////////////////////////////////////
+
+    // TODO: At this stage, check to see how many P
