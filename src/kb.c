@@ -421,4 +421,7 @@ void ps2_install()
         status = inb(PS2_DATA);
         if(BIT(status,5)) {
             trace("[err] Apparently we don't actually have 2nd controller!!\n");
-            is_dual_device
+            is_dual_device = false;
+        } else {
+            trace("We have a second controller!\n");
+            outb(PS2_CMD, PS2_2_DISABLE);
