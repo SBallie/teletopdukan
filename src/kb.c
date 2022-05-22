@@ -432,4 +432,9 @@ void ps2_install()
 
     ////////////////////////////////////////
 
-    // TODO: At this stage, check to see how many PS/2 ports are left. If there aren't any that work you can just give up (display some errors and terminate the PS/2 Controller driver). Note: If one of the PS/2 ports on a dual PS/2 controller fails, then you can still keep going and use/support the 
+    // TODO: At this stage, check to see how many PS/2 ports are left. If there aren't any that work you can just give up (display some errors and terminate the PS/2 Controller driver). Note: If one of the PS/2 ports on a dual PS/2 controller fails, then you can still keep going and use/support the other PS/2 port.
+    // TODO: should keep track of
+    // bool avail_ports[2];
+
+    // re-enable interrupts
+    outb(PS2_CMD
