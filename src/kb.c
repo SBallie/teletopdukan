@@ -432,4 +432,4 @@ void ps2_install()
 
     ////////////////////////////////////////
 
-    // TODO: At this stage, check to see how many P
+    // TODO: At this stage, check to see how many PS/2 ports are left. If there aren't any that work you can just give up (display some errors and terminate the PS/2 Controller driver
