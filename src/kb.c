@@ -437,4 +437,9 @@ void ps2_install()
     // bool avail_ports[2];
 
     // re-enable interrupts
-    outb(PS2_CMD
+    outb(PS2_CMD, PS2_CONFIG_READ);
+    ps2_wait_read();
+    status = inb(PS2_DATA);
+    status |= 0b01000001;
+    if(is_dual_device)
+        status |= 
