@@ -442,4 +442,8 @@ void ps2_install()
     status = inb(PS2_DATA);
     status |= 0b01000001;
     if(is_dual_device)
-        status |= 
+        status |= 0b000000010;
+    trace("final config = %b\n", status);
+    outb(PS2_CMD, PS2_CONFIG_WRITE);
+    ps2_wait_write();
+    outb(PS2_D
