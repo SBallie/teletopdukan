@@ -446,4 +446,10 @@ void ps2_install()
     trace("final config = %b\n", status);
     outb(PS2_CMD, PS2_CONFIG_WRITE);
     ps2_wait_write();
-    outb(PS2_D
+    outb(PS2_DATA, status);
+
+
+    // enable ports that exist
+    outb(PS2_CMD, PS2_1_ENABLE);
+    if(is_dual_device)
+       
