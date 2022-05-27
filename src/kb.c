@@ -452,4 +452,11 @@ void ps2_install()
     // enable ports that exist
     outb(PS2_CMD, PS2_1_ENABLE);
     if(is_dual_device)
-       
+        outb(PS2_CMD, PS2_2_ENABLE);
+
+
+    // disable streaming data
+    for(int i=0; i < n; ++i)
+    {
+        if(i==1) {
+     
