@@ -463,4 +463,10 @@ void ps2_install()
         }
         ps2_wait_write();
         outb(PS2_DATA, PS2_DEVICE_DISABLE_STREAMING);
-  
+        do {
+            ps2_wait_read();
+            status = inb(PS2_DATA);
+        } while(status != PS2_ACK_BYTE);
+    }
+
+    ////
