@@ -459,4 +459,8 @@ void ps2_install()
     for(int i=0; i < n; ++i)
     {
         if(i==1) {
-     
+            outb(PS2_CMD, MOUSE_WRITE);
+        }
+        ps2_wait_write();
+        outb(PS2_DATA, PS2_DEVICE_DISABLE_STREAMING);
+  
