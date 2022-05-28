@@ -469,4 +469,8 @@ void ps2_install()
         } while(status != PS2_ACK_BYTE);
     }
 
-    ////
+    ////////////////////////////////////////
+    // test devices
+    for(int i=0; i < n; ++i)
+    {
+        if(i==1) {
