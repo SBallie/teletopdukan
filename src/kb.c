@@ -487,3 +487,11 @@ void ps2_install()
             trace("[ERR] PS2 Port #%d Failed Test [code: %x!\n", i, status);
         } else {
             trace("PS2 Port #%d Passed Test Successfully\n", i);
+        }
+    }
+
+    ////////////////////////////////////////
+    // reset
+    for(int i=0; i < n; ++i)
+    {
+        // res
