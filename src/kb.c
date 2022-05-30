@@ -484,4 +484,6 @@ void ps2_install()
         if(status != 0)
         {
             // error occured
-            trace("[ERR] 
+            trace("[ERR] PS2 Port #%d Failed Test [code: %x!\n", i, status);
+        } else {
+            trace("PS2 Port #%d Passed Test Successfully\n", i);
