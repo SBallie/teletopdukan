@@ -479,4 +479,9 @@ void ps2_install()
             outb(PS2_CMD, PS2_1_TEST);
         }
 
-        ps2_wa
+        ps2_wait_read();
+        status = inb(PS2_DATA);
+        if(status != 0)
+        {
+            // error occured
+            trace("[ERR] 
