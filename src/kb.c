@@ -499,4 +499,10 @@ void ps2_install()
             outb(PS2_CMD, MOUSE_WRITE);
         }
         ps2_wait_write();
-        outb(PS2_DATA, PS2_DEVICE_R
+        outb(PS2_DATA, PS2_DEVICE_RESET);
+
+        ps2_wait_read();
+        status = inb(PS2_DATA);
+        if(status == 0xFA)
+        {
+            ps2_wait_read(
