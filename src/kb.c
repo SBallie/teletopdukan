@@ -509,4 +509,7 @@ void ps2_install()
             status = inb(PS2_DATA);
             if(status == 0xAA)
             {
-                trace("Reset PS
+                trace("Reset PS2 Port #%d Successfully\n", i);
+            }
+        } else if(status == 0xFC) {
+            trace("[ERR] Failure
