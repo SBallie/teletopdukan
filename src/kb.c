@@ -512,4 +512,6 @@ void ps2_install()
                 trace("Reset PS2 Port #%d Successfully\n", i);
             }
         } else if(status == 0xFC) {
-            trace("[ERR] Failure
+            trace("[ERR] Failure Resetting PS2 Port #%d\n", i);
+        } else {
+            trace("[ERR] Unknown error code %x Reset
