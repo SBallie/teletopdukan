@@ -514,4 +514,11 @@ void ps2_install()
         } else if(status == 0xFC) {
             trace("[ERR] Failure Resetting PS2 Port #%d\n", i);
         } else {
-            trace("[ERR] Unknown error code %x Reset
+            trace("[ERR] Unknown error code %x Resetting PS2 Port #2\n", status, i);
+        }
+    }
+
+
+    /*
+     Identity bytes
+     0xFA               AT keyboard with translation (not
