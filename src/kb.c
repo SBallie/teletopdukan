@@ -505,4 +505,8 @@ void ps2_install()
         status = inb(PS2_DATA);
         if(status == 0xFA)
         {
-            ps2_wait_read(
+            ps2_wait_read();
+            status = inb(PS2_DATA);
+            if(status == 0xAA)
+            {
+                trace("Reset PS
