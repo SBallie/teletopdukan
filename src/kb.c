@@ -521,4 +521,6 @@ void ps2_install()
 
     /*
      Identity bytes
-     0xFA               AT keyboard with translation (not
+     0xFA               AT keyboard with translation (not possible for device B)
+     0xFA, 0xAB, 0x41   MF2 keyboard with translation (not possible for device B)
+     0xFA, 0xAB, 0xC1   MF2 
