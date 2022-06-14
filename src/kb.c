@@ -527,4 +527,10 @@ void ps2_install()
      0xFA, 0xAB, 0x83   MF2 keyboard without translation
      0xFA, 0x00         Standard mouse
      0xFA, 0x03         Mouse with a scroll wheel
-     0xFA, 0x04         5 button mouse with a scr
+     0xFA, 0x04         5 button mouse with a scroll wheel
+     */
+
+    ////////////////////////////////////////
+    // identify
+    static u8 ps2_identify[2][2];
+    f
