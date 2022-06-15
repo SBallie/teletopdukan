@@ -539,4 +539,8 @@ void ps2_install()
         if(i==1) {
             outb(PS2_CMD, MOUSE_WRITE);
         }
-        ps2_wait_wr
+        ps2_wait_write();
+        outb(PS2_DATA, PS2_DEVICE_IDENTIFY);
+        do {
+            ps2_wait_read();
+            stat
