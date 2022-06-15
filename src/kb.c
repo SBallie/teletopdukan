@@ -533,4 +533,10 @@ void ps2_install()
     ////////////////////////////////////////
     // identify
     static u8 ps2_identify[2][2];
-    f
+    for(int i=0; i < n; ++i)
+    {
+        // identify
+        if(i==1) {
+            outb(PS2_CMD, MOUSE_WRITE);
+        }
+        ps2_wait_wr
