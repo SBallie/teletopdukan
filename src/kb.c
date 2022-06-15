@@ -543,4 +543,9 @@ void ps2_install()
         outb(PS2_DATA, PS2_DEVICE_IDENTIFY);
         do {
             ps2_wait_read();
-            stat
+            status = inb(PS2_DATA);
+        } while(status != PS2_ACK_BYTE);
+
+        ps2_wait_read();
+        ps2_identify[i][0] = inb(PS2_DATA);
+        ps
