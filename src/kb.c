@@ -548,4 +548,6 @@ void ps2_install()
 
         ps2_wait_read();
         ps2_identify[i][0] = inb(PS2_DATA);
-        ps
+        ps2_wait_read();
+        ps2_identify[i][1] = inb(PS2_DATA);
+        trace("ident %d: %x,%x\n", i, ps2_identify[i][0], ps2_ident
