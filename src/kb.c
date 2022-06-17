@@ -558,4 +558,6 @@ void ps2_install()
     // TODO:
     if(is_dual_device)
     {
-  
+        mouse_write(MOUSE_CMD_GET_MOUSE_ID);
+        result = mouse_read();
+        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", r
