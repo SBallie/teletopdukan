@@ -560,4 +560,8 @@ void ps2_install()
     {
         mouse_write(MOUSE_CMD_GET_MOUSE_ID);
         result = mouse_read();
-        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", r
+        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", result);
+
+        // Writing Magic Mouse Settings to test for scroll wheel
+        mouse_write(0xF3);
+        mouse_r
