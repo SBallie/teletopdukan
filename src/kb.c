@@ -569,4 +569,9 @@ void ps2_install()
         mouse_read();
         mouse_write(0xF3);
         mouse_read();
-        mouse_write(100)
+        mouse_write(100);
+        mouse_read();
+        mouse_write(0xF3);
+        mouse_read();
+        mouse_write(80);
+        mouse_read
