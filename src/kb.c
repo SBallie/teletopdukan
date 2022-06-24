@@ -577,4 +577,8 @@ void ps2_install()
         mouse_read();
 
         // TODO: this is wrong, i think (try with real corded mouse)
-        trace("Set Mouse Sample Rat
+        trace("Set Mouse Sample Rate to 80.\n");
+        mouse_write(MOUSE_CMD_GET_MOUSE_ID);
+        do {
+            ps2_wait_read();
+            status = inb(PS2_
