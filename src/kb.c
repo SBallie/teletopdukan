@@ -584,4 +584,8 @@ void ps2_install()
             status = inb(PS2_DATA);
         } while(status != PS2_ACK_BYTE);
         result = mouse_read();
-        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n",
+        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", result);
+        if (result == 3)
+        {
+            trace("%x - Has Scroll Wheel.\n", result);
+            m
