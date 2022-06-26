@@ -590,4 +590,11 @@ void ps2_install()
             trace("%x - Has Scroll Wheel.\n", result);
             mouse_mode = MOUSE_SCROLLWHEEL;
         } else {
-            trace("%x - Unsure if Has Scroll Wheel.\n"
+            trace("%x - Unsure if Has Scroll Wheel.\n", result);
+        }
+
+
+        // Writing Magic Mouse Settings to test for scroll wheel
+        mouse_write(0xF3);
+        mouse_read();
+      
