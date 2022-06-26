@@ -588,4 +588,6 @@ void ps2_install()
         if (result == 3)
         {
             trace("%x - Has Scroll Wheel.\n", result);
-            m
+            mouse_mode = MOUSE_SCROLLWHEEL;
+        } else {
+            trace("%x - Unsure if Has Scroll Wheel.\n"
