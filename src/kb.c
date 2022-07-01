@@ -597,4 +597,9 @@ void ps2_install()
         // Writing Magic Mouse Settings to test for scroll wheel
         mouse_write(0xF3);
         mouse_read();
-      
+        mouse_write(200);
+        mouse_read();
+        mouse_write(0xF3);
+        mouse_read();
+        mouse_write(200);
+        mouse_read(
