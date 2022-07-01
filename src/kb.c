@@ -608,4 +608,8 @@ void ps2_install()
         mouse_write(80);
         mouse_read();
 
-        // TODO: this is wron
+        // TODO: this is wrong, i think (try with real corded mouse)
+        trace("Set Mouse Sample Rate to 80.\n");
+        mouse_write(MOUSE_CMD_GET_MOUSE_ID);
+        do {
+ 
