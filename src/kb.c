@@ -612,4 +612,7 @@ void ps2_install()
         trace("Set Mouse Sample Rate to 80.\n");
         mouse_write(MOUSE_CMD_GET_MOUSE_ID);
         do {
- 
+            ps2_wait_read();
+            status = inb(PS2_DATA);
+        } while(status != PS2_ACK_BYTE);
+        result = mouse_rea
