@@ -602,4 +602,10 @@ void ps2_install()
         mouse_write(0xF3);
         mouse_read();
         mouse_write(200);
-        mouse_read(
+        mouse_read();
+        mouse_write(0xF3);
+        mouse_read();
+        mouse_write(80);
+        mouse_read();
+
+        // TODO: this is wron
