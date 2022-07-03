@@ -615,4 +615,7 @@ void ps2_install()
             ps2_wait_read();
             status = inb(PS2_DATA);
         } while(status != PS2_ACK_BYTE);
-        result = mouse_rea
+        result = mouse_read();
+        trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", result);
+        if (result == 4) {
+            trace("%x - Has 4th/5
