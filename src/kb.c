@@ -618,4 +618,7 @@ void ps2_install()
         result = mouse_read();
         trace("MOUSE_CMD_GET_MOUSE_ID = %d\n", result);
         if (result == 4) {
-            trace("%x - Has 4th/5
+            trace("%x - Has 4th/5th buttons.\n", result);
+            mouse_mode = MOUSE_SCROLLWHEEL;
+        } else {
+            trace("%x - Unsure if Has 4th/5th buttons.\n", r
