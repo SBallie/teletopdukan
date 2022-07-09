@@ -639,4 +639,10 @@ void ps2_install()
 
 
     // re-enable streaming data
-    for(int i=0; 
+    for(int i=0; i < n; ++i)
+    {
+        if(i==1) {
+            outb(PS2_CMD, MOUSE_WRITE);
+        }
+        ps2_wait_write();
+        outb(PS2_
