@@ -621,4 +621,11 @@ void ps2_install()
             trace("%x - Has 4th/5th buttons.\n", result);
             mouse_mode = MOUSE_SCROLLWHEEL;
         } else {
-            trace("%x - Unsure if Has 4th/5th buttons.\n", r
+            trace("%x - Unsure if Has 4th/5th buttons.\n", result);
+        }
+    }
+
+    //Setup the IRQ handlers
+
+    irq_install_handler(1, keyboard_handler, "keyboard");
+    trace("Keyboard handler in
