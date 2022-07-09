@@ -628,4 +628,9 @@ void ps2_install()
     //Setup the IRQ handlers
 
     irq_install_handler(1, keyboard_handler, "keyboard");
-    trace("Keyboard handler in
+    trace("Keyboard handler installed.\n");
+
+    // TODO: if has 2nd controller
+    if(is_dual_device)
+    {
+        irq_install_handler(IRQ_MOUSE_PS2, mou
