@@ -633,4 +633,10 @@ void ps2_install()
     // TODO: if has 2nd controller
     if(is_dual_device)
     {
-        irq_install_handler(IRQ_MOUSE_PS2, mou
+        irq_install_handler(IRQ_MOUSE_PS2, mouse_handler, "mouse");
+        trace("Installed Mouse.\n");
+    }
+
+
+    // re-enable streaming data
+    for(int i=0; 
