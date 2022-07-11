@@ -234,3 +234,139 @@ void* kmemmove(void * dest, const void * src, size_t n)
 ////////////////////////////////
 
 // memcpy - copy n bytes from src to dest
+u8* kmemcpyb(u8* dest, const u8* src, u32 count)
+{
+    const u8* sp = (const u8*)src;
+    u8* dp = (u8*)dest;
+    for(; count != 0; count--)
+        *dp++ = *sp++;
+    return dest;
+}
+
+u8* kmemsetb(u8* dest, u8 val, u32 count)
+{
+    u8* temp = dest;
+    while(count != 0) {
+        *temp++ = val; --count;
+    }
+    return dest;
+}
+
+u16* kmemsetw(u16* dest, u16 val, u32 count)
+{
+    u16* temp = (u16*)dest;
+    while(count != 0) {
+        *temp++ = val; --count;
+    }
+    return dest;
+}
+
+// strlen - gets the length of a c-string
+u32 kstrlen(c_str str)
+{
+    u32 retval = 0;
+    while(*str != 0) {
+        ++retval; ++str;
+    }
+    return retval;
+}
+
+// RAND_MAX assumed to be 32767
+static u32 _next_rand = 1;
+u32 krand(void)
+{
+    _next_rand = _next_rand * 1103515245 + 12345;
+    return (_next_rand/65536) % 32768;
+}
+
+void srand(u32 seed)
+{
+    _next_rand = seed;
+}
+
+void wait_any_key() {
+    set_text_color(COLOR_LIGHT_MAGENTA, COLOR_BLACK);
+
+    // TODO: clear_key_buffer();
+    kputs("Clearing Key Buffer\n");
+    while(keyboard_read_next()) {
+        kputch('.');
+    }
+
+    kputs("Waiting for Key\n");
+    kputs("Press Any Key!");
+    kgetch();
+
+    set_text_color(COLOR_WHITE, COLOR_BLACK);
+
+    kputs("\n");
+    kputs("key pressed\n");
+}
+
+void display_banner()
+{
+    set_text_color(COLOR_GREEN, COLOR_BLACK);
+
+    /// http://www.patorjk.com/software/taag/#p=testall&f=Lil%20Devil&t=TranbyOS
+    ///
+    kputs("                                                                            \n");
+    kputs(" _/_/_/_/_/                            _/                   _/_/     _/_/_/ \n");
+    kputs("    _/     _/  _/_/   _/_/_/ _/_/_/   _/_/_/    _/    _/ _/    _/ _/        \n");
+    kputs("   _/     _/_/     _/    _/ _/    _/ _/    _/  _/    _/ _/    _/   _/_/     \n");
+    kputs("  _/     _/       _/    _/ _/    _/ _/    _/  _/    _/ _/    _/       _/    \n");
+    kputs(" _/     _/         _/_/_/ _/    _/ _/_/_/      _/_/_/   _/_/   _/_/_/       \n");
+    kputs("                                                 _/                         \n");
+    kputs("                                            _/_/                            \n");
+    kputs("                                                                            \n");
+
+    //kputs("\n-= Tranby OS =-\n");
+
+    //set_text_color(COLOR_WHITE, COLOR_BLACK);
+
+    kputs("Steve Tranby (stevetranby@gmail.com)\n");
+    kputs("http://stevetranby.com/\n");
+    kputs("http://github.com/stevetranby/tranbyos\n");
+    kputs("http://osdev.org/\n");
+    kputs("\n");
+    kputs("This operating system is a test bed for experimenting and learning how to\n");
+    kputs("write an operating system kernel, drivers, and possibly more.\n");
+    kputs("\n");
+}
+
+#define my_test(x) _Generic((x), long double: my_testl, \
+                                 default: my_testi, \
+                                 float: my_testf)(x)
+
+void my_testi(int i) { UNUSED_PARAM(i); kputs("int\n"); }
+void my_testf(float f) { UNUSED_PARAM(f); kputs("float\n"); }
+void my_testl(long double l) { UNUSED_PARAM(l); kputs("long double\n"); }
+
+
+//#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
+internal vbe_controller_info *vbe_ctrl;
+internal vbe_mode_info *vbe;
+internal uint8_t *mem;
+
+// 24bpp
+internal void draw_pixel(u32 x, u32 y, u32 color)
+{
+    u32 pos = y * vbe->LinBytesPerScanLine + x * (vbe->bpp / 8);
+    // Assuming 24-bit color mode
+    mem[pos] = color & 0xFF;
+    mem[pos + 1] = (color >> 8) & 0xFF;
+    mem[pos + 2] = (color >> 16) & 0xFF;
+    //trace("draw pixel {%d, %d} [%d] w/color %x\n    ", x, y, pos, color);
+}
+
+internal void draw_rectangle(u32 x, u32 y, u32 width, u32 height, uint32_t color)
+{
+    trace("draw rect {%d, %d, %d, %d} w/color %x\n", x, y, width, height, color);
+    for (u32 i = x; i < x + width; ++i)
+    {
+        for (u32 j = y; j < y + height; ++j)
+        {
+            draw_pixel(i, j, color);
+        }
+    }
+}
