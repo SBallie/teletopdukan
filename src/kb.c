@@ -649,4 +649,6 @@ void ps2_install()
         do {
             ps2_wait_read();
             status = inb(PS2_DATA);
-        } while
+        } while(status != PS2_ACK_BYTE);
+    }
+}
