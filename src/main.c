@@ -93,3 +93,144 @@
 
 // TODO:
 // - https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_headers.html
+
+// Require libc
+// #include <stdint.h>
+
+/* Check if the compiler thinks we are targeting the wrong operating system. */
+#if defined(__linux__)
+    #error "You are not using a cross-compiler, you will most certainly run into trouble"
+#endif
+ 
+/* This tutorial will only work for the 32-bit ix86 targets. */
+#if !defined(__i386__)
+    // #error "This tutorial needs to be compiled with a i386-elf compiler"
+#endif
+
+#include <system.h>
+#include <systemcpp.h>
+#include <multiboot.h>
+
+//////////////////////////////
+
+output_writer TRACE_WRITER = serial_write_b;
+
+u32 initial_esp;
+
+/////////////////////////////
+
+void kassert_fail(c_str assertion, c_str file, unsigned int line, c_str func, c_str msg)
+{
+    for(int i=0; i<2; ++i) {
+        output_writer writer = i == 0 ? serial_write_b : kputch;
+        kwritef(writer, "[ASSERT]: %d: %s: %s: %s\n[%s]", line, file, func, msg, assertion);
+    }
+}
+
+void* kmemcpy(void* restrict dest, const void* restrict src, size_t n)
+{
+    asm volatile("rep movsb"
+                 : "=c"((i32){0})
+                 : "D"(dest), "S"(src), "c"(n)
+                 : "flags", "memory");
+    return dest;
+}
+
+void* kmemset(void* dest, int c, size_t n)
+{
+    asm volatile("rep stosb"
+                 : "=c"((int){0})
+                 : "D"(dest), "a"(c), "c"(n)
+                 : "flags", "memory");
+    return dest;
+}
+
+size_t kmemcmp(const void* vl, const void* vr, size_t n)
+{
+    const u8* l = vl;
+    const u8* r = vr;
+    for (; n && *l == *r; n--, l++, r++);
+    return n ? *l-*r : 0;
+}
+
+void* kmemchr(const void * src, int c, size_t n)
+{
+    const unsigned char * s = src;
+    c = (unsigned char)c;
+    // TODO: clarify code
+
+    for (; ((uintptr_t)s & (ALIGN - 1)) && n && *s != c; s++, n--);
+    if (n && *s != c) {
+        const size_t * w;
+        size_t k = ONES * c;
+        for (w = (const void *)s; n >= sizeof(size_t) && !HASZERO(*w^k); w++, n -= sizeof(size_t));
+        for (s = (const void *)w; n && *s != c; s++, n--);
+    }
+    return n ? (void *)s : 0;
+}
+
+void* kmemrchr(const void * m, int c, size_t n)
+{
+    const unsigned char * s = m;
+    c = (unsigned char)c;
+    while (n--) {
+        if (s[n] == c) {
+            return (void*)(s+n);
+        }
+    }
+    return 0;
+}
+
+void* kmemmove(void * dest, const void * src, size_t n)
+{
+    char * d = dest;
+    const char * s = src;
+
+    if (d==s) {
+        return d;
+    }
+
+    if (s+n <= d || d+n <= s) {
+        return kmemcpy(d, s, n);
+    }
+
+    if (d<s) {
+        if ((uintptr_t)s % sizeof(size_t) == (uintptr_t)d % sizeof(size_t)) {
+            while ((uintptr_t)d % sizeof(size_t)) {
+                if (!n--) {
+                    return dest;
+                }
+                *d++ = *s++;
+            }
+            for (; n >= sizeof(size_t); n -= sizeof(size_t), d += sizeof(size_t), s += sizeof(size_t)) {
+                *(size_t *)d = *(size_t *)s;
+            }
+        }
+        for (; n; n--) {
+            *d++ = *s++;
+        }
+    } else {
+        if ((uintptr_t)s % sizeof(size_t) == (uintptr_t)d % sizeof(size_t)) {
+            while ((uintptr_t)(d+n) % sizeof(size_t)) {
+                if (!n--) {
+                    return dest;
+                }
+                d[n] = s[n];
+            }
+            while (n >= sizeof(size_t)) {
+                n -= sizeof(size_t);
+                *(size_t *)(d+n) = *(size_t *)(s+n);
+            }
+        }
+        while (n) {
+            n--;
+            d[n] = s[n];
+        }
+    }
+    
+    return dest;
+}
+
+////////////////////////////////
+
+// memcpy - copy n bytes from src to dest
