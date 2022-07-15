@@ -370,3 +370,121 @@ internal void draw_rectangle(u32 x, u32 y, u32 width, u32 height, uint32_t color
         }
     }
 }
+
+// convert [seg]:[off] u32=u16:u16 into linear
+static void* linear_addr(segoff p)
+{
+    return (void*)((p.seg << 4) + p.off);
+}
+
+internal void test_harddisk()
+{
+    // -- BEG HARD DISK ACCESS TESTING ---
+
+    ata_soft_reset();
+
+    // wait while not ready
+    cli();
+    ata_wait_ready();
+    outb(HD_DH, IDE0_BASE & 0xff);
+    outb(HD_CMD, HD_CMD_IDENTIFY);
+    ata_wait_drq();
+    u16 ident_data[256];
+    for(int i=0; i<256; ++i) {
+        ident_data[i] = inw(HD_DATA);
+    }
+    sti();
+
+    // 00 - Useful if not Hard Disk
+    kprintf("Disk: %x, Cyl:%d, Head:%d, Sec:%d\n",
+            ident_data[0],
+            ident_data[1],
+            ident_data[3],
+            ident_data[6]);
+
+    u32 bytes = chs2bytes(ident_data[1], ident_data[3], ident_data[6]);
+    u32 kilobytes = bytes/1024;
+    u32 megabytes = bytes/1048576;
+    u32 gigabytes = bytes/1073741824;
+
+    kprintf("Storage Size is %dKB, %dMB, %dGB\n",
+            kilobytes, megabytes, gigabytes);
+
+    // 10-19 - Serial Number
+    kputs("Serial: ");
+    for(int i=10; i<19; ++i) {
+        kputch((ident_data[i] >> 8) & 0xff);
+        kputch(ident_data[i] & 0xff);
+    }
+    kputs("\n");
+
+    // 23-26 Firmware Revision
+    kputs("Firmware: ");
+    for(int i=23; i<26; ++i) {
+        kputch((ident_data[i] >> 8) & 0xff);
+        kputch(ident_data[i] & 0xff);
+    }
+    kputs("\n");
+
+    // 27-46 - Model Name
+    kputs("Model: ");
+    for(int i=27; i<46; ++i) {
+        kputch((ident_data[i] >> 8) & 0xff);
+        kputch(ident_data[i] & 0xff);
+    }
+    kputs("\n");
+
+    wait_any_key();
+
+    // TODO: ident_data should have a struct type instead
+    // 49 - (bit 9) LBA Supported
+    if(ident_data[49] & 0x0100)
+        kputs("LBA Supported!\n");
+    if(ident_data[59] & 0x0100)
+        kputs("Multiple sector setting is valid!\n");
+
+    // 60/61 - taken as DWORD => total # LBA28 sectors (if > 0, supports LBA28)
+    u32 lba_capacity = (ident_data[61] << 16) + ident_data[60];
+    u32 lba_bytes = (lba_capacity/MEGA*SECTOR_BYTES);
+
+    kprintf("LBA Capacity: %d sectors, %dMB\n", lba_capacity, lba_bytes);
+
+    if(ata_controller_present(0)){
+        trace_info("\nController 0 EXISTS");
+    } else {
+        trace_info("\nController 0 NOT EXIST");
+    }
+
+    if(ata_controller_present(1)){
+        trace_info(" Controller 1 EXISTS");
+    } else {
+        trace_info(" Controller 1 NOT EXIST");
+    }
+
+    //ata_soft_reset();
+
+    if(ata_drive_present(0, 0)){
+        trace_info("\nPri Drive 0 EXISTS");
+    } else {
+        trace_info("\nPri Drive 0 NOT EXIST");
+    }
+
+    if(ata_drive_present(0, 1)){
+        trace_info(" Pri Drive 1 EXISTS");
+    } else {
+        trace_info(" Pri Drive 1 NOT EXIST");
+    }
+
+    if(ata_drive_present(1, 0)){
+        trace_info("\nSec Drive 0 EXISTS");
+    } else {
+        trace_info("\nSec Drive 0 NOT EXIST");
+    }
+
+    if(ata_drive_present(1,1)){
+        trace_info(" Sec Drive 1 EXISTS");
+    } else {
+        trace_info(" Sec Drive 1 NOT EXIST");
+    }
+
+    u16 data[512];
