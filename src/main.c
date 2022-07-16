@@ -770,3 +770,138 @@ u32 kmain(multiboot_info* mbh, u32 magic, u32 initial_stack)
     trace("kmalloc\n");
     u8 *t = kmalloc_b(4);
     u8 *s = kmalloc_b(8);
+    for(int i=0; i<4; ++i) {
+        t[i] = i;
+        s[i*2] = i*2;
+        s[i*2+1] = i*2+1;
+    }
+    for(int i=0; i<4; ++i) {
+        kprintf("%x : %d : %x : %d : %d\n", (u32)&t, t[i], (u32)&s, s[i*2], s[i*2+1]);
+    }
+
+    // DEBUG::Testing heap code
+    print_heap_magic();
+    u8* testMalloc = kmalloc_b(20);
+    testMalloc[0] = 'S';
+    testMalloc[1] = 't';
+    testMalloc[2] = 'e';
+    testMalloc[3] = 'v';
+    testMalloc[4] = 'e';
+    print_heap_bytes(128);
+    trace("\n");
+    print_blocks_avail();
+
+    wait_any_key();
+
+    //--------------------------------------------
+
+    // print out some stack memory
+    kputch('\n');
+    int array[10] = { 1,1,2,3,5,8,13,21,34 };
+    int *p = array;
+    for(int i=0; i<10; ++i, ++p) {
+        kprintf("%d:%d , ", &p, *p);
+        if(i % 4 == 3)
+            kputs("\n");
+    }
+    kputs("\n");
+
+    wait_any_key();
+
+    //--------------------------------------------
+
+    // TODO: allow switching "stdout" from direct to serial or both
+    rtc_time time = read_rtc();
+    kprintf("datetime = %d-%d-%d %d:%d:%d\n",
+            time.year, time.month, time.day,
+            time.hour, time.minute, time.second);
+    
+
+
+    // TODO: fork off shell process
+    trace("Starting Infinite Loop!\r\n");
+    kputs("Starting Infinite Loop!\n");
+
+    kputs("Press SPACE BAR:");
+    for(u8 ch = 0; ch != SCAN_US_SPACE; ch = keyboard_read_next()) {
+        trace("still waiting for SPACE KEY PRESS!\n");
+        delay_ms(100);
+    }
+
+    wait_any_key();
+
+    //--------------------------------------------
+
+    init_page_directory();
+    trace("[main] set up page directory!");
+    wait_any_key();
+
+    //--------------------------------------------
+
+    // TODO: fix this
+    initTasking();
+    trace("[main] before preempt\n");
+    k_preempt();
+    trace("[main] back after preempt\n");
+    wait_any_key();
+
+    //--------------------------------------------
+
+    // TEST Setup VGA Graphics mode
+    //set_video_mode(video_mode_13h);
+    //set_video_mode(video_mode_13h)
+    u32 success = init_graph_vga(320,200,1);
+    if(success)
+    {
+        trace("["__DATE__" "__TIME__"] Video Mode Success!\r\n");
+        vga_tests();
+    }
+
+//    // test modeX (non-chain4 allows 400x600 possible)
+//    success = init_graph_vga(320,240,0);
+//    if(success) 
+//    {
+//        trace("["__DATE__" "__TIME__"] Video Mode Success!\r\n");
+//        vga_tests();
+//    }
+
+
+    // TODO: fork this into another process
+    static u16 x = 0;
+    static u16 y = 0;
+    static u16 screen_width = 320;
+    static u16 screen_height = 200;
+    static u8 colorIndex = 0;
+
+    for (;;) {
+        x = CLAMP(mouse_get_x(), 0, screen_width);
+        y = CLAMP(mouse_get_y(), 0, screen_height);
+
+        u32 buttons = mouse_get_buttons();
+        //u8 scroll = mouse_gety();
+        if(buttons & MOUSE_SCROLL_UP)
+            ++colorIndex;
+        else if(buttons & MOUSE_SCROLL_DOWN)
+            --colorIndex;
+
+        fillrect(x, y, colorIndex);
+
+        //trace("Running Process MAIN!\n");
+        //delay_ms(100);
+
+        k_preempt();
+    }
+
+
+//    // TODO: once the previous is forked, this should behave okay
+//    // Test Division By 0
+//    // need to hide the zero
+//    trace("trying divide by zero");
+//    int i,z;
+//    z = 2-2; i = 10 / z; kputch(i);
+//
+//
+//    trace("exiting main");
+
+    return 0;
+}
