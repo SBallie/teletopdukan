@@ -619,3 +619,154 @@ u32 kmain(multiboot_info* mbh, u32 magic, u32 initial_stack)
                 vbe->Yres,
                 vbe->Wchar,
                 vbe->Ychar,
+                vbe->planes,
+                vbe->bpp,
+                vbe->banks,
+                vbe->memory_model,
+                vbe->bank_size,
+                vbe->image_pages,
+                vbe->reserved0,
+                vbe->red_mask_size,
+                vbe->red_position,
+                vbe->green_mask_size,
+                vbe->green_position,
+                vbe->blue_mask_size,
+                vbe->blue_position,
+                vbe->rsv_mask,
+                vbe->rsv_position,
+                vbe->directcolor_attributes,
+                vbe->physbase,
+                vbe->reserved1,
+                vbe->reserved2,
+                vbe->LinBytesPerScanLine,
+                vbe->BnkNumberofImagePages,
+                vbe->LinNumberofImagePages,
+                vbe->LinRedMaskSize,
+                vbe->LinRedFieldPosition,
+                vbe->LinGreenMaskSize,
+                vbe->LinGreenFieldPosition,
+                vbe->LinBlueMaskSize,
+                vbe->LinBlueMaskPosition,
+                vbe->LinRsvdMaskSize,
+                vbe->LinRsvdFieldPosition,
+                vbe->MaxPixelClock,
+                vbe->Reserved);
+
+
+        mem = (u8*)vbe->physbase;
+        //kmemset((u32*)vbe->physbase, 0xff2222, 2^16);
+
+        uint16_t uses_lfb = BIT(mbh->vbe_mode, 14);
+        if (uses_lfb)
+            trace("uses LFB\n");
+        int32_t colors[] = {
+            0xFFFFFF, 0xC0C0C0, 0x808080,
+            0x000000, 0xFF0000, 0x800000,
+            0xFFFF00, 0x808000, 0x00FF00,
+            0x008000, 0x00FFFF, 0x008080,
+            0x0000FF, 0x000080, 0xFF00FF,
+            0x800080
+        };
+
+        int idx = 0;
+        int chunk_size = 8;
+        int xchunk = (vbe->Xres / chunk_size);
+        int ychunk = (vbe->Yres / chunk_size);
+
+
+        trace("chunk_size = %d, xchunk = %d, ychunk = %d\n", chunk_size, xchunk, ychunk);
+
+        for (int i = 0; i < chunk_size; ++i)
+        {
+            for (int j = 0; j < chunk_size; ++j)
+            {
+                draw_rectangle(j * xchunk, i * ychunk, xchunk, ychunk, colors[idx]);
+                if (++idx == 16)
+                    idx = 0;
+            }
+        }
+    }
+
+// TODO
+//    u32 timestamp = rsptd();
+//    srand();
+
+    display_banner();
+
+
+    set_text_color(COLOR_LIGHT_RED, COLOR_BLACK);
+
+    // TODO: assert(mboot_mag == MULTIBOOT_EAX_MAGIC && "Didn't boot with multiboot, not sure how we got here.");
+
+    trace("\n");
+
+    u32 ticks = timer_ticks();
+    trace("Start Delay.\n");
+    for(int i=0;i<10;i++)
+    {
+        delay_ms(100);
+    }
+    trace("Done.\n");
+
+    trace("Test took: %d ticks\n", timer_ticks() - ticks);
+
+    // Generics Test
+    my_test(1);
+    my_test((long double)2.0);
+    my_test(3.f);
+
+    wait_any_key();
+
+    set_text_color(COLOR_LIGHT_GREEN, COLOR_BLACK);
+
+
+    // TODO: do VBE in real mode
+    trace("\n\n");
+    for(int i=0; i<2; ++i)
+    {
+        //output_writer writer = (i == 0) ? serial_write_b : kputch;
+        TRACE_WRITER = (i == 0) ? kputch : serial_write_b;
+
+        // Multiboot Info
+        trace("MBInfo: \t%x [%x], Mem: %d - %d B, Flags: %b\n",
+                magic, &mbh, mbh->mem_lower, mbh->mem_upper, mbh->flags);
+
+        trace("MMap:   \t%x\n", mbh->mmap_length);
+        trace("Addr:   \t%x\n", mbh->mmap_addr);
+        trace("Drives: \t%x\n", mbh->drives_length);
+        trace("Addr:   \t%x\n", mbh->drives_addr);
+        trace("Config: \t%x\n", mbh->config_table);
+
+        trace("Found %d modules.\n", mbh->mods_count);
+        if (mbh->mods_count > 0)
+        {
+            for (u32 i = 0; i < mbh->mods_count; ++i )
+            {
+                u32 module_start = *(u32*)(mbh->mods_addr + 8 * i);
+                u32 module_end   = *(u32*)(mbh->mods_addr + 8 * i + 4);
+                trace("Module %d is at %x : %x\n",
+                      i+1, module_start, module_end);
+            }
+        }
+
+        trace("Bootloader Name: %s\n", (i8*)mbh->boot_loader_name);
+    }
+    wait_any_key();
+    set_text_color(COLOR_MAGENTA, COLOR_BLACK);
+
+    test_harddisk();
+
+    wait_any_key();
+    set_text_color(COLOR_YELLOW, COLOR_BLACK);
+
+    trace("print address test\n");
+    int test = 0;
+    kprintf("\nThe address of test is: %x\n", &test);
+
+    wait_any_key();
+
+        //--------------------------------------------
+
+    trace("kmalloc\n");
+    u8 *t = kmalloc_b(4);
+    u8 *s = kmalloc_b(8);
