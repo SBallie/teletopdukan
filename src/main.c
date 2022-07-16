@@ -488,3 +488,134 @@ internal void test_harddisk()
     }
 
     u16 data[512];
+    for(int i=0; i<512; ++i)
+        data[i]=0x5A;
+
+    ata_pio_write_w(0,1,1,1,data);
+    kputch('\n');
+    for(int i=0; i<10; ++i)
+        printHex_w(data[i]);
+
+    // wait
+    while((inb(HD_ST_ALT) & 0xc0) != 0x40)
+        ;
+
+    // NOTE: QEMU protects block 0 from being written to if img format is unknown or raw
+    u16 data2[512];
+    ata_pio_read_w(0,1,1,1,data2);
+    kputch('\n');
+    for(int i=0; i<10; ++i)
+        printHex_w(data2[i]);
+    kputch('\n');
+    
+    // -- END HARD DISK ACCESS TESTING ---
+}
+
+// NASM assembly boot loader calls this method
+u32 kmain(multiboot_info* mbh, u32 magic, u32 initial_stack)
+{
+    kserialf( "\n\n\n\n");
+    for(int i=0; i<10; ++i)
+        kserialf( "=============================================================\n");
+    kserialf( "\n\n\n\n");
+
+    initial_esp = initial_stack;
+
+    gdt_install();
+    idt_install();
+    timer_install();
+    ps2_install();
+
+    init_serial();
+    init_mm();
+    //TODO: init_tasking();
+    //TODO: init_paging();
+
+    init_video();
+
+    sti();
+
+    delay_ms(500);
+
+    trace("=============================================================\n");
+    trace("test double parsing: %f\n", 12349434.323423499);
+    trace("test double parsing: %f\n", 9582983498293849283984.133);
+
+    // TODO: kdebugf (prints to both stdout and serial port)
+    u32 a = addi(1,2);
+    u32 b = addl(1,2);
+    u64 c = addll(1,2);
+    trace("Test: calling %d, %d, %d\n", a, b, c);
+
+    // TODO: create text mode first if no VBE
+    if(BIT(mbh->flags, 11))
+    {
+
+        for(int i=0; i<4; ++i)
+            trace("=============================================================\n");
+
+        for(int i=0; i<2; ++i)
+        {
+            //output_writer writer = (i == 0) ? serial_write_b : kputch;
+            TRACE_WRITER = (i == 0) ? kputch : serial_write_b;
+
+            trace("VBE: %x,%x,%x,%x,%x,%x\n",
+                    mbh->vbe_controller_info,
+                    mbh->vbe_mode_info,
+                    mbh->vbe_mode,
+                    mbh->vbe_interface_seg,
+                    mbh->vbe_interface_off,
+                    mbh->vbe_interface_len);
+        }
+
+        vbe_ctrl = (vbe_controller_info*)mbh->vbe_controller_info;
+
+        trace("\n");
+        trace("vbe_control_info: %x\n", (u32)&mbh->vbe_controller_info);
+        trace("vbe buff [addr]: %x\n", (u32)&vbe_ctrl->buff[0]);
+        trace("\n");
+
+        trace("signature: %s [%x] addr: %x\nver: %x\noem: %s\ncaps: %x\n",
+                &vbe_ctrl->signature, (u32)vbe_ctrl->signature, vbe_ctrl->signature,
+                vbe_ctrl->version,
+                (c_str*)linear_addr(vbe_ctrl->oem),
+                vbe_ctrl->caps);
+
+        trace("oem vendor name: %s\n", (c_str*)linear_addr(vbe_ctrl->oem_vendor_name));
+        trace("oem product name: %s\n", (c_str*)linear_addr(vbe_ctrl->oem_product_name));
+        trace("oem product rev: %s\n", (c_str*)linear_addr(vbe_ctrl->oem_product_revision));
+
+        trace("list of modes: [%x]\n", vbe_ctrl->mode_list.segoff);
+
+        //u32* mode = linear_addr(vbe_ctrl->mode_list) - 34;
+
+        // TODO: should really just not bother with the multiboot VESA, unless we're only using QEMU/BOCHS
+        // TODO: we could 
+        u16* mode = (u16*)&vbe_ctrl->reserved[0];
+        for(u32 i=0; 0xFFFF != *mode; ++mode, ++i) {
+            trace("\t[%x]: %x", mode, *mode);
+            if(i % 8 == 7)
+                trace("\n");
+            if(i > 512) break;
+        }
+        trace("\n");
+
+        for(int i=0; i<4; ++i)
+            trace("===================================================================\n");
+
+        // https://codereview.stackexchange.com/questions/108168/vbe-bdf-font-rendering
+        vbe = (vbe_mode_info*)mbh->vbe_mode_info;
+        trace("attributes: %u\nwinA: %u\nwinB: %u\ngranularity: %u\nwinsize: %u\nsegmentA: %x\nsegmentB: %x\nwinFuncPtr: %x\npitch: %u\nXres: %u\nYres: %u\nWchar: %u\nYchar: %u\nplanes: %u\nbpp: %u\nbanks: %u\nmemory_model: %u\nbank_size: %u\nimage_pages: %u\nreserved0: %u\nred_mask_size: %u\nred_position: %u\ngreen_mask_size: %u\ngreen_position: %u\nblue_mask_size: %u\nblue_position: %u\nrsv_mask: %u\nrsv_position: %u\ndirectcolor_attributes: %u\nphysbase: %x\nreserved1: %u\nreserved2: %u\nLinBytesPerScanLine: %u\nBnkNumberofImagePages: %u\nLinNumberofImagePages: %u\nLinRedMaskSize: %u\nLinRedFieldPosition: %u\nLinGreenMaskSize: %u\nLinGreenFieldPosition: %u\nLinBlueMaskSize: %u\nLinBlueMaskPosition: %u\nLinRsvdMaskSize: %u\nLinRsvdFieldPosition: %u\nMaxPixelClock: %u\nReserved: %u\n",
+                vbe->attributes,
+                vbe->winA,
+                vbe->winB,
+                vbe->granularity,
+                vbe->winsize,
+                vbe->segmentA,
+                vbe->segmentB,
+                vbe->winFuncPtr,
+                vbe->pitch,
+                vbe->Xres,
+                vbe->Yres,
+                vbe->Wchar,
+                vbe->Ychar,
