@@ -140,3 +140,124 @@ u8* kmalloc_b(u32 nblks)
     // mark used
     trace( "blocks_used %p, %d, %d, %d\n", blocks_used + offset, offset, nblks, nblks);
     kmemset(blocks_used + offset, nblks, nblks);
+
+    // return init block (debug fill with known data)
+    u8* tmp = free_ptr;
+	free_ptr = free_ptr + nblks;
+#ifdef _DEBUG_
+    kmemset(tmp, 0xee, nblks);
+#endif
+    trace( "malloc ret ptr = %p\n", tmp);
+	return tmp;
+}
+
+//void* malloc(u32 size)
+//{
+//	// Find free block(s) for memory of size nbytes	
+//	// Set that block(s) to used
+//	// Possibly store some extra information
+//	// Return the address of this block
+//	return NULL;
+//}
+
+void kfree_b(u8* addr)
+ {
+     u32 start = addr - heap_ptr;
+     u32 nblks = blocks_used[start];
+     kmemset(blocks_used, 0, nblks);
+
+	// Find block(s) starting at memory address of addr
+	// Set these block(s) to free!
+}
+
+
+// TODO: everything below needs to be studied once working, then re-written by hand
+
+//////////////////////////////////////////////////
+// PAE Paging
+//
+//i64 page_dir_ptr_tab[4] __attribute__((aligned(0x20)));
+//
+//void init_page_directory_PAE()
+//{
+//    page_dir_ptr_tab[0] = (uint64_t)&page_dir | 1; // set the page directory into the PDPT and mark it present
+//    page_dir[0] = (uint64_t)&p_tab | 3; //set the page table into the PD and mark it present/writable
+//
+//    unsigned int i, address = 0;
+//    for(i = 0; i < 512; i++)
+//    {
+//        page_tab[i] = address | 3; // map address and mark it present/writable
+//        address = address + 0x1000;
+//    }
+//
+//    // load it
+//    asm volatile ("movl %cr4, %eax; bts $5, %eax; movl %eax, %cr4"); // set bit5 in CR4 to enable PAE
+//    asm volatile ("movl %%eax, %%cr3" :: "a" (&page_dir_ptr_tab)); // load PDPT into CR3
+//
+//    // activate
+//    asm volatile ("movl %cr0, %eax; orl $0x80000000, %eax; movl %eax, %cr0;");
+//
+//    // map the directory to itself
+//    uint64_t * page_dir = (uint64_t*)page_dir_ptr_tab[3]; // get the page directory (you should 'and' the flags away)
+//    page_dir[511] = (uint64_t)page_dir; // map pd to itself
+//    page_dir[510] = page_dir_ptr_tab[2]; // map pd3 to it
+//    page_dir[509] = page_dir_ptr_tab[1]; // map pd2 to it
+//    page_dir[508] = page_dir_ptr_tab[0]; // map pd1 to it
+//    page_dir[507] = (uint64_t)&page_dir_ptr_tab; // map the PDPT to the directory
+//                                                  
+//    // NOTE: http://wiki.osdev.org/Setting_Up_Paging_With_PAE
+//    // Now you can access all structures in virtual memory. Mapping the PDPT into the directory wastes quite much virtual memory as only 32 bytes are used, but if you allocate most/all PDPT's into one page then you can access ALL of them, which can be quite useful You can also statically allocate the PDPT at boot time, put the 4 page directory addresses in your process struct, and then just write the same PDPT address to CR3 on a context switch after you've patched the PDPT.
+//}
+
+u32 pageDirectory[1024] __attribute__((aligned(4096)));
+u32 firstPageTable[1024] __attribute__((aligned(4096)));
+// TODO: if you want more than 4K dir * 4K pages need to add another level
+
+
+//
+// US RW  P - Description
+// 0  0  0 - Supervisory process tried to read a non-present page entry
+// 0  0  1 - Supervisory process tried to read a page and caused a protection fault
+// 0  1  0 - Supervisory process tried to write to a non-present page entry
+// 0  1  1 - Supervisory process tried to write a page and caused a protection fault
+// 1  0  0 - User process tried to read a non-present page entry
+// 1  0  1 - User process tried to read a page and caused a protection fault
+// 1  1  0 - User process tried to write to a non-present page entry
+// 1  1  1 - User process tried to write a page and caused a protection fault
+void page_fault_handler(isr_stack_state* r)
+{
+    u32 i = r->int_no;
+    u32 err = r->err_code;
+    trace("page fault handler (isr #%d) called with err: %x", i, err);
+
+    //k_panic();
+}
+
+// TODO:
+/*
+ Creating a Blank Page Directory
+
+ The first step is to create a blank page directory. The page directory is blank because we have not yet
+ created any page tables where the entries in the page directory can point.
+
+ Note that all of your paging structures need to be at page-aligned addresses (i.e. being a multiple of 4096).
+ If you have already written a page frame allocator then you can use it to allocate the first free page after
+ your kernel for the page directory. If you have not created a proper page allocator, simply finding the first
+ free page-aligned address after the kernel will be fine, but you should write the page frame allocator as
+ soon as possible. Another temporary solution (used in this tutorial) is to simply declare global objects 
+ with __attribute__((align(4096))). Note that this is a GCC extension. It allows you to declare data aligned 
+ with some mark, such as 4KiB here. We can use this because we are only using one page directory and one page 
+ table. Please note that on the real world, dynamic allocation is too basic to be missing, and paging 
+ structures are constantly being added, deleted, and modified. For now, just use static objects;
+ */
+void init_page_directory() 
+{
+    trace("init multitasking\n");
+
+    //set each entry to not present
+    for(int i = 0; i < 1024; i++)
+    {
+        // This sets the following flags to the pages:
+        // bit 0 = 0 - not present
+        // bit 1 = 1 - writable
+        // bit 2 = 0 - supervisor only
