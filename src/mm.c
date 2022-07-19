@@ -261,3 +261,126 @@ void init_page_directory()
         // bit 0 = 0 - not present
         // bit 1 = 1 - writable
         // bit 2 = 0 - supervisor only
+        pageDirectory[i] = PAGE_DIR_READWRITE;
+    }
+
+    //we will fill all 1024 entries in the table, mapping 4 megabytes
+    for(int i = 0; i < 1024; i++)
+    {
+        // As the address is page aligned, it will always leave 12 bits zeroed.
+        // attributes: supervisor level (0), read/write (1), present (1)
+        firstPageTable[i] = (i * PAGE_DIR_ADDR_BASE) | PAGE_DIR_READWRITE | PAGE_DIR_PRESENT;
+    }
+
+    // attributes: supervisor level (0), read/write (1), present (1)
+    //page_directory[0] = ((unsigned int)first_page_table) | 3;
+    pageDirectory[0] = (u32)firstPageTable | PAGE_DIR_READWRITE | PAGE_DIR_PRESENT;
+
+    trace("loading in page directory\n");
+
+    // must have page fault handler installed before enabling paging otherwise GPF calling `trace()` or other
+    const int ISR_PAGE_FAULT = 0x0e;
+    isr_install_handler(ISR_PAGE_FAULT, page_fault_handler, "page fault");
+    loadPageDirectory(pageDirectory);
+    enablePaging();
+
+    trace("paging enabled\n");
+}
+
+
+// from - virtual address to start Ident paging
+// size - # bytes to page from start(from)
+void idpaging(uint32_t *first_pte, vaddr from, int size);
+void idpaging(uint32_t *first_pte, vaddr from, int size)
+{
+    // discard bits we don't want
+    from = from & 0xfffff000;
+    for(; size > 0; from += 4096, size -= 4096, ++first_pte)
+    {
+        *first_pte = from|1;     // mark page present.
+    }
+}
+
+void* get_physaddr(void* virtualaddr)
+{
+    u32 pdindex = (u32)virtualaddr >> 22;
+    u32 ptindex = (u32)virtualaddr >> 12 & 0x03FF;
+
+    //u32 * pd = (u32*)0xFFFFF000;
+
+    u32 pd = pageDirectory[pdindex];
+    UNUSED_VAR(pd);
+
+    // Here you need to check whether the PD entry is present.
+    // TODO: if(BIT(pd, PAGE_DIR_PRESENT))
+
+    u32 pt = 0xFFC00000 + (0x400 * pdindex);
+    UNUSED_VAR(pt);
+
+    // Here you need to check whether the PT entry is present.
+
+    u32 base = firstPageTable[ptindex] & ~0xFFF;
+    u32 offset = (u32)virtualaddr & 0xFFF;
+    return (void *)(base + offset);
+}
+
+void map_page(void* physaddr, void* virtualaddr, i32 flags)
+{
+    // Make sure that both addresses are page-aligned.
+
+    u32 pdindex = (u32)virtualaddr >> 22;
+    u32 ptindex = (u32)virtualaddr >> 12 & 0x03FF;
+
+    //u32 * pd = (u32 *)0xFFFFF000;
+
+    // Here you need to check whether the PD entry is present.
+
+    // When it is not present, you need to create a new empty PT and
+    // adjust the PDE accordingly.
+
+
+    u32 * pt = ((u32 *)0xFFC00000) + (0x400 * pdindex);
+    // Here you need to check whether the PT entry is present.
+    // When it is, then there is already a mapping present. What do you do now?
+
+    pt[ptindex] = ((u32)physaddr) | (flags & 0xFFF) | 0x01; // Present
+
+    // Now you need to flush the entry in the TLB
+    // or you might not notice the change.
+}
+
+
+
+
+//// Abstract model of a TLB.
+//
+//
+//// Flag to mark an entry in the modelled hardware TLB as having been set for use as a valid translation.
+//#define TLB_ENTRY_FLAGS_INUSE
+//#define CPU_MODEL_MAX_TLB_ENTRIES 10
+//
+//typedef struct
+//{
+//    vaddr_t entry_virtual_address;
+//    paddr_t relevant_physical_address;
+//    uint16_t permissions;
+//} tlb_cache_record;
+//
+//// Instance of a hardware Translation Lookaside Buffer.
+//
+//internal tlb_cache_record hw_tlb[CPU_MODEL_MAX_TLB_ENTRIES];
+//
+//// Model routine for a TLB lookup.
+//
+//int tlb_lookup(vaddr_t v, paddr_t *p)
+//{
+//    for (int i=0; i<CPU_MODEL_MAX_TLB_ENTRIES; i++)
+//    {
+//        if (hw_tlb[i].permissions & TLB_ENTRY_FLAGS_INUSE && hw_tlb[i].entry_virtual_address == v)
+//        {
+//            *p = hw_tlb[i].relevant_physical_address;
+//            return 1;
+//        };
+//    };
+//    return 0;
+//}
