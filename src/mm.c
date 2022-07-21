@@ -384,3 +384,22 @@ void map_page(void* physaddr, void* virtualaddr, i32 flags)
 //    };
 //    return 0;
 //}
+//
+//void tlb_flush()
+//{
+//    asm volatile ("tlbflsh %0\n\t" : : "r" (virtual_address));
+//}
+//
+//// Modelled function for a flush of the TLB modelled earlier on.
+//
+//void tlb_flush_single(vaddr_t v)
+//{
+//    for (int i=0; i<CPU_MODEL_MAX_TLB_ENTRIES; i++)
+//    {
+//        if (hw_tlb[i].permissions & TLB_ENTRY_FLAGS_INUSE && hw_tlb[i].entry_virtual_address == v)
+//        {
+//            ht_tlb[i].permissions &= ~TLB_ENTRY_FLAGS_INUSE;
+//            return;
+//        };
+//    };
+//}
