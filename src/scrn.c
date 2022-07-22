@@ -336,3 +336,127 @@ void writeUInt64(output_writer writer, u64 num)
     u8 buf[MAX_INT_DIGITS + 1];
     u8 cur = MAX_INT_DIGITS;
     buf[cur] = '\0';
+
+    while(num) {
+        --cur;
+        div_t qr = div64_slow(num, 10);
+        num = qr.quotient;
+        buf[cur] = qr.remainder + '0'; // add the digit (temp) to ASCII code '0'
+    }
+
+    // print the string
+    char c = '0';
+    for(; cur < MAX_INT_DIGITS; ++cur) {
+        c = buf[cur];
+        writer(c);
+    }
+}
+
+void writeInt64(output_writer writer, i64 num)
+{
+    u8 delim_negative = '-';
+    if(num < 0) {
+        writer(delim_negative);
+        num = -num;
+    }
+    writeUInt64(writer, (u64)num);
+}
+
+void writeUInt(output_writer writer, u32 num)
+{
+    u8 buf[MAX_INT_DIGITS];
+    i32 cur, end, temp=0;
+
+    end = MAX_INT_DIGITS-1;
+    cur = end;
+
+    if(num == 0) {
+        writer('0');
+        return;
+    }
+
+    buf[cur] = '\0';
+
+    while(num) {
+        temp = num % 10; // get 'ones' or right most digit
+        --cur;
+        buf[cur] = temp + '0'; // add the digit (temp) to ASCII code '0'
+        num /= 10; // remove right most digit
+    }
+
+    // print the string
+    char c = '0';
+    for(; cur < end; ++cur) {
+        c = buf[cur];
+        writer(c);
+    }
+}
+
+static inline unsigned bit_mask(int x)
+{
+    return (x >= sizeof(unsigned) * CHAR_BIT) ? (unsigned) -1 : (1U << x) - 1;
+}
+
+void writeRealDebug(output_writer writer, real64 num)
+{
+    // NOTE: Intel Double Precision
+    // NOTE: need to be careful to not get automatic value conversion instead of just type conversion
+    u64* numToIntPtr = (u64*)&num;
+    u64 numInt = *numToIntPtr;
+
+    u8  signbit = (numInt >> 63) & 1;
+    u16 exp = (numInt >> 52) & bit_mask(11);
+    u16 expbias = 1023;
+    u16 exponent = exp - expbias;
+    u64 mantissa = numInt & bit_mask(52);
+
+    if(exponent == 0) {
+        kwrites(writer, "signed zero (mantissa = 0) otherwise subnormal\n");
+    }
+    if(exponent == 0x7ff) {
+        kwrites(writer, "infinity (mantissa = 0) otherwise NaN\n");
+    }
+
+#if (DEBUG_LEVEL > 1)
+
+    writer('\n');
+    writer('[');
+    writeHex_q(writer, numInt);
+    writer(':');
+    writer(' ');
+    writeHex_b(writer, signbit);
+    writer(',');
+    writeHex_w(writer, exp);
+    kwrites(writer," => ");
+    writeInt(writer, exponent);
+    writer(',');
+    writeHex_q(writer, mantissa);
+    kwrites(writer," => ");
+    writeInt(writer, mantissa);
+    writer(']');
+    writer('\n');
+
+#endif
+
+    if(signbit) writer('-');
+    kwrites(writer, "1.");
+    writeUInt64(writer, mantissa);
+    kwrites(writer, " * 2^");
+    writeInt(writer, (i32)exponent);
+
+    return;
+}
+
+#define scast(typ) (typ)
+#define MAX_FLOATING_FRACTIONAL_DIGITS 10
+
+void writeReal_component(output_writer writer, real64 smallNum, bool write_fraction)
+{
+    if(smallNum < 0) {
+        smallNum = -smallNum;
+        writer('-');
+    }
+
+    // HACK: cast to truncate
+    i64 whole = (i64)smallNum;
+    real64 fractional = smallNum - (real64)whole;
