@@ -222,3 +222,117 @@ void writeInt(output_writer writer, i32 num)
 
  .data
  decstr  db      24 dup (0)
+ pfstr   db      '%','s',0dh,0ah,0
+ .code
+ extrn   _printf:NEAR
+ _main   proc    near
+ mov     edi,000000002h          ;edi = high order dvnd
+ mov     esi,04CB016EAh          ;esi = low  order dvnd
+ lea     ebx,decstr+23           ;ebx = ptr to end string
+ mov     ecx,10                  ;ecx = 10 (constant)
+ div0:   xor     edx,edx                 ;clear edx
+ mov     eax,edi                 ;divide high order
+ div     ecx
+ mov     edi,eax
+ mov     eax,esi                 ;divide low order
+ div     ecx
+ mov     esi,eax
+ add     dl,'0'                  ;store ascii digit
+ dec     ebx
+ mov     [ebx],dl
+ mov     eax,edi                 ;repeat till dvnd == 0
+ or      eax,esi
+ jnz     div0
+ push    ebx                     ;display string
+ push    offset pfstr
+ call    _printf
+ add     sp,8
+ xor     eax,eax
+ ret
+ _main   endp
+
+
+ asm ("movl %0,%%eax;
+ movl %1,%%ecx;
+ call _foo"
+ :
+ : "g" (from), "g" (to)
+ : "eax", "ecx"
+ );
+
+
+ */
+
+
+// TODO: need to link in libgcc (should have been with compiler build)
+//
+// http://www.delorie.com/gnu/docs/gcc/gcc_80.html
+// http://www.ic.unicamp.br/~islene/2s2008-mo806/libc/sysdeps/wordsize-32/divdi3.c
+//
+// HACK: subtrack out divisor until left with A
+// - https://stackoverflow.com/questions/2566010/fastest-way-to-calculate-a-128-bit-integer-modulo-a-64-bit-integer?rq=1
+//
+
+typedef struct { u64 quotient; u64 remainder; } div_t;
+u64 modulo(u64 A, u64 B)
+{
+    u64 X = B;
+
+    // find a decent divisor
+    while (X < A/2) {
+        X <<= 1;
+    }
+
+    // divide by subtracting, remainders left in A
+    while (A >= B) {
+        if (A >= X)
+            A -= X;
+        X >>= 1;
+    }
+    return A;
+}
+
+// STEVE: simple SLOW version of division
+div_t div64_slow(u64 dividend, u64 divisor)
+{
+    ASSERT(divisor, "can't divide with zero divisor!");
+    // TODO: speed up a bit by testing the divisor size
+    // - for large dividend and small divisor can look at first
+    // - subtracting a large multiple of divisor
+
+    u64 quotient = 0;
+    u64 quotient_per_removal = 1;
+    // find a decent divisor
+    u64 A = dividend;
+    u64 B = divisor;
+    u64 X = B;
+    while (X < A/2) {
+        X <<= 1; // mult by two
+        //        ++quotient_per_removal;
+        quotient_per_removal <<= 1;
+    }
+
+    // divide by subtracting, remainders left in A
+    while (A >= B) {
+        if (A >= X) {
+            A -= X;
+            quotient += quotient_per_removal;
+        }
+        X >>= 1;
+        quotient_per_removal >>= 1;
+    }
+
+    div_t ret = { quotient, A };
+    return ret;
+}
+
+void writeUInt64(output_writer writer, u64 num)
+{
+    if(num == 0) {
+        writer('0');
+        return;
+    }
+
+    u8 buf[MAX_INT_DIGITS + 1];
+    u8 cur = MAX_INT_DIGITS;
+    buf[cur] = '\0';
