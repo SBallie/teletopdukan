@@ -720,3 +720,33 @@ void kwritef(output_writer writer, c_str format, ...)
                 break;
             }
             case 'x': {
+                int val = va_arg(ap, int);
+                writeHex(writer, val);
+                break;
+            }
+            case 'p': {
+                void* val = va_arg(ap, void*);
+                writeAddr(writer, val);
+                break;
+            }
+            case 's': {
+                c_str s = va_arg(ap, c_str);
+                kwrites(writer, s);
+                break;
+            }
+
+            case '|': {
+                int paddingAmount = va_arg(ap, int);
+                while(cursor < paddingAmount) {
+                    writer(' ');
+                }
+            }
+
+            default:
+                break;
+        }
+    }
+    
+    va_end(ap);
+}
+
