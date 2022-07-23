@@ -460,3 +460,125 @@ void writeReal_component(output_writer writer, real64 smallNum, bool write_fract
     // HACK: cast to truncate
     i64 whole = (i64)smallNum;
     real64 fractional = smallNum - (real64)whole;
+
+    writeInt64(writer, whole);
+
+    if(! write_fraction)
+        return;
+
+    // print delimiter '.'
+    writer('.');
+
+    int iterations = MAX_FLOATING_FRACTIONAL_DIGITS; // @fixme @magic
+    while (iterations--) {
+        fractional = fractional * 10.0;
+        u32 wholeDigit = (u32)(fractional);
+        writeInt(writer, wholeDigit);
+
+        // are we done?
+        fractional = fractional - ((real64)wholeDigit);
+        if(fractional <= 0.0000001)
+            break;
+    }
+}
+
+// FIXME:
+// HACK:
+// TODO: use <math.h> instead
+//
+// - https://github.com/client9/stringencoders
+// - http://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html
+//
+void writeReal(output_writer writer, real64 num)
+{
+    // HACK
+    if(num > INT64_MAX) {
+        writeRealDebug(writer, num);
+    } else if(num > INT32_MAX) {
+        // can't div and modulo in 64 bits, without library
+        writeRealDebug(writer, num);
+    } else {
+        writeReal_component(writer, num, true);
+    }
+}
+
+
+internal
+void writeHex_bytes(output_writer writer, u64 num, u8 nibbles) {
+    writer('0'); writer('x');
+    for(int i = (nibbles << 2) - 4; i >= 0; i -= 4)
+        writeHexDigit(writer, (num >> i) & 0x0f);
+}
+
+void writeAddr(output_writer writer, void* ptr)
+{
+    writeHex_bytes(writer, (intptr_t)ptr, 8);
+}
+
+void writeHex_b(output_writer writer, u8 num)
+{
+    writeHex_bytes(writer, num, 2);
+}
+
+void writeHex_w(output_writer writer, u16 num)
+{
+    writeHex_bytes(writer, num, 4);
+}
+
+void writeHex(output_writer writer, u32 num)
+{
+    writeHex_bytes(writer, num, 8);
+}
+
+void writeHex_q(output_writer writer, u64 num)
+{
+    writeHex_bytes(writer, num, 16);
+}
+
+void writeHexDigit(output_writer writer, u8 digit)
+{
+    const char* digits = "0123456789abcdef";
+    writer(digits[digit]);
+    //    if(digit < 10)
+    //        writeInt(writer, digit);
+    //    else {
+    //        switch(digit) {
+    //            case 10: writer('a'); break;
+    //            case 11: writer('b'); break;
+    //            case 12: writer('c'); break;
+    //            case 13: writer('d'); break;
+    //            case 14: writer('e'); break;
+    //            case 15: writer('f'); break;
+    //        }
+    //    }
+}
+
+void writeBinary_b(output_writer writer, u8 num)
+{
+    int i = 8;
+    while(i--) {
+        writeInt(writer, (num & (1<<i)) >> i);
+    }
+}
+
+void writeBinary_w(output_writer writer, u16 num)
+{
+    int i = 16;
+    while(i--) {
+        writeInt(writer, (num & (1<<i)) >> i);
+    }
+}
+
+// TODO: combine above into one
+void writeBinary(output_writer writer, u32 num)
+{
+    writer('0'); writer('b');
+    int i = 32;
+    //    bool foundOne = false;
+    while(i--) {
+        u8 bit = (num & (1<<i)) >> i;
+        writer(bit ? '1' : '0');
+        //        if(bit || foundOne) {
+        //            foundOne = true;
+        //            // TODO: writeDigit instead
+        //            writer(bit ? '1' : '0');
