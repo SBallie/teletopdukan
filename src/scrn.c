@@ -582,3 +582,141 @@ void writeBinary(output_writer writer, u32 num)
         //            foundOne = true;
         //            // TODO: writeDigit instead
         //            writer(bit ? '1' : '0');
+        //        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+// Serial Port Communication - mostly used for debug w/QEMU
+
+#define PORT_COM1 0x3f8   /* COM1 */
+
+void init_serial()
+{
+    outb(PORT_COM1 + 1, 0x00);    // Disable all interrupts
+    outb(PORT_COM1 + 3, 0x80);    // Enable DLAB (set baud rate divisor)
+    outb(PORT_COM1 + 0, 0x03);    // Set divisor to 3 (lo byte) 38400 baud
+    outb(PORT_COM1 + 1, 0x00);    //                  (hi byte)
+    outb(PORT_COM1 + 3, 0x03);    // 8 bits, no parity, one stop bit
+    outb(PORT_COM1 + 2, 0xC7);    // Enable FIFO, clear them, with 14-byte threshold
+    outb(PORT_COM1 + 4, 0x0B);    // IRQs enabled, RTS/DSR set
+}
+
+int serial_received() {
+    return inb(PORT_COM1 + 5) & 1;
+}
+
+char read_serial() {
+    while (serial_received() == 0);
+
+    return inb(PORT_COM1);
+}
+
+u32 is_transmit_empty() {
+    return inb(PORT_COM1 + 5) & 0x20;
+}
+
+void serial_write_b(u8 a) {
+    while (is_transmit_empty() == 0)
+        ;
+    outb(PORT_COM1,a);
+    ++cursor;
+}
+
+void serial_writeln(c_str str) {
+    while (*str != 0) {
+        serial_write_b(*str);
+        str++;
+    }
+    serial_write_b('\r');
+    serial_write_b('\n');
+}
+
+void serial_write(c_str str) {
+    while (*str != 0) {
+        if(*str == '\n') {
+            serial_write_b('\r');
+            serial_write_b('\n');
+        }
+        serial_write_b(*str);
+        str++;
+    }
+}
+
+void serial_writeInt(u32 num) { writeInt(serial_write_b, num); }
+void serial_writeHex(u32 num) { writeHex(serial_write_b, num); }
+void serial_writeHex_b(u8 num) { writeHex_b(serial_write_b, num); }
+void serial_writeHex_w(u16 num) { writeHex_w(serial_write_b, num); }
+void serial_writeBinary_b(u8 num) { writeBinary_b(serial_write_b, num); }
+
+////////////////////////////////////////////////////
+// better print
+
+void kputs(c_str text)
+{
+    kwrites(kputch, text);
+}
+
+void kwrites(output_writer writer, c_str text)
+{
+    while(*text != 0) {
+        writer(*text++);
+    }
+}
+
+// TODO: use some SafeString struct
+// TODO: void ksprintf(u8* buf, c_str format, ...)
+void kwritef(output_writer writer, c_str format, ...)
+{
+    cursor = 0;
+
+    u8 ch;
+    va_list ap;
+    va_start(ap, format);
+
+    // read in, check next format char
+    while ((ch = *format++))
+    {
+        // if not escape write out to buffer
+        if(ch != '%') {
+            //*buf++ = ch;
+            writer(ch);
+            ++cursor;
+            continue;
+        }
+
+        // read next
+        ch = *format++;
+
+        switch (ch) {
+            case '%': {
+                writer(ch);
+                break;
+            }
+            case 'b': {
+                u32 val = va_arg(ap, u32);
+                writeBinary(writer, val);
+                break;
+            }
+            case 'd': {
+                int val = va_arg(ap, int);
+                writeInt(writer, val);
+                break;
+            }
+            case 'f': {
+                // va_arg cannot handle float, only doubles
+                real64 val = va_arg(ap, real64);
+                writeReal(writer, val);
+                break;
+            }
+            case 'u': {
+                u32 val = va_arg(ap, u32);
+                writeUInt(writer, val);
+                break;
+            }
+            case 'q': {
+                u64 val = va_arg(ap, u64);
+                writeUInt64(writer, val);
+                break;
+            }
+            case 'x': {
