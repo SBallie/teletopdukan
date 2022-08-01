@@ -36,4 +36,11 @@ u8 vga_palette[MAX_PALETTE_COUNT];
 #define R_H200 0x00
 #define R_H224 0x80
 #define R_H240 0x80
-#define R
+#define R_H256 0x80
+#define R_H270 0x80
+#define R_H300 0x80
+#define R_H360 0x00
+#define R_H400 0x00
+#define R_H480 0x80
+#define R_H564 0x80
+#define R_H600
