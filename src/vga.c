@@ -68,4 +68,8 @@ static const u8 height_564[] = {0x62, 0xf0, 0x60, 0x37, 0x89, 0x33, 0x3c, 0x5c};
 static const u8 height_600[] = {0x70, 0xf0, 0x60, 0x5b, 0x8c, 0x57, 0x58, 0x70};
 
 // the chain4 parameter should be 1 for normal 13h-type mode, but
-// only allows 320x200 256x200, 256x240 an
+// only allows 320x200 256x200, 256x240 and 256x256 because you
+// can only access the first 64kb
+
+// if chain4 is 0, then plane mode is used (tweaked modes), and
+// y
