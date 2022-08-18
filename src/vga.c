@@ -72,4 +72,5 @@ static const u8 height_600[] = {0x70, 0xf0, 0x60, 0x5b, 0x8c, 0x57, 0x58, 0x70};
 // can only access the first 64kb
 
 // if chain4 is 0, then plane mode is used (tweaked modes), and
-// y
+// you'll need to switch planes to access the whole screen but
+// that allows you using any resolution, up to 
