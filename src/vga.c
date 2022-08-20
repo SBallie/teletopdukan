@@ -86,4 +86,13 @@ static const u8 height_600[] = {0x70, 0xf0, 0x60, 0x5b, 0x8c, 0x57, 0x58, 0x70};
 #define RGB_DATA 0x03C9
 
 // returns 1=ok, 0=fail
-u32 init_graph_vga(u32 width, u32 height, b32 chain
+u32 init_graph_vga(u32 width, u32 height, b32 chain4)
+{
+    const u8* w;
+    const u8* h;
+    u8 val;
+    u32 a;
+
+    switch (width) {
+        case 256:
+            w = width_256
