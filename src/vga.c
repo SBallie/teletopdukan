@@ -81,4 +81,9 @@ static const u8 height_600[] = {0x70, 0xf0, 0x60, 0x5b, 0x8c, 0x57, 0x58, 0x70};
 #define inpw inw
 
 #define RGB_RESET 0x03C6
-#define RGB_READ 0x03
+#define RGB_READ 0x03C7
+#define RGB_WRITE 0x03C8
+#define RGB_DATA 0x03C9
+
+// returns 1=ok, 0=fail
+u32 init_graph_vga(u32 width, u32 height, b32 chain
