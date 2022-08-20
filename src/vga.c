@@ -73,4 +73,12 @@ static const u8 height_600[] = {0x70, 0xf0, 0x60, 0x5b, 0x8c, 0x57, 0x58, 0x70};
 
 // if chain4 is 0, then plane mode is used (tweaked modes), and
 // you'll need to switch planes to access the whole screen but
-// that allows you using any resolution, up to 
+// that allows you using any resolution, up to 400x600
+
+#define outp outb
+#define outpw outw
+#define inp inb
+#define inpw inw
+
+#define RGB_RESET 0x03C6
+#define RGB_READ 0x03
