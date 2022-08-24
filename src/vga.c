@@ -95,4 +95,9 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
 
     switch (width) {
         case 256:
-            w = width_256
+            w = width_256;
+            val = R_COM + R_W256;
+            break;
+        case 320:
+            w = width_320;
+     
