@@ -100,4 +100,9 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
             break;
         case 320:
             w = width_320;
-     
+            val = R_COM + R_W320;
+            break;
+        case 360:
+            w = width_360;
+            val = R_COM + R_W360;
+   
