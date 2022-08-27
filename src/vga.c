@@ -115,4 +115,10 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
             val = R_COM + R_W400;
             break;
         default:
-    
+            return 0;  // fail
+    }
+    switch (height) {
+        case 200:
+            h = height_200;
+            val |= R_H200;
+            break;
