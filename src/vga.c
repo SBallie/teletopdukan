@@ -127,4 +127,11 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
             val |= R_H224;
             break;
         case 240:
-            h = height_2
+            h = height_240;
+            val |= R_H240;
+            break;
+        case 256:
+            h = height_256;
+            val |= R_H256;
+            break;
+  
