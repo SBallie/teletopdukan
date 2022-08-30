@@ -150,3 +150,9 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
             h = height_400;
             val |= R_H400;
             break;
+        case 480:
+            h = height_480;
+            val |= R_H480;
+            break;
+        case 564:
+            h = height_
