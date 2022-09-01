@@ -161,4 +161,11 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
         case 600:
             h = height_600;
             val |= R_H600;
-            bre
+            break;
+        default:
+            return 0;  // fail
+    }
+
+    // chain4 not available if mode takes over 64k
+
+    if (ch
