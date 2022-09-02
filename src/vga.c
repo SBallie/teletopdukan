@@ -173,4 +173,8 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
     // here goes the actual modeswitch
 
     outp(0x3c2, val);
-    outpw(0x3d4, 0x
+    outpw(0x3d4, 0x0e11);  // enable regs 0-7
+
+    for (a = 0; a < SZ(hor_regs); ++a)
+        outpw(0x3d4, (word)((w[a] << 8) + hor_regs[a]));
+    for (a
