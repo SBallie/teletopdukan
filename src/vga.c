@@ -177,4 +177,7 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
 
     for (a = 0; a < SZ(hor_regs); ++a)
         outpw(0x3d4, (word)((w[a] << 8) + hor_regs[a]));
-    for (a
+    for (a = 0; a < SZ(ver_regs); ++a)
+        outpw(0x3d4, (word)((h[a] << 8) + ver_regs[a]));
+
+    outpw(0x3d4, 0x0008);  // ver
