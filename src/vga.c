@@ -187,4 +187,9 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
         outpw(0x3d4, 0xa317);
         outpw(0x3c4, 0x0e04);
     } else {
-  
+        outpw(0x3d4, 0x0014);
+        outpw(0x3d4, 0xe317);
+        outpw(0x3c4, 0x0604);
+    }
+
+    outpw(0x3c4, 0x
