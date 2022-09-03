@@ -180,4 +180,11 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
     for (a = 0; a < SZ(ver_regs); ++a)
         outpw(0x3d4, (word)((h[a] << 8) + ver_regs[a]));
 
-    outpw(0x3d4, 0x0008);  // ver
+    outpw(0x3d4, 0x0008);  // vert.panning = 0
+
+    if (chain4) {
+        outpw(0x3d4, 0x4014);
+        outpw(0x3d4, 0xa317);
+        outpw(0x3c4, 0x0e04);
+    } else {
+  
