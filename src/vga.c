@@ -195,4 +195,10 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
     outpw(0x3c4, 0x0101);
     outpw(0x3c4, 0x0f02);  // enable writing to all planes
     outpw(0x3ce, 0x4005);  // 256color mode
-    
+    outpw(0x3ce, 0x0506);  // graph mode & A000-AFFF
+
+    inp(0x3da);
+
+    outp(0x3c0, 0x30);
+    outp(0x3c0, 0x41);
+    outp(0x3c0, 0x33)
