@@ -206,4 +206,12 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
 
     for (a = 0; a < 16; a++) {  // ega pal
         outp(0x3c0, (byte)a);
-        outp
+        outp(0x3c0, (byte)a);
+    }
+
+    // setup extended palette
+
+    outp(0x3c0, 0x20);  // enable video
+
+    vga_screen_width = width;
+   
