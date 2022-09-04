@@ -201,4 +201,9 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
 
     outp(0x3c0, 0x30);
     outp(0x3c0, 0x41);
-    outp(0x3c0, 0x33)
+    outp(0x3c0, 0x33);
+    outp(0x3c0, 0x00);
+
+    for (a = 0; a < 16; a++) {  // ega pal
+        outp(0x3c0, (byte)a);
+        outp
