@@ -224,4 +224,5 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
 void set_palette(int index, int red, int green, int blue)
 {
     outp(RGB_RESET, 0xFF);  // Prepare the VGA card for the color change
-    outp(
+    outp(RGB_WRITE, index);  // Tell which palette register to write to
+    // The following values can be anywhere from 0
