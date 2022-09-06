@@ -214,4 +214,11 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
     outp(0x3c0, 0x20);  // enable video
 
     vga_screen_width = width;
-   
+    vga_screen_height = height;
+    vga_screen_colors = 255;
+    vga_is_chained = chain4 == 1 ? true : false;
+
+    return 1;
+}
+
+void se
