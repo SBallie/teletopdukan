@@ -221,4 +221,7 @@ u32 init_graph_vga(u32 width, u32 height, b32 chain4)
     return 1;
 }
 
-void se
+void set_palette(int index, int red, int green, int blue)
+{
+    outp(RGB_RESET, 0xFF);  // Prepare the VGA card for the color change
+    outp(
