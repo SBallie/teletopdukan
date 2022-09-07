@@ -225,4 +225,7 @@ void set_palette(int index, int red, int green, int blue)
 {
     outp(RGB_RESET, 0xFF);  // Prepare the VGA card for the color change
     outp(RGB_WRITE, index);  // Tell which palette register to write to
-    // The following values can be anywhere from 0
+    // The following values can be anywhere from 0 to 63
+    outp(RGB_DATA, red);  // change the red value
+    outp(RGB_DATA, green);  // change the green value
+ 
