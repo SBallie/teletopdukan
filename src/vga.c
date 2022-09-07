@@ -228,4 +228,9 @@ void set_palette(int index, int red, int green, int blue)
     // The following values can be anywhere from 0 to 63
     outp(RGB_DATA, red);  // change the red value
     outp(RGB_DATA, green);  // change the green value
- 
+    outp(RGB_DATA, blue);  // change the blue value
+}
+
+// void vga_wait_for_retrace(void)
+// {
+//   /* wait until done with v
