@@ -233,4 +233,7 @@ void set_palette(int index, int red, int green, int blue)
 
 // void vga_wait_for_retrace(void)
 // {
-//   /* wait until done with v
+//   /* wait until done with vertical retrace */
+//   while  ((inp(INPUT_STATUS) & VRETRACE));
+//   /* wait until done refreshing */
+//   while (!(inp(
