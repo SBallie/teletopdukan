@@ -242,4 +242,9 @@ void set_palette(int index, int red, int green, int blue)
 void vga_clear(u8 color)
 {
     // TODO: vga_clear(1);
-    kmemsetb((u8*)vga_memory, color, vga_scree
+    kmemsetb((u8*)vga_memory, color, vga_screen_width * vga_screen_height);
+
+    // reset
+    outp(0x03C6, 0xff);
+    outp(0x03C8, 0x10);
+    for (u8 i = 0
