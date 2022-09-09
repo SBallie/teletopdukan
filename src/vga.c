@@ -236,4 +236,10 @@ void set_palette(int index, int red, int green, int blue)
 //   /* wait until done with vertical retrace */
 //   while  ((inp(INPUT_STATUS) & VRETRACE));
 //   /* wait until done refreshing */
-//   while (!(inp(
+//   while (!(inp(INPUT_STATUS) & VRETRACE));
+// }
+
+void vga_clear(u8 color)
+{
+    // TODO: vga_clear(1);
+    kmemsetb((u8*)vga_memory, color, vga_scree
