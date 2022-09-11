@@ -247,4 +247,9 @@ void vga_clear(u8 color)
     // reset
     outp(0x03C6, 0xff);
     outp(0x03C8, 0x10);
-    for (u8 i = 0
+    for (u8 i = 0x10; i < 0xff; i++) {
+        // outp(0x03c8, i);
+        // r = 1-16
+        // g = 1x4-16x4
+        // b = 1x16-16x16
+      
