@@ -252,4 +252,10 @@ void vga_clear(u8 color)
         // r = 1-16
         // g = 1x4-16x4
         // b = 1x16-16x16
-      
+        outp(0x03c9, i % 16 * 16);
+        outp(0x03c9, i / 4 * 16);
+        outp(0x03c9, i / 16 * 16);
+    }
+}
+
+void pl
