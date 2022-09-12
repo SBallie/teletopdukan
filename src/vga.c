@@ -258,4 +258,8 @@ void vga_clear(u8 color)
     }
 }
 
-void pl
+void plot_pixel(u32 x, u32 y, u8 color)
+{
+    // TODO: check we are in video mode?
+
+    /*  y*320 = y*256 + y*64 = y*2^8 + 
