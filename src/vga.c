@@ -271,4 +271,9 @@ void plot_pixel(u32 x, u32 y, u8 color)
 i32 abs(i32 val) { return val < 0 ? -val : val; }
 i32 sgn(i32 val) { return val < 0 ? -1 : val > 0 ? 1 : 0; }
 
-void line_fast(u32 x1, u32 y1, u32 x2, u32
+void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
+{
+    i32 i, dx, dy, sdx, sdy, dxabs, dyabs, x, y, px, py;
+
+    dx = x2 - x1; /* the horizontal distance of the line */
+    
