@@ -262,4 +262,10 @@ void plot_pixel(u32 x, u32 y, u8 color)
 {
     // TODO: check we are in video mode?
 
-    /*  y*320 = y*256 + y*64 = y*2^8 + 
+    /*  y*320 = y*256 + y*64 = y*2^8 + y*2^6   */
+    vga_memory[(y << 8) + (y << 6) + x] = color;
+
+    // TODO : vga_memory[ y * screen_width + x] = color;
+}
+
+i32 abs(i
