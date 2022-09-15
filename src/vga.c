@@ -268,4 +268,7 @@ void plot_pixel(u32 x, u32 y, u8 color)
     // TODO : vga_memory[ y * screen_width + x] = color;
 }
 
-i32 abs(i
+i32 abs(i32 val) { return val < 0 ? -val : val; }
+i32 sgn(i32 val) { return val < 0 ? -1 : val > 0 ? 1 : 0; }
+
+void line_fast(u32 x1, u32 y1, u32 x2, u32
