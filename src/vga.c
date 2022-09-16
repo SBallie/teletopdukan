@@ -276,4 +276,7 @@ void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
     i32 i, dx, dy, sdx, sdy, dxabs, dyabs, x, y, px, py;
 
     dx = x2 - x1; /* the horizontal distance of the line */
-    
+    dy = y2 - y1; /* the vertical distance of the line */
+    dxabs = abs(dx);
+    dyabs = abs(dy);
+    sdx = sgn(dx)
