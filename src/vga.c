@@ -279,4 +279,11 @@ void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
     dy = y2 - y1; /* the vertical distance of the line */
     dxabs = abs(dx);
     dyabs = abs(dy);
-    sdx = sgn(dx)
+    sdx = sgn(dx);
+    sdy = sgn(dy);
+    x = dyabs >> 1;
+    y = dxabs >> 1;
+    px = x1;
+    py = y1;
+
+    vga_memory[(py << 8) + (py << 6) + px] =
