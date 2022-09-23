@@ -286,4 +286,9 @@ void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
     px = x1;
     py = y1;
 
-    vga_memory[(py << 8) + (py << 6) + px] =
+    vga_memory[(py << 8) + (py << 6) + px] = color;
+
+    if (dxabs >= dyabs) /* the line is more horizontal than vertical */
+    {
+        for (i = 0; i < dxabs; i++) {
+            y
