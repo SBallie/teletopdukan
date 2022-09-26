@@ -291,4 +291,10 @@ void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
     if (dxabs >= dyabs) /* the line is more horizontal than vertical */
     {
         for (i = 0; i < dxabs; i++) {
-            y
+            y += dyabs;
+            if (y >= dxabs) {
+                y -= dxabs;
+                py += sdy;
+            }
+            px += sdx;
+    
