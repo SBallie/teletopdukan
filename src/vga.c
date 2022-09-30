@@ -317,4 +317,8 @@ void polygon(u32 num_vertices, u32* vertices, u8 color)
 {
     for (u32 i = 0; i < num_vertices - 1; i++)
     {
-        line_fast(vertices[(i << 1) + 0], vertices
+        line_fast(vertices[(i << 1) + 0], vertices[(i << 1) + 1],
+                  vertices[(i << 1) + 2], vertices[(i << 1) + 3], color);
+    }
+    // end to start
+    line_fa
