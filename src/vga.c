@@ -313,4 +313,8 @@ void line_fast(u32 x1, u32 y1, u32 x2, u32 y2, u8 color)
     }
 }
 
-void polygon(u32 num_vertic
+void polygon(u32 num_vertices, u32* vertices, u8 color)
+{
+    for (u32 i = 0; i < num_vertices - 1; i++)
+    {
+        line_fast(vertices[(i << 1) + 0], vertices
