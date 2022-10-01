@@ -329,4 +329,6 @@ void fillrect(u32 xoff, u32 yoff, u8 color)
 {
     u32 height = 10;
     u32 width = 10;
-    for (u32 y
+    for (u32 y = 0; y < height; ++y) {
+        for (u32 x = 0; x < width; ++x) {
+            plot_pixel(xoff + x, yoff + y, color);
