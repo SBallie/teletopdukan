@@ -321,4 +321,5 @@ void polygon(u32 num_vertices, u32* vertices, u8 color)
                   vertices[(i << 1) + 2], vertices[(i << 1) + 3], color);
     }
     // end to start
-    line_fa
+    line_fast(vertices[0], vertices[1], vertices[(num_vertices << 1) - 2],
+              vertices[(num_vertices << 1) - 1], color)
