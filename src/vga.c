@@ -332,3 +332,18 @@ void fillrect(u32 xoff, u32 yoff, u8 color)
     for (u32 y = 0; y < height; ++y) {
         for (u32 x = 0; x < width; ++x) {
             plot_pixel(xoff + x, yoff + y, color);
+        }
+    }
+}
+
+void vga_tests()
+{
+    // clear
+    vga_clear(3);
+
+    delay_s(1);
+
+    set_palette(58, 255, 20, 20);
+    vga_clear(58);
+
+  
