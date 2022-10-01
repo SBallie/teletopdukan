@@ -322,4 +322,11 @@ void polygon(u32 num_vertices, u32* vertices, u8 color)
     }
     // end to start
     line_fast(vertices[0], vertices[1], vertices[(num_vertices << 1) - 2],
-              vertices[(num_vertices << 1) - 1], color)
+              vertices[(num_vertices << 1) - 1], color);
+}
+
+void fillrect(u32 xoff, u32 yoff, u8 color)
+{
+    u32 height = 10;
+    u32 width = 10;
+    for (u32 y
