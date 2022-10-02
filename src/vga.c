@@ -351,4 +351,7 @@ void vga_tests()
     // plot pixels
     u8 color = 0;
     for (u32 y = 0; y < vga_screen_height; ++y) {
-        for
+        for (u32 x = 0; x < vga_screen_width; ++x) {
+            plot_pixel(x, y, color);
+        }
+        color = (co
