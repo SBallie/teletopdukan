@@ -354,4 +354,10 @@ void vga_tests()
         for (u32 x = 0; x < vga_screen_width; ++x) {
             plot_pixel(x, y, color);
         }
-        color = (co
+        color = (color + 1) % 255;  // vga_screen_colors;
+    }
+    
+    delay_s(1);
+    
+    //  // randomly draw 5000 lines.
+    //  u32 x1, 
