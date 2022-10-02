@@ -360,4 +360,7 @@ void vga_tests()
     delay_s(1);
     
     //  // randomly draw 5000 lines.
-    //  u32 x1, 
+    //  u32 x1, y1, x2, y2;
+    //  for (u32 i = 0; i < 1000; i++) {
+    //    x1 = rand() % vga_screen_width;
+    //    y1 = rand() % vga_scr
