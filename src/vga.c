@@ -346,4 +346,9 @@ void vga_tests()
     set_palette(58, 255, 20, 20);
     vga_clear(58);
 
-  
+    delay_s(1);
+    
+    // plot pixels
+    u8 color = 0;
+    for (u32 y = 0; y < vga_screen_height; ++y) {
+        for
