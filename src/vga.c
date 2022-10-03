@@ -370,4 +370,9 @@ void vga_tests()
     //    line_fast(x1, y1, x2, y2, color);
     //  }
     //
-    //  delay_
+    //  delay_s(1);
+    
+    // polygon
+    u32 num_vertices = 3;
+    u32 vertices[6] = {5, 0,  /* (x1,y1) */
+        
