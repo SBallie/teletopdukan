@@ -366,4 +366,8 @@ void vga_tests()
     //    y1 = rand() % vga_screen_height;
     //    x2 = rand() % vga_screen_width;
     //    y2 = rand() % vga_screen_height;
-    //    color = 
+    //    color = rand() % vga_screen_colors;
+    //    line_fast(x1, y1, x2, y2, color);
+    //  }
+    //
+    //  delay_
