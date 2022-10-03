@@ -363,4 +363,7 @@ void vga_tests()
     //  u32 x1, y1, x2, y2;
     //  for (u32 i = 0; i < 1000; i++) {
     //    x1 = rand() % vga_screen_width;
-    //    y1 = rand() % vga_scr
+    //    y1 = rand() % vga_screen_height;
+    //    x2 = rand() % vga_screen_width;
+    //    y2 = rand() % vga_screen_height;
+    //    color = 
