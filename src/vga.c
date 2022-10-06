@@ -375,4 +375,27 @@ void vga_tests()
     // polygon
     u32 num_vertices = 3;
     u32 vertices[6] = {5, 0,  /* (x1,y1) */
-        
+        7, 5,  /* (x2,y2) */
+        1, 4}; /* (x3,y3) */
+    polygon(num_vertices, vertices, 15);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
