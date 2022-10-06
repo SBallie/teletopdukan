@@ -399,3 +399,14 @@ void vga_tests()
 
 
 
+
+////////////////////////////////////////////////////////////
+
+
+
+#define u8int u8
+#define u16int u16
+#define u32int u32
+
+
+#define VGA
