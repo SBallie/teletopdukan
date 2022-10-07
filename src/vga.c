@@ -409,4 +409,8 @@ void vga_tests()
 #define u32int u32
 
 
-#define VGA
+#define VGA_AC_INDEX        0x3C0
+#define VGA_AC_WRITE        0x3C0
+#define VGA_MISC_WRITE      0x3C2
+#define VGA_SEQ_INDEX       0x3C4
+#def
