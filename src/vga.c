@@ -416,4 +416,8 @@ void vga_tests()
 #define VGA_SEQ_DATA        0x3C5
 #define VGA_GC_INDEX        0x3CE
 #define VGA_GC_DATA         0x3CF
-#define VGA_CRTC_INDEX      0x
+#define VGA_CRTC_INDEX      0x3D4
+#define VGA_CRTC_DATA       0x3D5
+#define VGA_INSTAT_READ     0x3DA
+#define VGA_NUM_SEQ_REGS    5
+#define VGA_NUM_CR
