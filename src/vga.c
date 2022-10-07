@@ -420,4 +420,11 @@ void vga_tests()
 #define VGA_CRTC_DATA       0x3D5
 #define VGA_INSTAT_READ     0x3DA
 #define VGA_NUM_SEQ_REGS    5
-#define VGA_NUM_CR
+#define VGA_NUM_CRTC_REGS   25
+#define VGA_NUM_GC_REGS     9
+#define VGA_NUM_AC_REGS     21
+
+void swich_to_8x8_mode();
+
+
+u8int g_80x50_text[] =
