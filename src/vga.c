@@ -713,4 +713,13 @@ u32int get_fb_seg(void)
 
     outb(VGA_GC_INDEX, 6);
     seg = inb(VGA_GC_DATA);
-    seg >>= 
+    seg >>= 2;
+    seg &= 3;
+    switch(seg)
+    {
+    case 0:
+    case 1:
+        seg = 0xA000;
+        break;
+    case 2:
+        s
