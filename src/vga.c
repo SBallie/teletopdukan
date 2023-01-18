@@ -722,4 +722,13 @@ u32int get_fb_seg(void)
         seg = 0xA000;
         break;
     case 2:
-        s
+        seg = 0xB000;
+        break;
+    case 3:
+        seg = 0xB800;
+        break;
+    }
+    return seg;
+}
+
+void vmemwr(u32int d
