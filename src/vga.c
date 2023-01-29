@@ -731,4 +731,9 @@ u32int get_fb_seg(void)
     return seg;
 }
 
-void vmemwr(u32int d
+void vmemwr(u32int dst_off, u8int *src, u32int count)
+{
+    kmemcpyb((u8int *)(get_fb_seg() * 16 + dst_off), src, count);
+}
+
+void set_plane(
