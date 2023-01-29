@@ -736,4 +736,12 @@ void vmemwr(u32int dst_off, u8int *src, u32int count)
     kmemcpyb((u8int *)(get_fb_seg() * 16 + dst_off), src, count);
 }
 
-void set_plane(
+void set_plane(u32int p)
+{
+    u8int pmask;
+
+    p &= 3;
+    pmask = 1 << p;
+/* set read plane */
+    outb(VGA_GC_INDEX, 4);
+    outb(VGA_GC_DA
