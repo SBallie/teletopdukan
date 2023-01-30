@@ -754,4 +754,8 @@ void write_regs(u8int *regs)
 {
     u32int i;
 
-/
+/* write MISCELLANEOUS reg */
+    outb(VGA_MISC_WRITE, *regs);
+    regs++;
+/* write SEQUENCER regs */
+    for(i = 0; i < VGA_NU
