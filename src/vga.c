@@ -744,4 +744,14 @@ void set_plane(u32int p)
     pmask = 1 << p;
 /* set read plane */
     outb(VGA_GC_INDEX, 4);
-    outb(VGA_GC_DA
+    outb(VGA_GC_DATA, p);
+/* set write plane */
+    outb(VGA_SEQ_INDEX, 2);
+    outb(VGA_SEQ_DATA, pmask);
+}
+
+void write_regs(u8int *regs)
+{
+    u32int i;
+
+/
