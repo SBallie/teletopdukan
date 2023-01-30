@@ -758,4 +758,10 @@ void write_regs(u8int *regs)
     outb(VGA_MISC_WRITE, *regs);
     regs++;
 /* write SEQUENCER regs */
-    for(i = 0; i < VGA_NU
+    for(i = 0; i < VGA_NUM_SEQ_REGS; i++)
+    {
+        outb(VGA_SEQ_INDEX, i);
+        outb(VGA_SEQ_DATA, *regs);
+        regs++;
+    }
+/* unlo
