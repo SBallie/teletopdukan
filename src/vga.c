@@ -770,4 +770,9 @@ void write_regs(u8int *regs)
     outb(VGA_CRTC_INDEX, 0x11);
     outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) & ~0x80);
 /* make sure they remain unlocked */
-    regs
+    regs[0x03] |= 0x80;
+    regs[0x11] &= ~0x80;
+/* write CRTC regs */
+    for(i = 0; i < VGA_NUM_CRTC_REGS; i++)
+    {
+        o
