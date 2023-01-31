@@ -764,4 +764,7 @@ void write_regs(u8int *regs)
         outb(VGA_SEQ_DATA, *regs);
         regs++;
     }
-/* unlo
+/* unlock CRTC registers */
+    outb(VGA_CRTC_INDEX, 0x03);
+    outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) | 0x80);
+    outb(VGA_CRTC_INDE
