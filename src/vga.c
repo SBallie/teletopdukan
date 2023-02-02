@@ -775,4 +775,9 @@ void write_regs(u8int *regs)
 /* write CRTC regs */
     for(i = 0; i < VGA_NUM_CRTC_REGS; i++)
     {
-        o
+        outb(VGA_CRTC_INDEX, i);
+        outb(VGA_CRTC_DATA, *regs);
+        regs++;
+    }
+/* write GRAPHICS CONTROLLER regs */
+    for(i = 0; i <
