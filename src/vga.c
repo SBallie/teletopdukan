@@ -780,4 +780,8 @@ void write_regs(u8int *regs)
         regs++;
     }
 /* write GRAPHICS CONTROLLER regs */
-    for(i = 0; i <
+    for(i = 0; i < VGA_NUM_GC_REGS; i++)
+    {
+        outb(VGA_GC_INDEX, i);
+        outb(VGA_GC_DATA, *regs);
+        reg
