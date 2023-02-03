@@ -784,4 +784,9 @@ void write_regs(u8int *regs)
     {
         outb(VGA_GC_INDEX, i);
         outb(VGA_GC_DATA, *regs);
-        reg
+        regs++;
+    }
+/* write ATTRIBUTE CONTROLLER regs */
+    for(i = 0; i < VGA_NUM_AC_REGS; i++)
+    {
+        (void)inb(VGA_INSTA
