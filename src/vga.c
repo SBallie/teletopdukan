@@ -805,4 +805,9 @@ void write_font(u8int *buf, u32int font_height)
     u32int i;
 
 /* save registers
-set_plane() modifies GC 4 and SEQ 2, so s
+set_plane() modifies GC 4 and SEQ 2, so save them as well */
+    outb(VGA_SEQ_INDEX, 2);
+    seq2 = inb(VGA_SEQ_DATA);
+
+    outb(VGA_SEQ_INDEX, 4);
+    seq
