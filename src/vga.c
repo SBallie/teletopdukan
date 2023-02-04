@@ -799,4 +799,10 @@ void write_regs(u8int *regs)
     outb(VGA_AC_INDEX, 0x20);
 }
 
-void write_font(u8int 
+void write_font(u8int *buf, u32int font_height)
+{
+    u8int seq2, seq4, gc4, gc5, gc6;
+    u32int i;
+
+/* save registers
+set_plane() modifies GC 4 and SEQ 2, so s
