@@ -789,4 +789,9 @@ void write_regs(u8int *regs)
 /* write ATTRIBUTE CONTROLLER regs */
     for(i = 0; i < VGA_NUM_AC_REGS; i++)
     {
-        (void)inb(VGA_INSTA
+        (void)inb(VGA_INSTAT_READ);
+        outb(VGA_AC_INDEX, i);
+        outb(VGA_AC_WRITE, *regs);
+        regs++;
+    }
+/* lock 16-color pa
