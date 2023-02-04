@@ -794,4 +794,9 @@ void write_regs(u8int *regs)
         outb(VGA_AC_WRITE, *regs);
         regs++;
     }
-/* lock 16-color pa
+/* lock 16-color palette and unblank display */
+    (void)inb(VGA_INSTAT_READ);
+    outb(VGA_AC_INDEX, 0x20);
+}
+
+void write_font(u8int 
