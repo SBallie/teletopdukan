@@ -810,4 +810,7 @@ set_plane() modifies GC 4 and SEQ 2, so save them as well */
     seq2 = inb(VGA_SEQ_DATA);
 
     outb(VGA_SEQ_INDEX, 4);
-    seq
+    seq4 = inb(VGA_SEQ_DATA);
+/* turn off even-odd addressing (set flat addressing)
+assume: chain-4 addressing already off */
+    outb(VGA
