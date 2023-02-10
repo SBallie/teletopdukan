@@ -830,4 +830,8 @@ assume: chain-4 addressing already off */
 /* write font to plane P4 */
     set_plane(2);
 /* write font 0 */
-    for(i
+    for(i = 0; i < 256; i++)
+    {
+        vmemwr(16384u * 0 + i * 32, buf, font_height);
+        buf += font_height;
+    }
