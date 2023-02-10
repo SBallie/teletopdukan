@@ -825,4 +825,9 @@ assume: chain-4 addressing already off */
 
     outb(VGA_GC_INDEX, 6);
     gc6 = inb(VGA_GC_DATA);
-/
+/* turn off even-odd addressing */
+    outb(VGA_GC_DATA, gc6 & ~0x02);
+/* write font to plane P4 */
+    set_plane(2);
+/* write font 0 */
+    for(i
