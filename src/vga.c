@@ -835,3 +835,9 @@ assume: chain-4 addressing already off */
         vmemwr(16384u * 0 + i * 32, buf, font_height);
         buf += font_height;
     }
+#if 0
+/* write font 1 */
+    for(i = 0; i < 256; i++)
+    {
+        vmemwr(16384u * 1 + i * 32, buf, font_height);
+        buf 
