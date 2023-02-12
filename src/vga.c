@@ -846,4 +846,8 @@ assume: chain-4 addressing already off */
 /* restore registers */
     outb(VGA_SEQ_INDEX, 2);
     outb(VGA_SEQ_DATA, seq2);
-    
+    outb(VGA_SEQ_INDEX, 4);
+    outb(VGA_SEQ_DATA, seq4);
+    outb(VGA_GC_INDEX, 4);
+    outb(VGA_GC_DATA, gc4);
+    outb(VGA
