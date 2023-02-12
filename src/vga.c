@@ -850,4 +850,12 @@ assume: chain-4 addressing already off */
     outb(VGA_SEQ_DATA, seq4);
     outb(VGA_GC_INDEX, 4);
     outb(VGA_GC_DATA, gc4);
-    outb(VGA
+    outb(VGA_GC_INDEX, 5);
+    outb(VGA_GC_DATA, gc5);
+    outb(VGA_GC_INDEX, 6);
+    outb(VGA_GC_DATA, gc6);
+}
+
+void swich_to_8x8_mode()
+{
+    wri
