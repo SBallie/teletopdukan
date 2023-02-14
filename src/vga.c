@@ -858,4 +858,6 @@ assume: chain-4 addressing already off */
 
 void swich_to_8x8_mode()
 {
-    wri
+    write_regs(g_80x50_text);   
+    write_font(g_8x8_font, 8);
+}
