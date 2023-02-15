@@ -1,4 +1,6 @@
 
 # Stream Setup and Prep
 - Practice Streaming Something Simple
-- 
+- Decide on one or two major features "unique" to the OS
+- Create a list of topics for the first 10 streams
+- Decide on rough time limit, stick to 
