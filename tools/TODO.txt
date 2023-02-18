@@ -14,4 +14,9 @@
 
 ## RANDOM
 - CSPNG: https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator
-- arc4random: http://www.openbsd.or
+- arc4random: http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man3/arc4random.3?query=arc4random&sec=3
+
+---------------
+
+
+# TODO
