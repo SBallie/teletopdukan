@@ -19,4 +19,6 @@
 ---------------
 
 
-# TODO
+# TODO(Now)
+- Switch Processing Modes: Real <--> Protected <--> Long
+  - http://www.codeproject.com/Articles/45788/The-Real-Protected-Long-mo
