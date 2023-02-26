@@ -24,4 +24,6 @@
   - http://www.codeproject.com/Articles/45788/The-Real-Protected-Long-mode-assembly-tutorial-for
 - CPUID: https://github.com/rythie/CPUID-in-Assembly
 - Processor TLB Structure
-- C
+- Context Switch Capability
+- Fork Capability
+- Memory Allocator (malloc-like, free store, index forward and circle around, over time
