@@ -21,4 +21,7 @@
 
 # TODO(Now)
 - Switch Processing Modes: Real <--> Protected <--> Long
-  - http://www.codeproject.com/Articles/45788/The-Real-Protected-Long-mo
+  - http://www.codeproject.com/Articles/45788/The-Real-Protected-Long-mode-assembly-tutorial-for
+- CPUID: https://github.com/rythie/CPUID-in-Assembly
+- Processor TLB Structure
+- C
