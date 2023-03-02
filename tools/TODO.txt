@@ -26,4 +26,6 @@
 - Processor TLB Structure
 - Context Switch Capability
 - Fork Capability
-- Memory Allocator (malloc-like, free store, index forward and circle around, over time
+- Memory Allocator (malloc-like, free store, index forward and circle around, over time bring all blocks to the latest HEAD)
+  - see the video somewhere on SSD's not like erase, but write okay 
+- Simple Shell (trash 
