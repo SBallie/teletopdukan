@@ -36,3 +36,68 @@ mkdir -p $PREFIX
 brew install gmp mpfr libmpc autoconf automake
 
 # binutils
+echo ""
+echo "Installing \`binutils\`"
+echo ""
+cd $HOME/src
+
+if [ ! -d "binutils-2.25" ]; then
+  curl http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.gz > binutils-2.25.tar.gz
+  tar xfz binutils-2.25.tar.gz
+
+  rm binutils-2.25.tar.gz
+  mkdir -p build-binutils
+  cd build-binutils
+  ../binutils-2.25/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
+  make
+  make install
+fi
+
+# gcc
+cd $HOME/src
+
+if [ ! -d "gcc-5.3.0" ]; then
+  curl http://www.netgull.com/gcc/releases/gcc-5.3.0/gcc-5.3.0.tar.gz > gcc-5.3.0.tar.gz
+  tar xfz gcc-5.3.0.tar.gz
+
+  rm gcc-5.3.0.tar.gz
+  mkdir -p build-gcc
+  cd build-gcc
+  ../gcc-5.3.0/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers --with-gmp=/usr/local/Cellar/gmp/6.1.0 --with-mpfr=/usr/local/Cellar/mpfr/3.1.3 --with-mpc=/usr/local/Cellar/libmpc/1.0.3
+  make all-gcc
+  make all-target-libgcc
+  make install-gcc
+  make install-target-libgcc
+fi
+
+# objconv
+
+cd $HOME/src
+
+if [ ! -d "objconv" ]; then
+  curl http://www.agner.org/optimize/objconv.zip > objconv.zip
+  mkdir -p build-objconv
+  unzip objconv.zip -d build-objconv
+
+  cd build-objconv
+  unzip source.zip -d src
+  g++ -o objconv -O2 src/*.cpp --prefix="$PREFIX"
+  cp objconv $PREFIX/bin
+fi
+
+# grub
+
+cd $HOME/src
+
+if [ ! -d "grub" ]; then
+  git clone --depth 1 git://git.savannah.gnu.org/grub.git
+
+  cd grub
+  sh autogen.sh
+  mkdir -p build-grub
+  cd build-grub
+  ../configure --disable-werror TARGET_CC=$TARGET-gcc TARGET_OBJCOPY=$TARGET-objcopy \
+    TARGET_STRIP=$TARGET-strip TARGET_NM=$TARGET-nm TARGET_RANLIB=$TARGET-ranlib --target=$TARGET --prefix=$PREFIX
+  make
+  make install
+fi
