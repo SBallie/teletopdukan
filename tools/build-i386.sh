@@ -5,4 +5,9 @@
 # Makefile does have a reasonable dependency system
 # - `compile` depends on ``
 
-#run b
+#run build-base.sh
+ 
+#all
+#assemble
+#compile
+#link
