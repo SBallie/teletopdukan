@@ -27,4 +27,7 @@ SECTIONS
   {
     _bss_start = .;
     *(.bss)
- 
+    _bss_end = .;
+    . = ALIGN(4096);
+  }
+}
